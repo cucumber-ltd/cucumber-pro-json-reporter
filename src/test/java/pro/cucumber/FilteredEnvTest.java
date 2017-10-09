@@ -2,6 +2,7 @@ package pro.cucumber;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,5 +24,20 @@ public class FilteredEnvTest {
         expected.put("FOO", "BAR");
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void convertsToString() {
+        Map<String, String> env = new HashMap<String, String>();
+        env.put("FOO", "BAR");
+        env.put("DOO", "dar");
+
+        FilteredEnv filteredEnv = new FilteredEnv("PASSWORD|KEY|TOKEN", env);
+        String actual = filteredEnv.toString();
+        String[] lines = actual.split("\n");
+        Arrays.sort(lines);
+        actual = String.join("\n", lines);
+
+        assertEquals("DOO=dar\nFOO=BAR", actual);
     }
 }
