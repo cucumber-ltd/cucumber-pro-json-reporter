@@ -3,7 +3,6 @@ package pro.cucumber;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import sun.jvm.hotspot.utilities.Assert;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -20,7 +19,7 @@ public class GitWorkingCopyTest {
     private Path subfolder;
 
     @Before
-    public void create_scm() throws IOException {
+    public void createScm() throws IOException {
         // TODO
         rootPath = Files.createTempDirectory("GitWC");
         subfolder = rootPath.resolve("subfolder");
@@ -77,6 +76,6 @@ public class GitWorkingCopyTest {
         String sha1Pattern = "^[a-f0-9]{40}$";
         GitWorkingCopy workingCopy = GitWorkingCopy.detect(rootPath);
 
-        Assert.that(Pattern.matches(sha1Pattern, workingCopy.getRev()), "Expected a sha1 revision.");
+        assertTrue("Expected a sha1", Pattern.matches(sha1Pattern, workingCopy.getRev()));
     }
 }
