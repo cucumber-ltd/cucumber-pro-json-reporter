@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 public class JsonReporter implements Formatter {
 
@@ -26,6 +27,7 @@ public class JsonReporter implements Formatter {
         f = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
 
         filteredEnv = new FilteredEnv(System.getenv("CUCUMBER_PRO_ENV_MASK"), System.getenv());
+
         URI url = new URI(System.getenv("CUCUMBER_PRO_URL"));
         deliversResults = new DeliversResults(url);
     }
