@@ -21,6 +21,12 @@ public class JsonReporter implements Formatter {
     private final FilteredEnv filteredEnv;
     private DeliversResults deliversResults;
 
+    public static URI createResultsUri(String basePath, String revision) throws URISyntaxException {
+        if (!basePath.endsWith("/"))
+            basePath = basePath + "/";
+        return new URI(basePath + revision);
+    }
+
     public JsonReporter() throws IOException, URISyntaxException {
         jsonFile = File.createTempFile("cucumber-json", ".json");
         jsonFile.deleteOnExit();
@@ -28,7 +34,9 @@ public class JsonReporter implements Formatter {
 
         filteredEnv = new FilteredEnv(System.getenv("CUCUMBER_PRO_ENV_MASK"), System.getenv());
 
-        URI url = new URI(System.getenv("CUCUMBER_PRO_URL"));
+        GitWorkingCopy workingCopy = GitWorkingCopy.detect(Paths.get(System.getProperty("user.dir")));
+        String rev = workingCopy.getRev();
+        URI url = JsonReporter.createResultsUri(System.getenv("CUCUMBER_PRO_URL"), rev);
         deliversResults = new DeliversResults(url);
     }
 
