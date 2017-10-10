@@ -8,12 +8,11 @@ import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.Env;
 import cucumber.runtime.formatter.PluginFactory;
-import pro.cucumber.gitcli.GitCliRevisionProvider;
 import pro.cucumber.jgit.JGitRevisionProvider;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.Map;
 
 public class JsonReporter implements Formatter {
 
@@ -24,17 +23,21 @@ public class JsonReporter implements Formatter {
     private final Publisher publisher;
     private static final Env ENV = new Env();
 
-    public JsonReporter(Publisher publisher) throws IOException, URISyntaxException {
+    public JsonReporter(Publisher publisher, Map<String, String> env, String envMask) {
         this.publisher = publisher;
-        jsonFile = File.createTempFile("cucumber-json", ".json");
+        try {
+            jsonFile = File.createTempFile("cucumber-json", ".json");
+        } catch (IOException e) {
+            throw new CucumberException(e);
+        }
         jsonFile.deleteOnExit();
         jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
 
-        filteredEnv = new FilteredEnv(ENV.get("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK), System.getenv());
+        filteredEnv = new FilteredEnv(envMask, env);
     }
 
-    public JsonReporter() throws IOException, URISyntaxException {
-        this(createPublisher());
+    public JsonReporter() {
+        this(createPublisher(), System.getenv(), ENV.get("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK));
     }
 
     private static Publisher createPublisher() {
