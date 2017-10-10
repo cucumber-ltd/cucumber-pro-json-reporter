@@ -1,10 +1,10 @@
 package pro.cucumber;
 
-import cucumber.api.event.EventPublisher;
-import cucumber.api.formatter.Formatter;
 import cucumber.api.event.Event;
 import cucumber.api.event.EventHandler;
+import cucumber.api.event.EventPublisher;
 import cucumber.api.event.TestRunFinished;
+import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.formatter.PluginFactory;
 
@@ -15,11 +15,12 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
 public class JsonReporter implements Formatter {
+    private static final String CUCUMBER_PRO_URL = System.getenv("CUCUMBER_PRO_URL");
 
     private final Formatter f;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
-    private DeliversResults deliversResults;
+    private final DeliversResults deliversResults;
 
     public static URI createResultsUri(String basePath, String revision) throws URISyntaxException {
         if (!basePath.endsWith("/"))
@@ -28,20 +29,30 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter() throws IOException, URISyntaxException {
-        jsonFile = File.createTempFile("cucumber-json", ".json");
-        jsonFile.deleteOnExit();
-        f = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
+        if (CUCUMBER_PRO_URL != null) {
+            jsonFile = File.createTempFile("cucumber-json", ".json");
+            jsonFile.deleteOnExit();
+            f = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
 
-        filteredEnv = new FilteredEnv(System.getenv("CUCUMBER_PRO_ENV_MASK"), System.getenv());
+            filteredEnv = new FilteredEnv(System.getenv("CUCUMBER_PRO_ENV_MASK"), System.getenv());
 
-        GitWorkingCopy workingCopy = GitWorkingCopy.detect(Paths.get(System.getProperty("user.dir")));
-        String rev = workingCopy.getRev();
-        URI url = JsonReporter.createResultsUri(System.getenv("CUCUMBER_PRO_URL"), rev);
-        deliversResults = new DeliversResults(url);
+            GitWorkingCopy workingCopy = GitWorkingCopy.detect(Paths.get(System.getProperty("user.dir")));
+            String rev = workingCopy.getRev();
+
+            URI url = JsonReporter.createResultsUri(CUCUMBER_PRO_URL, rev);
+            deliversResults = new DeliversResults(url);
+        } else {
+            System.err.println("CUCUMBER_PRO_URL not defined. Cannot send results to Cucumber Pro.");
+            f = null;
+            jsonFile = null;
+            filteredEnv = null;
+            deliversResults = null;
+        }
     }
 
     @Override
     public void setEventPublisher(EventPublisher publisher) {
+        if (f == null) return;
         f.setEventPublisher(new PostingEventPublisher(publisher));
     }
 
