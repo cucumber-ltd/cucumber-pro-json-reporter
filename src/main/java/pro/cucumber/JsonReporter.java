@@ -17,10 +17,12 @@ import java.net.URISyntaxException;
 
 public class JsonReporter implements Formatter {
 
+    public static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
     private final Publisher publisher;
+    private static final Env ENV = new Env();
 
     public JsonReporter(Publisher publisher) throws IOException, URISyntaxException {
         this.publisher = publisher;
@@ -28,7 +30,7 @@ public class JsonReporter implements Formatter {
         jsonFile.deleteOnExit();
         jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
 
-        filteredEnv = new FilteredEnv(System.getenv("CUCUMBER_PRO_ENV_MASK"), System.getenv());
+        filteredEnv = new FilteredEnv(ENV.get("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK), System.getenv());
     }
 
     public JsonReporter() throws IOException, URISyntaxException {
@@ -40,8 +42,7 @@ public class JsonReporter implements Formatter {
     }
 
     private static RevisionProvider createRevisionProvider() {
-        Env env = new Env();
-        String revisionProviderClassName = env.get("CUCUMBER_PRO_REVISION_PROVIDER", JGitRevisionProvider.class.getName());
+        String revisionProviderClassName = ENV.get("CUCUMBER_PRO_REVISION_PROVIDER", JGitRevisionProvider.class.getName());
         try {
             Class<RevisionProvider> providerClass = (Class<RevisionProvider>) Thread.currentThread().getContextClassLoader().loadClass(revisionProviderClassName);
             return providerClass.newInstance();

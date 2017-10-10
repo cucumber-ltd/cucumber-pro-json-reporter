@@ -2,6 +2,8 @@ package pro.cucumber;
 
 import cucumber.runtime.CucumberException;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -77,7 +79,14 @@ public class HTTPPublisher implements Publisher {
 
         HttpClient client = HttpClientBuilder.create().build();
         try {
-            client.execute(post);
+            HttpResponse response = client.execute(post);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode >= 200 && statusCode < 400) {
+                System.out.println("Published results to Cucumber Pro: " + url.toString() );
+            } else {
+                throw new CucumberException(String.format("Failed to publish results to Cucumber Pro URL: %s, Status: %s", url, statusLine));
+            }
         } catch (IOException e) {
             throw new CucumberException(e);
         }
