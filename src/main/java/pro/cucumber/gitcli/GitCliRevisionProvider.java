@@ -1,24 +1,27 @@
-package pro.cucumber;
+package pro.cucumber.gitcli;
+
+import pro.cucumber.Exec;
+import pro.cucumber.RevisionProvider;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class GitWorkingCopy implements RevisionProvider {
+public class GitCliRevisionProvider implements RevisionProvider {
 
     private final Path rootPath;
     private final Exec exec;
 
-    public GitWorkingCopy() {
+    public GitCliRevisionProvider() {
         this(Paths.get(System.getProperty("user.dir")));
     }
 
-    public GitWorkingCopy(Path rootPath) {
+    public GitCliRevisionProvider(Path rootPath) {
         this.rootPath = rootPath;
         exec = new Exec(rootPath);
     }
 
-    public static GitWorkingCopy detect(Path directory) {
+    public static GitCliRevisionProvider detect(Path directory) {
         Path workingCopyRoot = null;
         while (directory != null) {
             Path dotGit = directory.resolve(".git");
@@ -27,7 +30,7 @@ public class GitWorkingCopy implements RevisionProvider {
             }
             directory = directory.getParent();
         }
-        return workingCopyRoot != null ? new GitWorkingCopy(workingCopyRoot) : null;
+        return workingCopyRoot != null ? new GitCliRevisionProvider(workingCopyRoot) : null;
     }
 
     public Path getRootPath() {

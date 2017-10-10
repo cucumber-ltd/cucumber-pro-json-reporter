@@ -6,6 +6,7 @@ import cucumber.api.event.EventPublisher;
 import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
 import cucumber.runtime.formatter.PluginFactory;
+import pro.cucumber.gitcli.GitCliRevisionProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class JsonReporter implements Formatter {
     }
 
     private static RevisionProvider createRevisionProvider() {
-        return new GitWorkingCopy();
+        return new GitCliRevisionProvider();
     }
 
     @Override

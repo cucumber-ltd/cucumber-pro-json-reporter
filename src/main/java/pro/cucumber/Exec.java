@@ -7,8 +7,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-class Exec {
-    public final Path dir;
+public class Exec {
+    private final Path dir;
 
     public Exec(Path dir) {
         this.dir = dir;

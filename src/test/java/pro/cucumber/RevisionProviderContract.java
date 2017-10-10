@@ -2,6 +2,7 @@ package pro.cucumber;
 
 import org.junit.Before;
 import org.junit.Test;
+import pro.cucumber.gitcli.GitCliRevisionProvider;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertTrue;
 
-public class GitWorkingCopyTest {
+public abstract class RevisionProviderContract {
     private Path rootPath;
 
     @Before
@@ -27,8 +28,10 @@ public class GitWorkingCopyTest {
     @Test
     public void findsRev() {
         String sha1Pattern = "^[a-f0-9]{40}$";
-        GitWorkingCopy workingCopy = new GitWorkingCopy(rootPath);
-
-        assertTrue("Expected a sha1", Pattern.matches(sha1Pattern, workingCopy.getRev()));
+        RevisionProvider revisionProvider = makeRevisionProvider(rootPath);
+        assertTrue("Expected a sha1", Pattern.matches(sha1Pattern, revisionProvider.getRev()));
     }
+
+    protected abstract RevisionProvider makeRevisionProvider(Path rootPath);
+
 }
