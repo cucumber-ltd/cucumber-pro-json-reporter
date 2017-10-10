@@ -25,7 +25,7 @@ public abstract class RevisionProviderContract {
         Exec exec = new Exec(rootPath);
         exec.cmd("git init");
         exec.cmd("git add .");
-        exec.cmd("git commit --message=\"file\"");
+        exec.cmd("git -c user.email=\"devs@cucumber.io\" -c user.name=\"Devs\" commit -m \"file\"");
 
         List<String> status = exec.cmd("git status --porcelain");
         assertEquals("Expected status to be empty.", new ArrayList<String>(), status);
