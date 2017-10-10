@@ -5,14 +5,11 @@ import cucumber.api.event.EventHandler;
 import cucumber.api.event.EventPublisher;
 import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
-import cucumber.runtime.CucumberException;
 import cucumber.runtime.formatter.PluginFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
 
 public class JsonReporter implements Formatter {
 
@@ -31,7 +28,15 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter() throws IOException, URISyntaxException {
-        this(new HTTPPublisher(GitWorkingCopy.detect(Paths.get(System.getProperty("user.dir")))));
+        this(createPublisher());
+    }
+
+    private static Publisher createPublisher() {
+        return new HTTPPublisher(createRevisionProvider());
+    }
+
+    private static RevisionProvider createRevisionProvider() {
+        return new GitWorkingCopy();
     }
 
     @Override

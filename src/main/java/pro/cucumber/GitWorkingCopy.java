@@ -2,11 +2,16 @@ package pro.cucumber;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class GitWorkingCopy implements RevisionProvider {
 
     private final Path rootPath;
     private final Exec exec;
+
+    public GitWorkingCopy() {
+        this(Paths.get(System.getProperty("user.dir")));
+    }
 
     public GitWorkingCopy(Path rootPath) {
         this.rootPath = rootPath;
