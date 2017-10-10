@@ -22,11 +22,13 @@ public abstract class RevisionProviderContract {
         Path subfolder = rootPath.resolve("subfolder");
         Files.createDirectory(subfolder);
         Files.createFile(subfolder.resolve("file"));
-        Exec.cmd("git init", rootPath);
-        Exec.cmd("git add -A", rootPath);
-        System.out.println(Exec.cmd("git commit -am \"files\"", rootPath));
-        List<String> status = Exec.cmd("git status --porcelain", rootPath);
-        assertEquals(new ArrayList<String>(), status);
+        Exec exec = new Exec(rootPath);
+        exec.cmd("git init");
+        exec.cmd("git add .");
+        exec.cmd("git commit --message=\"file\"");
+
+        List<String> status = exec.cmd("git status --porcelain");
+        assertEquals("Expected status to be empty.", new ArrayList<String>(), status);
     }
 
     @Test
