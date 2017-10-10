@@ -24,7 +24,7 @@ public abstract class RevisionProviderContract {
         Files.createFile(subfolder.resolve("file"));
         Exec.cmd("git init", rootPath);
         Exec.cmd("git add -A", rootPath);
-        Exec.cmd("git commit -am \"files\"", rootPath);
+        System.out.println(Exec.cmd("git commit -am \"files\"", rootPath));
         List<String> status = Exec.cmd("git status --porcelain", rootPath);
         assertEquals(new ArrayList<String>(), status);
     }
