@@ -5,8 +5,11 @@ import cucumber.api.event.EventHandler;
 import cucumber.api.event.EventPublisher;
 import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
+import cucumber.runtime.CucumberException;
+import cucumber.runtime.Env;
 import cucumber.runtime.formatter.PluginFactory;
 import pro.cucumber.gitcli.GitCliRevisionProvider;
+import pro.cucumber.jgit.JGitRevisionProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +40,14 @@ public class JsonReporter implements Formatter {
     }
 
     private static RevisionProvider createRevisionProvider() {
-        return new GitCliRevisionProvider();
+        Env env = new Env();
+        String revisionProviderClassName = env.get("CUCUMBER_PRO_REVISION_PROVIDER", JGitRevisionProvider.class.getName());
+        try {
+            Class<RevisionProvider> providerClass = (Class<RevisionProvider>) Thread.currentThread().getContextClassLoader().loadClass(revisionProviderClassName);
+            return providerClass.newInstance();
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            throw new CucumberException(e);
+        }
     }
 
     @Override
