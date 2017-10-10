@@ -23,6 +23,7 @@ public abstract class RevisionProviderContract {
         Exec.cmd("git init", rootPath);
         Exec.cmd("git add -A", rootPath);
         Exec.cmd("git commit -am \"files\"", rootPath);
+        System.out.println(Exec.cmd("ls -al", rootPath));
     }
 
     @Test
