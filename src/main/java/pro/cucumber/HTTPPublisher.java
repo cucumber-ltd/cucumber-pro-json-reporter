@@ -1,5 +1,6 @@
 package pro.cucumber;
 
+import cucumber.runtime.CucumberException;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -15,18 +16,36 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 
-class DeliversResults {
+public class HTTPPublisher implements Publisher {
 
-    private final URI url;
+    static final String CUCUMBER_PRO_URL = System.getenv("CUCUMBER_PRO_URL");
+    private final RevisionProvider revisionProvider;
 
-    DeliversResults(URI url) {
-        this.url = url;
+    HTTPPublisher(RevisionProvider revisionProvider) {
+        this.revisionProvider = revisionProvider;
     }
 
-    void post(File jsonFile, final String env) throws IOException {
+    public static URI createResultsUri(String basePath, String revision) {
+        if (!basePath.endsWith("/"))
+            basePath = basePath + "/";
+        try {
+            return new URI(basePath + revision);
+        } catch (URISyntaxException e) {
+            throw new CucumberException(e);
+        }
+    }
+
+    @Override
+    public void publish(File file, final String env) {
+        if (CUCUMBER_PRO_URL == null) {
+            System.err.println("CUCUMBER_PRO_URL not defined. Cannot send results to Cucumber Pro.");
+            return;
+        }
+        URI url = createResultsUri(CUCUMBER_PRO_URL, revisionProvider.getRev());
         HttpPost post = new HttpPost(url);
-        FileBody fileBody = new FileBody(jsonFile, ContentType.create("application/x.cucumber.java.results+json", "UTF-8"));
+        FileBody fileBody = new FileBody(file, ContentType.create("application/x.cucumber.java.results+json", "UTF-8"));
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -57,6 +76,10 @@ class DeliversResults {
         post.setEntity(entity);
 
         HttpClient client = HttpClientBuilder.create().build();
-        client.execute(post);
+        try {
+            client.execute(post);
+        } catch (IOException e) {
+            throw new CucumberException(e);
+        }
     }
 }

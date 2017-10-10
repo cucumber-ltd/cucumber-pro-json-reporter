@@ -13,7 +13,7 @@ public class JsonReporterTest {
     public void addRevisionToUrl() throws MalformedURLException, URISyntaxException {
         String urlString = "https://example.com/tests/results";
         String revision = "abcd1234";
-        URI url = JsonReporter.createResultsUri(urlString, revision);
+        URI url = HTTPPublisher.createResultsUri(urlString, revision);
         assertEquals(url.toString(), "https://example.com/tests/results/abcd1234");
     }
 }

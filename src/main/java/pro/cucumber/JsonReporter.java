@@ -15,45 +15,29 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
 public class JsonReporter implements Formatter {
-    private static final String CUCUMBER_PRO_URL = System.getenv("CUCUMBER_PRO_URL");
 
-    private final Formatter f;
+    private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
-    private final DeliversResults deliversResults;
+    private final Publisher publisher;
 
-    public static URI createResultsUri(String basePath, String revision) throws URISyntaxException {
-        if (!basePath.endsWith("/"))
-            basePath = basePath + "/";
-        return new URI(basePath + revision);
+    public JsonReporter(Publisher publisher) throws IOException, URISyntaxException {
+        this.publisher = publisher;
+        jsonFile = File.createTempFile("cucumber-json", ".json");
+        jsonFile.deleteOnExit();
+        jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
+
+        filteredEnv = new FilteredEnv(System.getenv("CUCUMBER_PRO_ENV_MASK"), System.getenv());
     }
 
     public JsonReporter() throws IOException, URISyntaxException {
-        if (CUCUMBER_PRO_URL != null) {
-            jsonFile = File.createTempFile("cucumber-json", ".json");
-            jsonFile.deleteOnExit();
-            f = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
-
-            filteredEnv = new FilteredEnv(System.getenv("CUCUMBER_PRO_ENV_MASK"), System.getenv());
-
-            GitWorkingCopy workingCopy = GitWorkingCopy.detect(Paths.get(System.getProperty("user.dir")));
-            String rev = workingCopy.getRev();
-
-            URI url = JsonReporter.createResultsUri(CUCUMBER_PRO_URL, rev);
-            deliversResults = new DeliversResults(url);
-        } else {
-            System.err.println("CUCUMBER_PRO_URL not defined. Cannot send results to Cucumber Pro.");
-            f = null;
-            jsonFile = null;
-            filteredEnv = null;
-            deliversResults = null;
-        }
+        this(new HTTPPublisher(GitWorkingCopy.detect(Paths.get(System.getProperty("user.dir")))));
     }
 
     @Override
     public void setEventPublisher(EventPublisher publisher) {
-        if (f == null) return;
-        f.setEventPublisher(new PostingEventPublisher(publisher));
+        if (jsonFormatter == null) return;
+        jsonFormatter.setEventPublisher(new PostingEventPublisher(publisher));
     }
 
     private class PostingEventPublisher implements EventPublisher {
@@ -71,11 +55,7 @@ public class JsonReporter implements Formatter {
                 publisher.registerHandlerFor(TestRunFinished.class, new EventHandler<TestRunFinished>() {
                     @Override
                     public void receive(TestRunFinished event) {
-                        try {
-                            deliversResults.post(jsonFile, filteredEnv.toString());
-                        } catch (IOException e) {
-                            throw new CucumberException(e);
-                        }
+                        JsonReporter.this.publisher.publish(jsonFile, filteredEnv.toString());
                     }
                 });
             }

@@ -3,7 +3,7 @@ package pro.cucumber;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class GitWorkingCopy {
+public class GitWorkingCopy implements RevisionProvider {
 
     private final Path rootPath;
     private final Exec exec;
@@ -29,6 +29,7 @@ public class GitWorkingCopy {
         return this.rootPath;
     }
 
+    @Override
     public String getRev() {
         return exec.cmd("git rev-parse HEAD").get(0);
     }
