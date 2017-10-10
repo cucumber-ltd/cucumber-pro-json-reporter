@@ -23,14 +23,14 @@ public abstract class RevisionProviderContract {
         Exec.cmd("git init", rootPath);
         Exec.cmd("git add -A", rootPath);
         Exec.cmd("git commit -am \"files\"", rootPath);
-        System.out.println(Exec.cmd("ls -al", rootPath));
     }
 
     @Test
     public void findsRev() {
         String sha1Pattern = "^[a-f0-9]{40}$";
         RevisionProvider revisionProvider = makeRevisionProvider(rootPath);
-        assertTrue("Expected a sha1", Pattern.matches(sha1Pattern, revisionProvider.getRev()));
+        String rev = revisionProvider.getRev();
+        assertTrue("Expected a sha1, got: "+rev, Pattern.matches(sha1Pattern, rev));
     }
 
     protected abstract RevisionProvider makeRevisionProvider(Path rootPath);
