@@ -9,7 +9,7 @@
 #
 #     ssh-keygen -R git.cucumber.pro
 #     ssh-keygen -R 46.101.61.151
-#     ssh gitgit.cucumber.pro uptime
+#     ssh git@git.cucumber.pro uptime
 #
 # Another failure might be:
 #
