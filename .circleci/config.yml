@@ -37,6 +37,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
+      - run: ./scripts/make-cpro-known-host
       - run: ./scripts/publish-documentation
       # run tests!
       - run: mvn integration-test
