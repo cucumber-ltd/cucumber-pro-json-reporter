@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.AbstractContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -16,6 +17,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -46,19 +49,19 @@ class HTTPPublisher implements Publisher {
         }
         URI url = createResultsUri(CUCUMBER_PRO_URL, revisionProvider.getRev());
         HttpPost post = new HttpPost(url);
-        FileBody fileBody = new FileBody(file, ContentType.create("application/x.cucumber.java.results+json", "UTF-8"));
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-        builder.addPart("profileName", new StringBody(profileName, ContentType.TEXT_PLAIN));
-        builder.addPart("env", new StringBody(env, ContentType.TEXT_PLAIN));
-        builder.addPart("payload", fileBody);
-        HttpEntity entity = builder.build();
-        post.setEntity(entity);
 
         HttpClient client = HttpClientBuilder.create().build();
         try {
+            builder.addPart("env", new MemoryFileBody("env.txt", env, ContentType.TEXT_PLAIN));
+            builder.addPart("payload", new FileBody(file, ContentType.create("application/x.cucumber.java.results+json", "UTF-8")));
+            builder.addPart("profileName", new StringBody(profileName, ContentType.TEXT_PLAIN));
+            HttpEntity entity = builder.build();
+            post.setEntity(entity);
+
             HttpResponse response = client.execute(post);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -77,6 +80,37 @@ class HTTPPublisher implements Publisher {
             }
         } catch (IOException e) {
             throw new CucumberException(e);
+        }
+    }
+
+    private class MemoryFileBody extends AbstractContentBody {
+        private final String filename;
+        private final byte[] data;
+
+        public MemoryFileBody(String filename, String data, ContentType contentType) throws UnsupportedEncodingException {
+            super(contentType);
+            this.filename = filename;
+            this.data = data.getBytes("UTF-8");
+        }
+
+        @Override
+        public String getFilename() {
+            return filename;
+        }
+
+        @Override
+        public void writeTo(OutputStream outputStream) throws IOException {
+            outputStream.write(data);
+        }
+
+        @Override
+        public String getTransferEncoding() {
+            return "UTF-8";
+        }
+
+        @Override
+        public long getContentLength() {
+            return data.length;
         }
     }
 }

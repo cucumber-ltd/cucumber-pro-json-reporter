@@ -17,7 +17,7 @@ import java.util.Map;
 public class JsonReporter implements Formatter {
 
     static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
-    static final String DEFAULT_CUCUMBER_PROFILE_NAME = "unknown profile";
+    static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
