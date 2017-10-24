@@ -8,28 +8,26 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MIME;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.AbstractContentBody;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class HTTPPublisher implements Publisher {
+class HTTPPublisher implements Publisher {
 
-    static final String CUCUMBER_PRO_URL = System.getenv("CUCUMBER_PRO_URL");
+    private static final String CUCUMBER_PRO_URL = System.getenv("CUCUMBER_PRO_URL");
     private final RevisionProvider revisionProvider;
 
     HTTPPublisher(RevisionProvider revisionProvider) {
         this.revisionProvider = revisionProvider;
     }
 
-    public static URI createResultsUri(String basePath, String revision) {
+    static URI createResultsUri(String basePath, String revision) {
         if (!basePath.endsWith("/"))
             basePath = basePath + "/";
         try {
@@ -40,9 +38,9 @@ public class HTTPPublisher implements Publisher {
     }
 
     @Override
-    public void publish(File file, final String env) {
+    public void publish(File file, final String env, String profileName) {
         if (CUCUMBER_PRO_URL == null) {
-            System.err.println("CUCUMBER_PRO_URL not defined. Cannot send results to Cucumber Pro.");
+            System.err.println("CUCUMBER_PRO_URL not defined. Not sending results to Cucumber Pro.");
             return;
         }
         URI url = createResultsUri(CUCUMBER_PRO_URL, revisionProvider.getRev());
@@ -51,29 +49,10 @@ public class HTTPPublisher implements Publisher {
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+        builder.addPart("profileName", new StringBody(profileName, ContentType.TEXT_PLAIN));
+        builder.addPart("env", new StringBody(env, ContentType.TEXT_PLAIN));
         builder.addPart("payload", fileBody);
-        builder.addPart("env", new AbstractContentBody(ContentType.TEXT_PLAIN) {
-
-            @Override
-            public String getTransferEncoding() {
-                return MIME.ENC_BINARY;
-            }
-
-            @Override
-            public long getContentLength() {
-                return env.length();
-            }
-
-            @Override
-            public String getFilename() {
-                return "env";
-            }
-
-            @Override
-            public void writeTo(OutputStream out) throws IOException {
-                out.write(env.getBytes("UTF-8"));
-            }
-        });
         HttpEntity entity = builder.build();
         post.setEntity(entity);
 
@@ -83,7 +62,7 @@ public class HTTPPublisher implements Publisher {
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
             if (statusCode >= 200 && statusCode < 400) {
-                System.out.println("Published results to Cucumber Pro: " + url.toString() );
+                System.out.println("Published results to Cucumber Pro: " + url.toString());
             } else {
                 throw new CucumberException(String.format("Failed to publish results to Cucumber Pro URL: %s, Status: %s", url, statusLine));
             }

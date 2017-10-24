@@ -7,6 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Disabled by default, only in the codebase as a fallback in case JGit
+ * doesn't work well. Delete this when/if jgit proves to be stable
+ */
 public class GitCliRevisionProvider implements RevisionProvider {
 
     private final Path rootPath;

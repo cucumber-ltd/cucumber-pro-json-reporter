@@ -16,15 +16,18 @@ import java.util.Map;
 
 public class JsonReporter implements Formatter {
 
-    public static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
+    static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
+    static final String DEFAULT_CUCUMBER_PROFILE_NAME = "unknown profile";
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
     private final Publisher publisher;
+    private final String profileName;
     private static final Env ENV = new Env();
 
-    public JsonReporter(Publisher publisher, Map<String, String> env, String envMask) {
+    public JsonReporter(Publisher publisher, Map<String, String> env, String envMask, String profileName) {
         this.publisher = publisher;
+        this.profileName = profileName;
         try {
             jsonFile = File.createTempFile("cucumber-json", ".json");
         } catch (IOException e) {
@@ -36,8 +39,12 @@ public class JsonReporter implements Formatter {
         filteredEnv = new FilteredEnv(envMask, env);
     }
 
+    public JsonReporter(String profileName) {
+        this(createPublisher(), System.getenv(), ENV.get("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK), profileName);
+    }
+
     public JsonReporter() {
-        this(createPublisher(), System.getenv(), ENV.get("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK));
+        this(createPublisher(), System.getenv(), ENV.get("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK), ENV.get("CUCUMBER_PROFILE_NAME", DEFAULT_CUCUMBER_PROFILE_NAME));
     }
 
     private static Publisher createPublisher() {
@@ -75,7 +82,7 @@ public class JsonReporter implements Formatter {
                 publisher.registerHandlerFor(TestRunFinished.class, new EventHandler<TestRunFinished>() {
                     @Override
                     public void receive(TestRunFinished event) {
-                        JsonReporter.this.publisher.publish(jsonFile, filteredEnv.toString());
+                        JsonReporter.this.publisher.publish(jsonFile, filteredEnv.toString(), profileName);
                     }
                 });
             }

@@ -12,6 +12,7 @@ public class FilteredEnvTest {
     @Test
     public void filters_and_sorts_keys() {
         Map<String, String> env = new HashMap<String, String>();
+        env.put("my_secret__token", "abcd");
         env.put("MY_SECRET_TOKEN", "abcd");
         env.put("A_KEY_TO_A_DOOR", "clef");
         env.put("FOO", "BAR");

@@ -8,11 +8,3 @@ a project under Git source control. If it cannot detect that it is
 running in Git, the formatter will fail the build.
 
 The formatter needs to detect the Git revision. It will shell out to `git` to do this.
-
-
-## TODO
-
-* Handle case where `git` is not on the path
-  * Specify location with `GIT_PATH`
-  * Fall back to JGit
-* Detect whether the working copy is dirty and react accordingly (fail/warn/send diff)
