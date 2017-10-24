@@ -13,6 +13,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -64,7 +65,15 @@ class HTTPPublisher implements Publisher {
             if (statusCode >= 200 && statusCode < 400) {
                 System.out.println("Published results to Cucumber Pro: " + url.toString());
             } else {
-                throw new CucumberException(String.format("Failed to publish results to Cucumber Pro URL: %s, Status: %s", url, statusLine));
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                response.getEntity().writeTo(baos);
+                String responseBody = new String(baos.toByteArray(), "UTF-8");
+                throw new CucumberException(String.format(
+                        "Failed to publish results to Cucumber Pro URL: %s, Status: %s\nResponse:\n%s",
+                        url,
+                        statusLine,
+                        responseBody
+                ));
             }
         } catch (IOException e) {
             throw new CucumberException(e);
