@@ -1,4 +1,4 @@
-package pro.cucumber;
+package io.cucumber.proreporter;
 
 import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;

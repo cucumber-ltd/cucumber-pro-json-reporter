@@ -1,4 +1,4 @@
-package pro.cucumber;
+package io.cucumber.proreporter;
 
 import org.junit.Test;
 
@@ -6,7 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class HTTPPublisherTest {
     @Test

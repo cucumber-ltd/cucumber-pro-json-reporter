@@ -1,4 +1,4 @@
-package pro.cucumber;
+package io.cucumber.proreporter;
 
 import java.io.BufferedReader;
 import java.io.IOException;

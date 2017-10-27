@@ -1,7 +1,7 @@
-package pro.cucumber.gitcli;
+package io.cucumber.proreporter.gitcli;
 
-import pro.cucumber.Exec;
-import pro.cucumber.RevisionProvider;
+import io.cucumber.proreporter.Exec;
+import io.cucumber.proreporter.RevisionProvider;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

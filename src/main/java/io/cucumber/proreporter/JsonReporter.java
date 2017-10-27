@@ -1,4 +1,4 @@
-package pro.cucumber;
+package io.cucumber.proreporter;
 
 import cucumber.api.event.Event;
 import cucumber.api.event.EventHandler;
@@ -8,7 +8,7 @@ import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.Env;
 import cucumber.runtime.formatter.PluginFactory;
-import pro.cucumber.jgit.JGitRevisionProvider;
+import io.cucumber.proreporter.jgit.JGitRevisionProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,14 +18,14 @@ public class JsonReporter implements Formatter {
 
     static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
     static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
+    private static final Env ENV = new Env();
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
     private final Publisher publisher;
     private final String profileName;
-    private static final Env ENV = new Env();
 
-    public JsonReporter(Publisher publisher, Map<String, String> env, String envMask, String profileName) {
+    JsonReporter(Publisher publisher, Map<String, String> env, String envMask, String profileName) {
         this.publisher = publisher;
         this.profileName = profileName;
         try {

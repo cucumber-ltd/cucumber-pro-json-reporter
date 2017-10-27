@@ -43,6 +43,6 @@ ensure_cpro_is_up
 if [ -n "${CIRCLE_BRANCH}" ]; then
   git push -f git@git.cucumber.pro:cucumber-pro-json-reporter-jvm.git refs/heads/"${CIRCLE_BRANCH}"
 else
-  git push -f  git@git.cucumber.pro:cucumber-pro-json-reporter-jvm.git refs/tags/"${CIRCLE_TAG}"
+  git push -f git@git.cucumber.pro:cucumber-pro-json-reporter-jvm.git refs/tags/"${CIRCLE_TAG}"
 fi
 

@@ -1,4 +1,4 @@
-package pro.cucumber;
+package io.cucumber.proreporter;
 
 import cucumber.runtime.CucumberException;
 import org.apache.http.HttpEntity;
@@ -87,7 +87,7 @@ class HTTPPublisher implements Publisher {
         private final String filename;
         private final byte[] data;
 
-        public MemoryFileBody(String filename, String data, ContentType contentType) throws UnsupportedEncodingException {
+        MemoryFileBody(String filename, String data, ContentType contentType) throws UnsupportedEncodingException {
             super(contentType);
             this.filename = filename;
             this.data = data.getBytes("UTF-8");

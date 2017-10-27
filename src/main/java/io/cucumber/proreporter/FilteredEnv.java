@@ -1,4 +1,4 @@
-package pro.cucumber;
+package io.cucumber.proreporter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 class FilteredEnv {
-    private Pattern maskPattern;
-    private Map<String, String> env;
+    private final Pattern maskPattern;
+    private final Map<String, String> env;
 
     FilteredEnv(String mask, Map<String, String> env) {
         this.maskPattern = Pattern.compile(String.format(".*(%s).*", mask), Pattern.CASE_INSENSITIVE);
