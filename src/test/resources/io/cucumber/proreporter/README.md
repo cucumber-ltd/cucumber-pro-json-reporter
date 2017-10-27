@@ -75,3 +75,16 @@ export CUCUMBER_PRO_URL=https://<auth-token>@app.cucumber.pro/tests/results/<pro
 
 You need to replace `<auth-token>` with your Cucumber Pro project's authentication token.
 You also need to replace `<project-name>` with your Cucumber Pro project name.
+
+## Security
+
+The plugin sends your local environment variables to Cucumber Pro so it can detect the CI build number, 
+git branch/tag and other information about the build.
+
+Environment variables with `SECRET|KEY|TOKEN|PASSWORD` (case insensitive) are stripped out and not sent to Cucumber Pro.
+
+You can specify a custom pattern of environment variables to filter out with the following environment variable:
+
+```
+export CUCUMBER_PRO_ENV_MASK=...
+```

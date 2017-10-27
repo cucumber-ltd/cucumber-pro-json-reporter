@@ -58,7 +58,7 @@ class HTTPPublisher implements Publisher {
         try {
             builder.addPart("env", new MemoryFileBody("env.txt", env, ContentType.TEXT_PLAIN));
             builder.addPart("payload", new FileBody(file, ContentType.create("application/x.cucumber.java.results+json", "UTF-8")));
-            builder.addPart("profileName", new StringBody(profileName, ContentType.TEXT_PLAIN));
+            builder.addPart("profileName", new MemoryFileBody("profileName.txt", profileName, ContentType.TEXT_PLAIN));
             HttpEntity entity = builder.build();
             post.setEntity(entity);
 
