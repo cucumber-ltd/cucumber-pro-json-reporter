@@ -1,7 +1,7 @@
-package io.cucumber.proreporter.jgit;
+package io.cucumber.pro.revision.jgit;
 
 import cucumber.runtime.CucumberException;
-import io.cucumber.proreporter.RevisionProvider;
+import io.cucumber.pro.revision.RevisionProvider;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 

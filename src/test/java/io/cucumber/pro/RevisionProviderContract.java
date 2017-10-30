@@ -1,5 +1,7 @@
-package io.cucumber.proreporter;
+package io.cucumber.pro;
 
+import io.cucumber.pro.revision.RevisionProvider;
+import io.cucumber.pro.revision.git.Exec;
 import org.junit.Before;
 import org.junit.Test;
 

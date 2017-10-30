@@ -1,4 +1,4 @@
-package io.cucumber.proreporter;
+package io.cucumber.pro.publisher;
 
 import cucumber.runtime.CucumberException;
 

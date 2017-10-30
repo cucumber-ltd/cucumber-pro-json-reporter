@@ -1,4 +1,4 @@
-package io.cucumber.proreporter;
+package io.cucumber.pro.revision.git;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,10 +12,6 @@ public class Exec {
 
     public Exec(Path dir) {
         this.dir = dir;
-    }
-
-    public static List<String> cmd(String cmd, Path dir) {
-        return new Exec(dir).cmd(cmd);
     }
 
     public List<String> cmd(String cmd) {

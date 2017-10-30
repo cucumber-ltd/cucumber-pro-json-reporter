@@ -1,4 +1,4 @@
-package io.cucumber.proreporter;
+package io.cucumber.pro;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

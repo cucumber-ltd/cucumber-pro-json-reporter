@@ -1,4 +1,4 @@
-package io.cucumber.proreporter;
+package io.cucumber.pro;
 
 import cucumber.api.event.Event;
 import cucumber.api.event.EventHandler;
@@ -8,7 +8,10 @@ import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.Env;
 import cucumber.runtime.formatter.PluginFactory;
-import io.cucumber.proreporter.jgit.JGitRevisionProvider;
+import io.cucumber.pro.revision.RevisionProvider;
+import io.cucumber.pro.revision.jgit.JGitRevisionProvider;
+import io.cucumber.pro.publisher.HTTPPublisher;
+import io.cucumber.pro.publisher.Publisher;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +51,11 @@ public class JsonReporter implements Formatter {
     }
 
     private static Publisher createPublisher() {
-        return new HTTPPublisher(createRevisionProvider());
+        return new HTTPPublisher(createBaseUri(), createRevisionProvider());
+    }
+
+    private static String createBaseUri() {
+        return ENV.get("CUCUMBER_PRO_URL");
     }
 
     private static RevisionProvider createRevisionProvider() {

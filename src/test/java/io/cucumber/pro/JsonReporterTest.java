@@ -1,8 +1,12 @@
-package io.cucumber.proreporter;
+package io.cucumber.pro;
 
+import cucumber.api.event.EventHandler;
+import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
+import cucumber.runner.EventBus;
+import cucumber.runner.TimeService;
 import cucumber.runtime.CucumberException;
-import org.junit.Ignore;
+import io.cucumber.pro.publisher.Publisher;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,7 +18,6 @@ import static org.junit.Assert.assertNotNull;
 
 public class JsonReporterTest {
 
-    @Ignore
     @Test
     public void it_publishes_the_json_report_with_filtered_environment_data() {
         Map<String, String> env = new HashMap<>();
@@ -28,11 +31,18 @@ public class JsonReporterTest {
                 JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME
         );
 
-        // TODO: use reporter
+        TimeService timeService = TimeService.SYSTEM;
+        EventBus eventBus = new EventBus(timeService);
+        reporter.setEventPublisher(eventBus);
+        EventHandler<TestRunFinished> testRunFinishedEventHandler = new EventHandler<TestRunFinished>() {
+            @Override
+            public void receive(TestRunFinished event) {
+            }
+        };
+        eventBus.registerHandlerFor(TestRunFinished.class, testRunFinishedEventHandler);
+        eventBus.send(new TestRunFinished(timeService.time()));
 
-        assertEquals("FOO=BAR\n", publisher.getPublishedEnv());
-
-        // TODO: better check for file?
+        assertEquals("FOO=bar\n", publisher.getPublishedEnv());
         assertNotNull(publisher.getPublishedFile());
     }
 

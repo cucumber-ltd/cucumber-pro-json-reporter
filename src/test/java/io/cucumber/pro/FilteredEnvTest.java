@@ -1,4 +1,4 @@
-package io.cucumber.proreporter;
+package io.cucumber.pro;
 
 import org.junit.Test;
 
