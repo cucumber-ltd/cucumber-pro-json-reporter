@@ -32,7 +32,7 @@ public class JGitRevisionProvider implements RevisionProvider {
     }
 
     @Override
-    public String getRev() {
+    public String getRevision() {
         try {
             return repository.exactRef("HEAD").getObjectId().getName();
         } catch (IOException e) {

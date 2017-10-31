@@ -20,12 +20,19 @@ Next, tell Cucumber to use the plugin:
 
 ```java
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"io.cucumber.proreporter.JsonReporter"})
+@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter"})
 public class RunCucumberTest {
 }
 ```
 
 ## Configuration
+
+There are several configuration options for the plugin:
+
+* Project Name
+* Cucumber Pro URL
+* Activation
+* Profile name
 
 If you run Cucumber several times as part of your build (with different options), you can
 specify a different profile name for each run. This allows Cucumber Pro to differentiate
@@ -47,14 +54,14 @@ With Cucumber-JVM 2.0.2 and above you can specify the profile by appending a col
 
 ```java
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"io.cucumber.proreporter.JsonReporter:smoke"}, tags = "@ui and @smoke")
+@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter:smoke"}, tags = "@ui and @smoke")
 public class RunCucumberTest {
 }
 ```
 
 ```java
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"io.cucumber.proreporter.JsonReporter:full"}, tags = "not @ui and not @smoke")
+@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter:full"}, tags = "not @ui and not @smoke")
 public class RunCucumberTest {
 }
 ```

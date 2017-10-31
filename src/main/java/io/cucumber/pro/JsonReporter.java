@@ -8,13 +8,20 @@ import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.Env;
 import cucumber.runtime.formatter.PluginFactory;
+import io.cucumber.pro.metadata.ChainedMetadata;
+import io.cucumber.pro.metadata.EnvMetadata;
+import io.cucumber.pro.metadata.Metadata;
+import io.cucumber.pro.metadata.YamlMetadata;
 import io.cucumber.pro.revision.RevisionProvider;
 import io.cucumber.pro.revision.jgit.JGitRevisionProvider;
 import io.cucumber.pro.publisher.HTTPPublisher;
 import io.cucumber.pro.publisher.Publisher;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 public class JsonReporter implements Formatter {
@@ -51,12 +58,12 @@ public class JsonReporter implements Formatter {
     }
 
     private static Publisher createPublisher() {
-        return new HTTPPublisher(createBaseUri(), createRevisionProvider());
+        Metadata metadata = ChainedMetadata.create();
+        String projectName = metadata.getProjectName();
+        String revision = createRevisionProvider().getRevision();
+        return HTTPPublisher.create(System.getenv(), projectName, revision);
     }
 
-    private static String createBaseUri() {
-        return ENV.get("CUCUMBER_PRO_URL");
-    }
 
     private static RevisionProvider createRevisionProvider() {
         String revisionProviderClassName = ENV.get("CUCUMBER_PRO_REVISION_PROVIDER", JGitRevisionProvider.class.getName());

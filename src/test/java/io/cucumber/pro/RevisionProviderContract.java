@@ -37,7 +37,7 @@ public abstract class RevisionProviderContract {
     public void findsRev() {
         String sha1Pattern = "^[a-f0-9]{40}$";
         RevisionProvider revisionProvider = makeRevisionProvider(rootPath);
-        String rev = revisionProvider.getRev();
+        String rev = revisionProvider.getRevision();
         assertTrue("Expected a sha1, got: " + rev, Pattern.matches(sha1Pattern, rev));
     }
 

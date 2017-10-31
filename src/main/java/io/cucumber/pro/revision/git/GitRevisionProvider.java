@@ -41,7 +41,7 @@ public class GitRevisionProvider implements RevisionProvider {
     }
 
     @Override
-    public String getRev() {
+    public String getRevision() {
         return exec.cmd("git rev-parse HEAD").get(0);
     }
 }

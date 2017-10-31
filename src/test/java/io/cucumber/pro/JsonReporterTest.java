@@ -52,8 +52,8 @@ public class JsonReporterTest {
         private String env;
 
         @Override
-        public void publish(File file, String env, String profileName) throws CucumberException {
-            this.file = file;
+        public void publish(File resultsJsonFile, String env, String profileName) throws CucumberException {
+            this.file = resultsJsonFile;
             this.env = env;
         }
 
