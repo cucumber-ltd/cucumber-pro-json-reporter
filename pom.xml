@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.cucumber</groupId>
-    <artifactId>pro-publisher</artifactId>
+    <artifactId>pro-plugin</artifactId>
     <version>1.0.1-SNAPSHOT</version>
 
     <packaging>bundle</packaging>
