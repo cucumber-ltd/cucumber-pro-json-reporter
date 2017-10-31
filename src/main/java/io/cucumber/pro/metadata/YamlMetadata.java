@@ -13,6 +13,11 @@ public class YamlMetadata implements Metadata {
 
     public static final String YAML_FILE_NAME = ".cucumberpro.yml";
     public static final String PROJECT_NAME_FIELD = "project_name";
+    private static final Yaml YAML = new Yaml();
+    private final Map metadata;
+    public YamlMetadata(Reader source) {
+        metadata = YAML.load(source);
+    }
 
     static Metadata create() {
         File yamlFile = new File(YAML_FILE_NAME);
@@ -22,13 +27,6 @@ public class YamlMetadata implements Metadata {
         } catch (IOException e1) {
             return new NullMetadata();
         }
-    }
-
-    private static final Yaml YAML = new Yaml();
-    private final Map metadata;
-
-    public YamlMetadata(Reader source) {
-        metadata = YAML.load(source);
     }
 
     @Override

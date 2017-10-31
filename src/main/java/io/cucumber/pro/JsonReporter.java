@@ -9,19 +9,14 @@ import cucumber.runtime.CucumberException;
 import cucumber.runtime.Env;
 import cucumber.runtime.formatter.PluginFactory;
 import io.cucumber.pro.metadata.ChainedMetadata;
-import io.cucumber.pro.metadata.EnvMetadata;
 import io.cucumber.pro.metadata.Metadata;
-import io.cucumber.pro.metadata.YamlMetadata;
-import io.cucumber.pro.revision.RevisionProvider;
-import io.cucumber.pro.revision.jgit.JGitRevisionProvider;
 import io.cucumber.pro.publisher.HTTPPublisher;
 import io.cucumber.pro.publisher.Publisher;
+import io.cucumber.pro.revision.RevisionProvider;
+import io.cucumber.pro.revision.jgit.JGitRevisionProvider;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Map;
 
 public class JsonReporter implements Formatter {

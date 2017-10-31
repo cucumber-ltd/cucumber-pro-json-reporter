@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
  * Implements a subset of https://tools.ietf.org/html/rfc6570
  */
 public class URITemplate {
-    private final String template;
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("\\{([^}]+)}");
+    private final String template;
 
     public URITemplate(String template) {
         this.template = template;
@@ -25,7 +25,7 @@ public class URITemplate {
             String variableName = matcher.group(1);
             matcher.appendReplacement(format, "%s");
             String argument = values.get(variableName);
-            if(argument == null) {
+            if (argument == null) {
                 throw new RuntimeException(String.format("Missing argument \"%s\". Template: %s Arguments: %s", variableName, template, values));
             }
             arguments.add(argument);

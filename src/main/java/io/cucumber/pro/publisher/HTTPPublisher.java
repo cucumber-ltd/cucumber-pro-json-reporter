@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Map;
 
-import static io.cucumber.pro.metadata.EnvMetadata.CUCUMBER_PRO_PROJECT_NAME;
+import static io.cucumber.pro.metadata.EnvMetadata.ENV_CUCUMBER_PRO_PROJECT_NAME;
 import static io.cucumber.pro.metadata.YamlMetadata.PROJECT_NAME_FIELD;
 import static io.cucumber.pro.metadata.YamlMetadata.YAML_FILE_NAME;
 
@@ -36,23 +36,11 @@ public class HTTPPublisher implements Publisher {
     public static final String PART_PAYLOAD = "payload";
     public static final String PART_PROFILE_NAME = "profileName";
     public static final String CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON = "application/x.cucumber.java.results+json";
-
-    public static Publisher create(Map<String, String> env, final String projectName, final String revision) {
-        if (projectName == null) {
-            String message = String.format("Project name missing. Either define an environment variable called %s or create %s with key %s", CUCUMBER_PRO_PROJECT_NAME, YAML_FILE_NAME, PROJECT_NAME_FIELD);
-            return new NullPublisher(message);
-        }
-        String username = env.get(ENV_CUCUMBER_PRO_TOKEN);
-        String password = "";
-        return new HTTPPublisher(CucumberProUrlBuilder.buildCucumberProUrl(env, projectName, revision), username, password);
-    }
-
     private final String url;
     private final String username;
     private final String password;
-
     /**
-     * @param url where to send results
+     * @param url      where to send results
      * @param username the auth token
      * @param password blank for now
      */
@@ -60,6 +48,16 @@ public class HTTPPublisher implements Publisher {
         this.url = url;
         this.username = username;
         this.password = password;
+    }
+
+    public static Publisher create(Map<String, String> env, final String projectName, final String revision) {
+        if (projectName == null) {
+            String message = String.format("Project name missing. Either define an environment variable called %s or create %s with key %s", ENV_CUCUMBER_PRO_PROJECT_NAME, YAML_FILE_NAME, PROJECT_NAME_FIELD);
+            return new NullPublisher(message);
+        }
+        String username = env.get(ENV_CUCUMBER_PRO_TOKEN);
+        String password = "";
+        return new HTTPPublisher(CucumberProUrlBuilder.buildCucumberProUrl(env, projectName, revision), username, password);
     }
 
     @Override
@@ -100,7 +98,7 @@ public class HTTPPublisher implements Publisher {
 
     private HttpClient buildHttpClient() {
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-        if(username != null) {
+        if (username != null) {
             CredentialsProvider provider = new BasicCredentialsProvider();
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
             provider.setCredentials(AuthScope.ANY, credentials);

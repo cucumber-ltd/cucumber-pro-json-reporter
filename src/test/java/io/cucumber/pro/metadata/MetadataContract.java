@@ -2,8 +2,6 @@ package io.cucumber.pro.metadata;
 
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
-
 import static org.junit.Assert.assertEquals;
 
 public abstract class MetadataContract {

@@ -1,7 +1,7 @@
 package io.cucumber.pro.revision.git;
 
-import io.cucumber.pro.revision.RevisionProvider;
 import io.cucumber.pro.RevisionProviderContract;
+import io.cucumber.pro.revision.RevisionProvider;
 
 import java.nio.file.Path;
 
