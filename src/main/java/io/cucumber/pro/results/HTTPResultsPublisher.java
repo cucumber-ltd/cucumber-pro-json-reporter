@@ -1,5 +1,6 @@
-package io.cucumber.pro.publisher;
+package io.cucumber.pro.results;
 
+import io.cucumber.pro.Env;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -23,9 +24,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.util.Map;
 
-class HTTPPublisher implements Publisher {
+class HTTPResultsPublisher implements ResultsPublisher {
 
     public static final String ENV_CUCUMBER_PRO_TOKEN = "CUCUMBER_PRO_TOKEN";
     public static final String PART_ENV = "env";
@@ -38,9 +38,9 @@ class HTTPPublisher implements Publisher {
     /**
      * @param url where to send results
      */
-    public HTTPPublisher(String url, Map<String, String> env) {
+    public HTTPResultsPublisher(String url, Env env) {
         this.url = url;
-        authToken = env.get(ENV_CUCUMBER_PRO_TOKEN);
+        authToken = env.get(ENV_CUCUMBER_PRO_TOKEN, null);
     }
 
     @Override

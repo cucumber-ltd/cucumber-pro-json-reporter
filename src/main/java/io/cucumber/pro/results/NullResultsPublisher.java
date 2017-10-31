@@ -1,13 +1,13 @@
-package io.cucumber.pro.publisher;
+package io.cucumber.pro.results;
 
 import cucumber.runtime.CucumberException;
 
 import java.io.File;
 
-class NullPublisher implements Publisher {
+class NullResultsPublisher implements ResultsPublisher {
     private final String warningMessage;
 
-    NullPublisher(String warningMessage) {
+    NullResultsPublisher(String warningMessage) {
         this.warningMessage = warningMessage;
     }
 
