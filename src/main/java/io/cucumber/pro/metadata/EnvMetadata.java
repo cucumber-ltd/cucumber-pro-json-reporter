@@ -4,8 +4,8 @@ import java.util.Map;
 
 public class EnvMetadata implements Metadata {
 
-    public static final String ENV_TRAVIS_REPO_SLUG = "TRAVIS_REPO_SLUG";
     public static final String ENV_CUCUMBER_PRO_PROJECT_NAME = "CUCUMBER_PRO_PROJECT_NAME";
+    public static final String ENV_TRAVIS_REPO_SLUG = "TRAVIS_REPO_SLUG";
     public static final String[] ENV_PROJECT_NAME_VARS = new String[]{
             ENV_CUCUMBER_PRO_PROJECT_NAME, // overrides everything
             "bamboo_shortPlanName", // https://confluence.atlassian.com/bamboo/bamboo-variables-289277087.html

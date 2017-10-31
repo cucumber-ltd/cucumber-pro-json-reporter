@@ -4,15 +4,17 @@ import cucumber.runtime.CucumberException;
 
 import java.io.File;
 
-public class NullPublisher implements Publisher {
-    private final String message;
+class NullPublisher implements Publisher {
+    private final String warningMessage;
 
-    public NullPublisher(String message) {
-        this.message = message;
+    NullPublisher(String warningMessage) {
+        this.warningMessage = warningMessage;
     }
 
     @Override
     public void publish(File resultsJsonFile, String env, String profileName) throws CucumberException {
-        System.err.println(message);
+        if (warningMessage != null) {
+            System.err.println(warningMessage);
+        }
     }
 }

@@ -9,6 +9,7 @@ import io.undertow.server.handlers.form.FormParserFactory;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +44,7 @@ public class HTTPPublisherTest {
                 }).build();
         server.start();
 
-        HTTPPublisher publisher = new HTTPPublisher("http://localhost:8082/results", null, null);
+        HTTPPublisher publisher = new HTTPPublisher("http://localhost:8082/results", new HashMap<String, String>());
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
 
         latch.await(2, TimeUnit.SECONDS);

@@ -6,14 +6,9 @@ import cucumber.api.event.EventPublisher;
 import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
-import cucumber.runtime.Env;
 import cucumber.runtime.formatter.PluginFactory;
-import io.cucumber.pro.metadata.ChainedMetadata;
-import io.cucumber.pro.metadata.Metadata;
-import io.cucumber.pro.publisher.HTTPPublisher;
 import io.cucumber.pro.publisher.Publisher;
-import io.cucumber.pro.revision.RevisionProvider;
-import io.cucumber.pro.revision.jgit.JGitRevisionProvider;
+import io.cucumber.pro.publisher.PublisherFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +18,6 @@ public class JsonReporter implements Formatter {
 
     static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
     static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
-    private static final Env ENV = new Env();
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
@@ -45,41 +39,29 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter(String profileName) {
-        this(createPublisher(), System.getenv(), ENV.get("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK), profileName);
+        this(PublisherFactory.create(), System.getenv(), getenv("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK), profileName);
     }
 
     public JsonReporter() {
-        this(createPublisher(), System.getenv(), ENV.get("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK), ENV.get("CUCUMBER_PROFILE_NAME", DEFAULT_CUCUMBER_PROFILE_NAME));
+        this(PublisherFactory.create(), System.getenv(), getenv("CUCUMBER_PRO_ENV_MASK", DEFAULT_ENV_MASK), getenv("CUCUMBER_PROFILE_NAME", DEFAULT_CUCUMBER_PROFILE_NAME));
     }
 
-    private static Publisher createPublisher() {
-        Metadata metadata = ChainedMetadata.create();
-        String projectName = metadata.getProjectName();
-        String revision = createRevisionProvider().getRevision();
-        return HTTPPublisher.create(System.getenv(), projectName, revision);
-    }
-
-
-    private static RevisionProvider createRevisionProvider() {
-        String revisionProviderClassName = ENV.get("CUCUMBER_PRO_REVISION_PROVIDER", JGitRevisionProvider.class.getName());
-        try {
-            Class<RevisionProvider> providerClass = (Class<RevisionProvider>) Thread.currentThread().getContextClassLoader().loadClass(revisionProviderClassName);
-            return providerClass.newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            throw new CucumberException(e);
-        }
+    private static String getenv(String key, String defaultValue) {
+        String value = System.getenv(key);
+        if(value != null) return value;
+        return defaultValue;
     }
 
     @Override
     public void setEventPublisher(EventPublisher publisher) {
         if (jsonFormatter == null) return;
-        jsonFormatter.setEventPublisher(new PostingEventPublisher(publisher));
+        jsonFormatter.setEventPublisher(new PublisherAdapter(publisher));
     }
 
-    private class PostingEventPublisher implements EventPublisher {
+    private class PublisherAdapter implements EventPublisher {
         private final EventPublisher publisher;
 
-        PostingEventPublisher(EventPublisher publisher) {
+        PublisherAdapter(EventPublisher publisher) {
             this.publisher = publisher;
         }
 

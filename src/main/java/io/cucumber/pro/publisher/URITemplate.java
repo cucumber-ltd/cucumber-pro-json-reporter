@@ -9,15 +9,15 @@ import java.util.regex.Pattern;
 /**
  * Implements a subset of https://tools.ietf.org/html/rfc6570
  */
-public class URITemplate {
+class URITemplate {
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("\\{([^}]+)}");
     private final String template;
 
-    public URITemplate(String template) {
+    URITemplate(String template) {
         this.template = template;
     }
 
-    public String expand(Map<String, String> values) {
+    String expand(Map<String, String> values) {
         Matcher matcher = PARAMETER_PATTERN.matcher(template);
         StringBuffer format = new StringBuffer();
         List<String> arguments = new ArrayList<>();

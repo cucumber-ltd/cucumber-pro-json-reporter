@@ -15,6 +15,7 @@ public class YamlMetadata implements Metadata {
     public static final String PROJECT_NAME_FIELD = "project_name";
     private static final Yaml YAML = new Yaml();
     private final Map metadata;
+
     public YamlMetadata(Reader source) {
         metadata = YAML.load(source);
     }

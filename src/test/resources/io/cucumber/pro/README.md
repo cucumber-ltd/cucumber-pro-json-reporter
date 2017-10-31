@@ -3,6 +3,10 @@
 This Cucumber plugin sends results to Cucumber Pro. This allows
 Cucumber Pro to display results.
 
+## Requirements
+
+* Git
+
 ## Installation
 
 First, install the library:
@@ -10,7 +14,7 @@ First, install the library:
 ```xml
 <dependency>
     <groupId>io.cucumber</groupId>
-    <artifactId>pro-reporter</artifactId>
+    <artifactId>pro-plugin</artifactId>
     <version>1.0.0</version>
     <scope>test</scope>
 </dependency>
@@ -25,22 +29,60 @@ public class RunCucumberTest {
 }
 ```
 
-## Configuration
+## Project Name configuration
 
-There are several configuration options for the plugin:
+The plugin needs to detect the Cucumber Pro project name so it can send results to the right Cucumber Pro project. 
 
-* Project Name
-* Cucumber Pro URL
-* Activation
-* Profile name
+If the build runs on a supported CI server (see below), you may not have to declare the project name explicitly.
+If you need to override the project name detection for supported CI servers, or if you're using a different CI
+server or none at all, you have to declare your project name as an environment variable or in a file:
+
+### Environment variable
+
+If the `CUCUMBER_PRO_PROJECT_NAME` environment variable is defined, that will be used as the project name.
+This overrides all other project name settings.
+
+### Configuration file (`.cucumberpro.yml`)
+
+If there is a `.cucumberpro.yml` file in directory where the build runs (usually the root directory of the repository),
+the project name will be picked up from the `project_name` field. Example:
+
+```yaml
+project_name: cucumber-pro-plugin-jvm
+```
+
+### Bamboo
+
+If your Bamboo *plan name* is the same as your Cucumber Pro *project name*, no project name configuration is required.
+The plugin will pick this up from the `bamboo_shortPlanName` environment variable that Bamboo sets automatically.
+
+### Circle CI
+
+If you use Travis and the name of your git repo (without the org or user prefix) is the same as your Cucumber Pro 
+*project name*, no project name configuration is required. The plugin will pick this up from the 
+`CIRCLE_PROJECT_REPONAME` environment variable that Circle CI sets automatically.
+
+### Travis
+
+If you use Travis and the name of your git repo (without the org or user prefix) is the same as your Cucumber Pro 
+*project name*, no project name configuration is required. The plugin will pick this up from the 
+`TRAVIS_REPO_SLUG` environment variable that Travis sets automatically.
+
+## Activation
+
+The plugin will detect if the build is running in a CI environment by checking for the presence of environment
+variables defined by supported CI servers. If you want to publish results from an unsupported CI server or
+a machine that isn't a CI server, simply define the `CUCUMBER_PRO_PUBLISH` environment variable with any value
+different than `false` or `no`.
+
+## Profiles
 
 If you run Cucumber several times as part of your build (with different options), you can
-specify a different profile name for each run. This allows Cucumber Pro to differentiate
-between the different runs and give them each a name.
+specify a different *profile name* for each run. This allows Cucumber Pro to show separate results for each profile.
 
 ### Cucumber-JVM 2.0.1 and below
 
-With Cucumber-JVM 2.0.2 and below you can specify the profile name with an environment variable:
+With Cucumber-JVM 2.0.1 and below you can specify the profile name with an environment variable:
 
 ```
 export CUCUMBER_PROFILE_NAME=smoke
@@ -48,9 +90,9 @@ export CUCUMBER_PROFILE_NAME=smoke
 
 If you run Cucumber several times, you simply specify a different environment variable before each run.
 
-### Cucumber-JVM 2.0.2 and above
+### Cucumber-JVM 2.1.0 and above
 
-With Cucumber-JVM 2.0.2 and above you can specify the profile by appending a colon and a profile name to the class name:
+With Cucumber-JVM 2.1.0 and above you can specify the profile by appending a colon and a profile name to the class name:
 
 ```java
 @RunWith(Cucumber.class)
@@ -68,20 +110,6 @@ public class RunCucumberTest {
 
 This is slightly better than defining `CUCUMBER_PROFILE_NAME`, because it lets you run several Cucumber times in the
 same JVM, which can be a little faster and easier to configure.
-
-## Activation
-
-The plugin is activated by defining the `CUCUMBER_PRO_URL` environment variable.
-If this environment variable is not defined, the plugin won't do anything.
-
-It's recommended you only configure this environment variable in your CI server:
-
-```
-export CUCUMBER_PRO_URL=https://<auth-token>@app.cucumber.pro/tests/results/<project-name>
-```
-
-You need to replace `<auth-token>` with your Cucumber Pro project's authentication token.
-You also need to replace `<project-name>` with your Cucumber Pro project name.
 
 ## Security
 

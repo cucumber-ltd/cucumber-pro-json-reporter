@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 public class YamlMetadataTest extends MetadataContract {
     @Override
     protected Metadata createMetadata() throws UnsupportedEncodingException {
-        Reader source = new InputStreamReader(getClass().getResourceAsStream(".cucumber.yml"), "utf-8");
+        Reader source = new InputStreamReader(getClass().getResourceAsStream(".cucumberpro.yml"), "utf-8");
         return new YamlMetadata(source);
     }
 }
