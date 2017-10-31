@@ -5,7 +5,13 @@ Cucumber Pro to display results.
 
 ## Requirements
 
-* Git
+The plugin only works with projects in git at the moment.
+
+If you use one of the following CI servers, setup will be easier than if you don't.
+
+* Bamboo
+* Circle CI
+* Travis
 
 ## Installation
 
@@ -29,6 +35,29 @@ public class RunCucumberTest {
 }
 ```
 
+## Authentication
+
+You need to define a `CUCUMBER_PRO_TOKEN` environment variable on the machine running Cucumber. You can find this token
+on your Cucumber Pro project's settings page. Example:
+
+```
+export CUCUMBER_PRO_TOKEN=ababababababababababa
+```
+
+If you are using the hosted Cucumber Pro on `https://app.cucumber.pro`, one of the preferred CI servers, and CI project 
+names identical to your Cucumber Pro project names, no further configuration should be needed. 
+
+If that's not the case, please read on.
+
+## Cucumber Pro URL
+
+If you're using a privately hosted Cucumber Pro appliance, you have to let the plugin know. Simply define the following
+environment variable:
+
+```
+export CUCUMBER_PRO_URL=http://example.com/
+```
+
 ## Project Name configuration
 
 The plugin needs to detect the Cucumber Pro project name so it can send results to the right Cucumber Pro project. 
@@ -40,7 +69,11 @@ server or none at all, you have to declare your project name as an environment v
 ### Environment variable
 
 If the `CUCUMBER_PRO_PROJECT_NAME` environment variable is defined, that will be used as the project name.
-This overrides all other project name settings.
+This overrides all other project name settings. Example:
+
+```
+export CUCUMBER_PRO_PROJECT_NAME="HelloWorld"
+```
 
 ### Configuration file (`.cucumberpro.yml`)
 
@@ -48,7 +81,7 @@ If there is a `.cucumberpro.yml` file in directory where the build runs (usually
 the project name will be picked up from the `project_name` field. Example:
 
 ```yaml
-project_name: cucumber-pro-plugin-jvm
+project_name: HelloWorld
 ```
 
 ### Bamboo
