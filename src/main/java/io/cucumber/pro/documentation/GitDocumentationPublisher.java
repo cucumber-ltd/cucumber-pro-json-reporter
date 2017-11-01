@@ -106,6 +106,8 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
 
                 Vector identityNames = jsch.getIdentityNames();
                 String privkey = (String) identityNames.get(0);
+                System.out.println("PRIVATE KEY " + privkey);
+
                 if (passphrase != null) {
                     jsch.addIdentity(privkey, passphrase);
                 } else {
