@@ -1,7 +1,5 @@
 package io.cucumber.pro.documentation;
 
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.HostKey;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Logger;
@@ -56,7 +54,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         } catch (GitAPIException e) {
             throw new RuntimeException("Git API error", e);
         } catch (JSchException e) {
-            if(e.getCause() != null) {
+            if (e.getCause() != null) {
                 System.err.println("CAUSE");
                 e.getCause().printStackTrace();
             }
@@ -106,7 +104,6 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
 
                 Vector identityNames = jsch.getIdentityNames();
                 String privkey = (String) identityNames.get(0);
-                System.out.println("PRIVATE KEY " + privkey);
 
                 if (passphrase != null) {
                     jsch.addIdentity(privkey, passphrase);
@@ -114,33 +111,8 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
                     jsch.addIdentity(privkey);
                 }
 
-                testShell(jsch);
-
-                System.out.println("************* identityNames = " + identityNames);
                 return jsch;
             }
         };
-    }
-
-    private void testShell(JSch jsch) {
-        try {
-            System.out.println("============================ SHELL");
-            Session session = jsch.getSession("git", "git.cucumber.pro", 22);
-            System.out.println("============================ A");
-            session.connect(50000);
-            System.out.println("============================ B");
-            Channel channel = session.openChannel("shell");
-            System.out.println("============================ C");
-            channel.setOutputStream(System.out);
-            System.out.println("============================ D");
-            channel.setInputStream(System.in);
-            System.out.println("============================ E");
-            channel.connect(30000);
-            System.out.println("============================ OK");
-        } catch (JSchException e) {
-            System.out.println("============================ ERROR");
-            e.printStackTrace();
-        }
-        System.out.println("============================ DONE");
     }
 }
