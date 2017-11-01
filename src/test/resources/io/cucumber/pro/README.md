@@ -34,6 +34,31 @@ public class RunCucumberTest {
 }
 ```
 
+## Configuration
+
+The plugin is configured with environment variables. Most of these can be left undefined - the plugin
+provides sensible defaults.
+
+* `CUCUMBER_PRO_TOKEN` (required for `app.cucumber.pro`)
+    * Set it to the project-specific authentication token. Not required for appliance, where result publishing is open.
+* `CUCUMBER_PRO_BASE_URL` (required for appliance)
+    * Set it to Cucumber Pro's base URL. Defaults to `https://app.cucumber.pro/`
+* `CUCUMBER_PRO_GIT_HOST` (required for appliance)
+    * Set it to the hostname where Cucumber Pro's git server is. Defaults to `git.cucumber.pro`.
+* `CUCUMBER_PRO_GIT_HOST_KEY` (optional)
+    * Only required if the build machine's `~/.ssh/known_hosts` doesn't have an entry for the git host.
+* `CUCUMBER_PRO_GIT_DEBUG` (optional)
+    * Enables logging for Git SSH traffic, useful for troubleshooting
+* `CUCUMBER_PRO_GIT_PUBLISH` (optional)
+    * Set to `false` or `no` if you want to disable publishing to git.
+* `CUCUMBER_PRO_PUBLISH` (optional)
+    * Set it to `true` to explicitly enable the plugin. Not required if the build is running on a supported CI server.
+* `CUCUMBER_PRO_PROJECT_NAME` (optional)
+    * Set it to the Cucumber Pro project name if the build isn't running on a supported CI server, or if the CI server project name is different 
+      from the Cucumber Pro project name.
+* `CUCUMBER_PRO_ENV_MASK` (optional)
+    * Set it to a pattern of environment variables that shouldn't be sent to Cucumber Pro. Defaults to `SECRET|KEY|TOKEN|PASSWORD`.
+
 ## Authentication
 
 Cucumber Pro restricts write access to documentation and results to authenticated users. You need to grant access to 
@@ -49,13 +74,6 @@ for the sole purpose of pushing documents, and doesn't have to be associated to 
 
 After creating a machine account and set its SSH public key via the Cucumber Pro user interface, you need to install
 the corresponding private key on the CI machine.
-
-If this private key requires a passphrase, you must define this in an environment variable on the CI machine.
-For example:
-
-```
-export CUCUMBER_PRO_SSH_PASSPHRASE=t0ps3cr3t
-```
 
 If you're using a privately hosted Cucumber Pro appliance, you should define an environment variable with
 the host name (or IP address), for example: 

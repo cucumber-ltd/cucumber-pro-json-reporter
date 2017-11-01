@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 class CucumberProResultsUrlBuilder {
     private static final String DEFAULT_CUCUMBER_PRO_URL = "https://app.cucumber.pro/";
+    private static final String ENV_CUCUMBER_PRO_BASE_URL = "CUCUMBER_PRO_BASE_URL";
 
     static String buildCucumberProUrl(final Env env, final String projectName, final String revision) {
         String template = "{cucumberProUrl}tests/results/{projectName}/{revision}";
@@ -19,7 +20,7 @@ class CucumberProResultsUrlBuilder {
     }
 
     private static String getCucumberProUrl(Env env) {
-        String cucumberProUrl = env.get("CUCUMBER_PRO_URL", DEFAULT_CUCUMBER_PRO_URL);
+        String cucumberProUrl = env.get(ENV_CUCUMBER_PRO_BASE_URL, DEFAULT_CUCUMBER_PRO_URL);
         if (!cucumberProUrl.endsWith("/")) cucumberProUrl += "/";
         return cucumberProUrl;
     }
