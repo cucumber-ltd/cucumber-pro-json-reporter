@@ -2,7 +2,6 @@ package io.cucumber.pro.documentation;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Logger;
 import com.jcraft.jsch.Session;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
@@ -25,20 +24,6 @@ import java.util.Vector;
 public class GitDocumentationPublisher implements DocumentationPublisher {
     private final String remote;
     private final String passphrase;
-
-    static {
-        JSch.setLogger(new Logger() {
-            @Override
-            public boolean isEnabled(int i) {
-                return true;
-            }
-
-            @Override
-            public void log(int i, String s) {
-                System.out.format("%d: %s\n", i, s);
-            }
-        });
-    }
 
     public GitDocumentationPublisher(String remote, String passphrase) {
         this.remote = remote;

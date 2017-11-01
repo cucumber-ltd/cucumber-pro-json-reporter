@@ -3,8 +3,13 @@ package io.cucumber.pro.documentation;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Logger;
 import com.jcraft.jsch.Session;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
 
 public class GitDocumentationPublisherTest {
 //    @Test
@@ -13,16 +18,49 @@ public class GitDocumentationPublisherTest {
 //        publisher.publish();
 //    }
 
+    @Before
+    public void enableLogging() {
+        JSch.setLogger(new Logger() {
+            @Override
+            public boolean isEnabled(int i) {
+                return true;
+            }
+
+            @Override
+            public void log(int i, String s) {
+                System.out.format("%d: %s\n", i, s);
+            }
+        });
+    }
+
+    @After
+    public void disableLogging() {
+        JSch.setLogger(null);
+    }
+
     @Test
     public void test_ssh() throws JSchException {
         // This test is just for debugging SSH connection problems on Circle CI.
         // Once it passes it can probably be deleted.
 
         JSch jsch = new JSch();
-        String authorizedKeys = System.getProperty("user.home") + "/.ssh/authorized_keys";
-        String identity = System.getProperty("user.home") + "/.ssh/id_rsa";
-        jsch.setKnownHosts(authorizedKeys);
-        jsch.addIdentity(identity, System.getenv("IDENTITY_PASSPHRASE"));
+        File authorizedKeys = new File(System.getProperty("user.home") + "/.ssh/authorized_keys");
+        File identity = new File(System.getProperty("user.home") + "/.ssh/id_rsa");
+
+        System.out.println("IDENTITY");
+        System.out.println("F = " + identity.isFile());
+        System.out.println("E = " + identity.canExecute());
+        System.out.println("R = " + identity.canRead());
+        System.out.println("W = " + identity.canWrite());
+
+        System.out.println("IDENTITY DIR");
+        System.out.println("F = " + identity.getParentFile().isDirectory());
+        System.out.println("E = " + identity.getParentFile().canExecute());
+        System.out.println("R = " + identity.getParentFile().canRead());
+        System.out.println("W = " + identity.getParentFile().canWrite());
+
+        jsch.setKnownHosts(authorizedKeys.getAbsolutePath());
+        jsch.addIdentity(identity.getAbsolutePath(), System.getenv("IDENTITY_PASSPHRASE"));
 
         Session session = jsch.getSession("git", "git.cucumber.pro", 22);
         session.setConfig("StrictHostKeyChecking", "no");
