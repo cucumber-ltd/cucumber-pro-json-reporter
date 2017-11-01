@@ -1,5 +1,6 @@
-package io.cucumber.pro.publisher;
+package io.cucumber.pro.results;
 
+import io.cucumber.pro.Env;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -44,7 +45,8 @@ public class HTTPPublisherTest {
                 }).build();
         server.start();
 
-        HTTPPublisher publisher = new HTTPPublisher("http://localhost:8082/results", new HashMap<String, String>());
+        Env env = new Env(new HashMap<String, String>());
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env);
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
 
         latch.await(2, TimeUnit.SECONDS);

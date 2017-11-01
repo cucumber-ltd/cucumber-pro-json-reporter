@@ -6,7 +6,8 @@ import cucumber.api.formatter.Formatter;
 import cucumber.runner.EventBus;
 import cucumber.runner.TimeService;
 import cucumber.runtime.CucumberException;
-import io.cucumber.pro.publisher.Publisher;
+import io.cucumber.pro.documentation.NullDocumentationPublisher;
+import io.cucumber.pro.results.ResultsPublisher;
 import org.junit.Test;
 
 import java.io.File;
@@ -23,13 +24,13 @@ public class JsonReporterTest {
         Map<String, String> env = new HashMap<>();
         env.put("FOO", "bar");
         env.put("PASSWORD", "secret");
-        CapturingPublisher publisher = new CapturingPublisher();
+        CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
         Formatter reporter = new JsonReporter(
-                publisher,
+                new NullDocumentationPublisher(),
+                resultsPublisher,
                 env,
                 JsonReporter.DEFAULT_ENV_MASK,
-                JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME
-        );
+                JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME);
 
         TimeService timeService = TimeService.SYSTEM;
         EventBus eventBus = new EventBus(timeService);
@@ -42,11 +43,11 @@ public class JsonReporterTest {
         eventBus.registerHandlerFor(TestRunFinished.class, testRunFinishedEventHandler);
         eventBus.send(new TestRunFinished(timeService.time()));
 
-        assertEquals("FOO=bar\n", publisher.getPublishedEnv());
-        assertNotNull(publisher.getPublishedFile());
+        assertEquals("FOO=bar\n", resultsPublisher.getPublishedEnv());
+        assertNotNull(resultsPublisher.getPublishedFile());
     }
 
-    class CapturingPublisher implements Publisher {
+    class CapturingResultsPublisher implements ResultsPublisher {
 
         private File file;
         private String env;

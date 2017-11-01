@@ -16,14 +16,12 @@ public class JGitRevisionProvider implements RevisionProvider {
         this(Paths.get(System.getProperty("user.dir")));
     }
 
-    public JGitRevisionProvider(Path rootPath) {
+    JGitRevisionProvider(Path rootPath) {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        // scan environment GIT_* variables
-        // scan up the file system tree
         try {
             repository = builder
-                    .readEnvironment() // scan environment GIT_* variables
-                    .findGitDir(rootPath.toFile()) // scan up the file system tree
+                    .readEnvironment()
+                    .findGitDir(rootPath.toFile())
                     .setMustExist(true)
                     .build();
         } catch (IOException e) {

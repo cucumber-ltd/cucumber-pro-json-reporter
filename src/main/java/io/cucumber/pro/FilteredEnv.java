@@ -17,7 +17,7 @@ class FilteredEnv {
     }
 
     private Map<String, String> clean() {
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, String> result = new HashMap<>();
         for (Map.Entry<String, String> entry : this.env.entrySet()) {
             if (!maskPattern.matcher(entry.getKey()).matches())
                 result.put(entry.getKey(), entry.getValue());

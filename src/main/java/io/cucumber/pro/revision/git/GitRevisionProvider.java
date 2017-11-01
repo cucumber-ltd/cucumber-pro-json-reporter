@@ -19,7 +19,7 @@ public class GitRevisionProvider implements RevisionProvider {
         this(Paths.get(System.getProperty("user.dir")));
     }
 
-    public GitRevisionProvider(Path rootPath) {
+    GitRevisionProvider(Path rootPath) {
         this.rootPath = rootPath;
         exec = new Exec(rootPath);
     }

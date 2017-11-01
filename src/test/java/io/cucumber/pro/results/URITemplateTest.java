@@ -1,5 +1,6 @@
-package io.cucumber.pro.publisher;
+package io.cucumber.pro.results;
 
+import io.cucumber.pro.URITemplate;
 import org.junit.Test;
 
 import java.util.HashMap;

@@ -16,7 +16,7 @@ public class YamlMetadata implements Metadata {
     private static final Yaml YAML = new Yaml();
     private final Map metadata;
 
-    public YamlMetadata(Reader source) {
+    YamlMetadata(Reader source) {
         metadata = YAML.load(source);
     }
 

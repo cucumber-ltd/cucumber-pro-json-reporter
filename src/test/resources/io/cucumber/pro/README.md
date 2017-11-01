@@ -1,7 +1,6 @@
 # Cucumber-JVM plugin for Cucumber Pro
 
-This Cucumber plugin sends results to Cucumber Pro. This allows
-Cucumber Pro to display results.
+This Cucumber plugin publishes documentation and results to Cucumber Pro.
 
 ## Requirements
 
@@ -37,6 +36,36 @@ public class RunCucumberTest {
 
 ## Authentication
 
+Cucumber Pro restricts write access to documentation and results to authenticated users. You need to grant access to 
+the plugin so it can publish documentation (using Git and SSH) and results (using HTTP or HTTPS).
+
+### Git
+
+Cucumber `.feature` files and Markdown (`.md`) documents are published on Cucumber Pro using Git. Only users that are
+collaborators on a project can publish documents on Cucumber Pro.
+
+We recommend you create a "machine account" on Cucumber Pro for this purpose. This is simply an account that is created 
+for the sole purpose of pushing documents, and doesn't have to be associated to a real person.
+
+After creating a machine account and set its SSH public key via the Cucumber Pro user interface, you need to install
+the corresponding private key on the CI machine.
+
+If this private key requires a passphrase, you must define this in an environment variable on the CI machine.
+For example:
+
+```
+export CUCUMBER_PRO_SSH_PASSPHRASE=t0ps3cr3t
+```
+
+If you're using a privately hosted Cucumber Pro appliance, you should define an environment variable with
+the host name (or IP address), for example: 
+
+```
+export CUCUMBER_PRO_GIT_HOST=cucumberpro.example.com
+```
+
+### Results
+
 You need to define a `CUCUMBER_PRO_TOKEN` environment variable on the machine running Cucumber. You can find this token
 on your Cucumber Pro project's settings page. Example:
 
@@ -55,7 +84,7 @@ If you're using a privately hosted Cucumber Pro appliance, you have to let the p
 environment variable:
 
 ```
-export CUCUMBER_PRO_URL=http://example.com/
+export CUCUMBER_PRO_URL=http://cucumberpro.example.com/
 ```
 
 ## Project Name configuration

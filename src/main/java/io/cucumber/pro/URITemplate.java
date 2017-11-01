@@ -1,4 +1,4 @@
-package io.cucumber.pro.publisher;
+package io.cucumber.pro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +9,15 @@ import java.util.regex.Pattern;
 /**
  * Implements a subset of https://tools.ietf.org/html/rfc6570
  */
-class URITemplate {
+public class URITemplate {
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("\\{([^}]+)}");
     private final String template;
 
-    URITemplate(String template) {
+    public URITemplate(String template) {
         this.template = template;
     }
 
-    String expand(Map<String, String> values) {
+    public String expand(Map<String, String> values) {
         Matcher matcher = PARAMETER_PATTERN.matcher(template);
         StringBuffer format = new StringBuffer();
         List<String> arguments = new ArrayList<>();
@@ -30,6 +30,7 @@ class URITemplate {
             }
             arguments.add(argument);
         }
+        matcher.appendTail(format);
         Object[] args = arguments.toArray(new String[arguments.size()]);
         return String.format(format.toString(), args);
     }
