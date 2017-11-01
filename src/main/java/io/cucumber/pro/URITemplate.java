@@ -30,6 +30,7 @@ public class URITemplate {
             }
             arguments.add(argument);
         }
+        matcher.appendTail(format);
         Object[] args = arguments.toArray(new String[arguments.size()]);
         return String.format(format.toString(), args);
     }
