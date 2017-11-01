@@ -1,5 +1,6 @@
 package io.cucumber.pro.documentation;
 
+import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.HostKey;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -26,6 +27,20 @@ import java.util.Vector;
 public class GitDocumentationPublisher implements DocumentationPublisher {
     private final String remote;
     private final String passphrase;
+
+    static {
+        JSch.setLogger(new Logger() {
+            @Override
+            public boolean isEnabled(int i) {
+                return true;
+            }
+
+            @Override
+            public void log(int i, String s) {
+                System.out.format("%d: %s\n", i, s);
+            }
+        });
+    }
 
     public GitDocumentationPublisher(String remote, String passphrase) {
         this.remote = remote;
@@ -87,29 +102,43 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
 
             @Override
             protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
-                JSch.setLogger(new Logger() {
-                    @Override
-                    public boolean isEnabled(int i) {
-                        return true;
-                    }
-
-                    @Override
-                    public void log(int i, String s) {
-                        System.out.format("%d: %s\n", i, s);
-                    }
-                });
                 JSch jsch = super.createDefaultJSch(fs);
-                Vector identityNames = jsch.getIdentityNames();
-                System.out.println("************* identityNames = " + identityNames);
 
+                Vector identityNames = jsch.getIdentityNames();
                 String privkey = (String) identityNames.get(0);
                 if (passphrase != null) {
                     jsch.addIdentity(privkey, passphrase);
                 } else {
                     jsch.addIdentity(privkey);
                 }
+
+                testShell(jsch);
+
+                System.out.println("************* identityNames = " + identityNames);
                 return jsch;
             }
         };
+    }
+
+    private void testShell(JSch jsch) {
+        try {
+            System.out.println("============================ SHELL");
+            Session session = jsch.getSession("git", "git.cucumber.pro", 22);
+            System.out.println("============================ A");
+            session.connect(50000);
+            System.out.println("============================ B");
+            Channel channel = session.openChannel("shell");
+            System.out.println("============================ C");
+            channel.setOutputStream(System.out);
+            System.out.println("============================ D");
+            channel.setInputStream(System.in);
+            System.out.println("============================ E");
+            channel.connect(30000);
+            System.out.println("============================ OK");
+        } catch (JSchException e) {
+            System.out.println("============================ ERROR");
+            e.printStackTrace();
+        }
+        System.out.println("============================ DONE");
     }
 }
