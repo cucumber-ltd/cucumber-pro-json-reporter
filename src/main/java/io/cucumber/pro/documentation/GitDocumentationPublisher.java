@@ -1,5 +1,6 @@
 package io.cucumber.pro.documentation;
 
+import com.jcraft.jsch.HostKey;
 import com.jcraft.jsch.IdentityRepository;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -24,14 +25,17 @@ import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.transport.Transport;
 import org.eclipse.jgit.util.FS;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 
 public class GitDocumentationPublisher implements DocumentationPublisher {
     private static final String ENV_CUCUMBER_PRO_GIT_DEBUG = "CUCUMBER_PRO_GIT_DEBUG";
     private final String remote;
+    private final String hostKey;
 
-    GitDocumentationPublisher(String remote, Env env) {
+    GitDocumentationPublisher(String remote, String hostKey, Env env) {
         this.remote = remote;
+        this.hostKey = hostKey;
         if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_DEBUG, false)) {
             JSch.setLogger(new VerboseJschLogger());
         }
@@ -87,6 +91,8 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             @Override
             protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
                 JSch jsch = super.createDefaultJSch(fs);
+                HostKey key = new HostKey(host.getHostName(), DatatypeConverter.parseBase64Binary(hostKey));
+                jsch.getHostKeyRepository().add(key, null);
                 jsch.setIdentityRepository(getIdentityRepository());
                 return jsch;
             }

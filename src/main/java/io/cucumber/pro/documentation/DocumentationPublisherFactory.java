@@ -7,6 +7,7 @@ import io.cucumber.pro.metadata.MetadataFactory;
 public class DocumentationPublisherFactory {
 
     private static final String ENV_CUCUMBER_PRO_GIT_PUBLISH = "CUCUMBER_PRO_GIT_PUBLISH";
+    private static final String ENV_CUCUMBER_PRO_GIT_HOST_KEY = "CUCUMBER_PRO_GIT_HOST_KEY";
 
     public static DocumentationPublisher create(Env env) {
         boolean isActive = new EnvActivation(env).isActive();
@@ -14,8 +15,13 @@ public class DocumentationPublisherFactory {
 
         if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_PUBLISH, true)) {
             String projectName = MetadataFactory.create(env).getProjectName();
+            if (projectName == null)
+                throw new RuntimeException("Couldn't detect project name. Can't publish documentation to git.");
             String remote = CucumberProGitRemoteBuilder.buildCucumberProUrl(env, projectName);
-            return new GitDocumentationPublisher(remote, env);
+            String hostKey = env.get(ENV_CUCUMBER_PRO_GIT_HOST_KEY);
+            if (hostKey == null)
+                throw new RuntimeException("Couldn't detect host key. Can't publish documentation to git.");
+            return new GitDocumentationPublisher(remote, hostKey, env);
         } else {
             return new NullDocumentationPublisher();
         }
