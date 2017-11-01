@@ -82,7 +82,6 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         return new JschConfigSessionFactory() {
             @Override
             protected void configure(OpenSshConfig.Host host, Session session) {
-                System.out.println("host = " + host);
             }
 
             @Override
