@@ -7,11 +7,11 @@ import com.jcraft.jsch.Session;
 import org.junit.Test;
 
 public class GitDocumentationPublisherTest {
-    @Test
-    public void pushes_to_git() {
-        GitDocumentationPublisher publisher = new GitDocumentationPublisher("git@git.cucumber.pro:cucumber-pro-plugin-jvm.git", System.getenv("IDENTITY_PASSPHRASE"));
-        publisher.publish();
-    }
+//    @Test
+//    public void pushes_to_git() {
+//        GitDocumentationPublisher publisher = new GitDocumentationPublisher("git@git.cucumber.pro:cucumber-pro-plugin-jvm.git", System.getenv("IDENTITY_PASSPHRASE"));
+//        publisher.publish();
+//    }
 
     @Test
     public void test_ssh() throws JSchException {

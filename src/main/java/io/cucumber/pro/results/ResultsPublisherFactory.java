@@ -13,7 +13,7 @@ import static io.cucumber.pro.metadata.YamlMetadata.YAML_FILE_NAME;
 
 public class ResultsPublisherFactory {
     public static ResultsPublisher create(Env env) {
-        boolean isActive = EnvActivation.create().isActive();
+        boolean isActive = new EnvActivation(env).isActive();
         if (!isActive) return new NullResultsPublisher(null);
 
         String projectName = MetadataFactory.create(env).getProjectName();

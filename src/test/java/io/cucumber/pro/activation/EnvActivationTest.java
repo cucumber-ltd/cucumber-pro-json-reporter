@@ -1,5 +1,6 @@
 package io.cucumber.pro.activation;
 
+import io.cucumber.pro.Env;
 import io.cucumber.pro.activation.EnvActivation;
 import org.junit.Test;
 
@@ -11,20 +12,20 @@ import static org.junit.Assert.assertTrue;
 public class EnvActivationTest {
     @Test
     public void is_active_when_env_var_anything() {
-      assertTrue(new EnvActivation(new HashMap<String, String>(){{
+      assertTrue(new EnvActivation(new Env(new HashMap<String, String>(){{
           put("CUCUMBER_PRO_PUBLISH", "true");
-      }}).isActive());
+      }})).isActive());
     }
 
     @Test
     public void is_inactive_when_env_var_false() {
-        assertFalse(new EnvActivation(new HashMap<String, String>(){{
+        assertFalse(new EnvActivation(new Env(new HashMap<String, String>(){{
             put("CUCUMBER_PRO_PUBLISH", "false");
-        }}).isActive());
+        }})).isActive());
     }
 
     @Test
     public void is_inactive_when_env_var_undefined() {
-        assertFalse(new EnvActivation(new HashMap<String, String>()).isActive());
+        assertFalse(new EnvActivation(new Env(new HashMap<String, String>())).isActive());
     }
 }
