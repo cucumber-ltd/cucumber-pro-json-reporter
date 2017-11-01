@@ -41,6 +41,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     public void publish() {
         try {
             this.publish0();
+            System.out.println("Published documentation to Cucumber Pro: " + remote);
         } catch (IOException e) {
             throw new RuntimeException("IO error", e);
         } catch (GitAPIException e) {
@@ -88,16 +89,6 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
                 JSch jsch = super.createDefaultJSch(fs);
                 jsch.setIdentityRepository(getIdentityRepository());
-
-//                Vector identityNames = jsch.getIdentityNames();
-//                String privkey = (String) identityNames.get(0);
-//
-//                if (passphrase != null) {
-//                    jsch.addIdentity(privkey, passphrase);
-//                } else {
-//                    jsch.addIdentity(privkey);
-//                }
-
                 return jsch;
             }
         };

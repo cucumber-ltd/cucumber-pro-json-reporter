@@ -12,7 +12,7 @@ public class DocumentationPublisherFactory {
         boolean isActive = new EnvActivation(env).isActive();
         if (!isActive) return new NullDocumentationPublisher();
 
-        if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_PUBLISH, false)) {
+        if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_PUBLISH, true)) {
             String projectName = MetadataFactory.create(env).getProjectName();
             String remote = CucumberProGitRemoteBuilder.buildCucumberProUrl(env, projectName);
             return new GitDocumentationPublisher(remote, env);
