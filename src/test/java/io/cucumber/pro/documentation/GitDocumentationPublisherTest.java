@@ -47,7 +47,7 @@ public class GitDocumentationPublisherTest {
         File authorizedKeys = new File(System.getProperty("user.home") + "/.ssh/authorized_keys");
         File identity = new File(System.getProperty("user.home") + "/.ssh/id_rsa");
 
-        System.out.println("IDENTITY");
+        System.out.println("IDENTITY " + identity.getAbsolutePath());
         System.out.println("F = " + identity.isFile());
         System.out.println("E = " + identity.canExecute());
         System.out.println("R = " + identity.canRead());
