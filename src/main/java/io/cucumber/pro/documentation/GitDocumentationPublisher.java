@@ -1,5 +1,6 @@
 package io.cucumber.pro.documentation;
 
+import com.jcraft.jsch.HostKey;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -26,7 +27,6 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     private final String passphrase;
 
     public GitDocumentationPublisher(String remote, String passphrase) {
-        System.out.println("******************** remote = " + remote);
         this.remote = remote;
         this.passphrase = passphrase;
     }
@@ -35,8 +35,18 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     public void publish() {
         try {
             this.publish0();
-        } catch (Exception e) {
-            throw new RuntimeException("Git push failed", e);
+        } catch (IOException e) {
+            throw new RuntimeException("IO error", e);
+        } catch (GitAPIException e) {
+            throw new RuntimeException("Git API error", e);
+        } catch (JSchException e) {
+            if(e.getCause() != null) {
+                System.err.println("CAUSE");
+                e.getCause().printStackTrace();
+            }
+            System.err.println("ERROR");
+            e.printStackTrace();
+            throw new RuntimeException("SSH error");
         }
     }
 
@@ -80,9 +90,11 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
                 Vector identityNames = jsch.getIdentityNames();
                 System.out.println("************* identityNames = " + identityNames);
 
+                String privkey = (String) identityNames.get(0);
                 if (passphrase != null) {
-                    String privkey = (String) identityNames.get(0);
                     jsch.addIdentity(privkey, passphrase);
+                } else {
+                    jsch.addIdentity(privkey);
                 }
                 return jsch;
             }
