@@ -26,6 +26,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     private final String passphrase;
 
     public GitDocumentationPublisher(String remote, String passphrase) {
+        System.out.println("******************** remote = " + remote);
         this.remote = remote;
         this.passphrase = passphrase;
     }

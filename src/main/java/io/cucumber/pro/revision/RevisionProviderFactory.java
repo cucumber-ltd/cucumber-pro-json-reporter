@@ -1,12 +1,12 @@
 package io.cucumber.pro.revision;
 
 import cucumber.runtime.CucumberException;
+import io.cucumber.pro.Env;
 import io.cucumber.pro.revision.jgit.JGitRevisionProvider;
 
 public class RevisionProviderFactory {
-    public static RevisionProvider create() {
-        String revisionProviderClassName = System.getenv("CUCUMBER_PRO_REVISION_PROVIDER");
-        if (revisionProviderClassName == null) revisionProviderClassName = JGitRevisionProvider.class.getName();
+    public static RevisionProvider create(Env env) {
+        String revisionProviderClassName = env.get("CUCUMBER_PRO_REVISION_PROVIDER", JGitRevisionProvider.class.getName());
         try {
             Class<RevisionProvider> providerClass = (Class<RevisionProvider>) Thread.currentThread().getContextClassLoader().loadClass(revisionProviderClassName);
             return providerClass.newInstance();

@@ -21,7 +21,7 @@ public class ResultsPublisherFactory {
             String message = String.format("Project name missing. Either define an environment variable called %s or create %s with key %s", ENV_CUCUMBER_PRO_PROJECT_NAME, YAML_FILE_NAME, PROJECT_NAME_FIELD);
             return new NullResultsPublisher(message);
         }
-        String revision = RevisionProviderFactory.create().getRevision();
+        String revision = RevisionProviderFactory.create(env).getRevision();
         String url = CucumberProResultsUrlBuilder.buildCucumberProUrl(env, projectName, revision);
         return new HTTPResultsPublisher(url, env);
     }

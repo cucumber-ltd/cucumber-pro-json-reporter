@@ -14,7 +14,7 @@ public class DocumentationPublisherFactory {
 
         String projectName = MetadataFactory.create(env).getProjectName();
         String remote = CucumberProGitRemoteBuilder.buildCucumberProUrl(env, projectName);
-        String passphrase = System.getenv(ENV_CUCUMBER_PRO_SSH_PASSPHRASE);
+        String passphrase = env.get(ENV_CUCUMBER_PRO_SSH_PASSPHRASE, null);
         return new GitDocumentationPublisher(remote, passphrase);
     }
 }
