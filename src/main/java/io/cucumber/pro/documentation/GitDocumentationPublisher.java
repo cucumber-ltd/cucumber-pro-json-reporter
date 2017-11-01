@@ -3,6 +3,7 @@ package io.cucumber.pro.documentation;
 import com.jcraft.jsch.HostKey;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Logger;
 import com.jcraft.jsch.Session;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
@@ -86,6 +87,17 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
 
             @Override
             protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
+                JSch.setLogger(new Logger() {
+                    @Override
+                    public boolean isEnabled(int i) {
+                        return true;
+                    }
+
+                    @Override
+                    public void log(int i, String s) {
+                        System.out.format("%d: %s\n", i, s);
+                    }
+                });
                 JSch jsch = super.createDefaultJSch(fs);
                 Vector identityNames = jsch.getIdentityNames();
                 System.out.println("************* identityNames = " + identityNames);
