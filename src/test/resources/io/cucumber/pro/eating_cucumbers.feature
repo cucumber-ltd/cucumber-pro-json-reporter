@@ -1,4 +1,5 @@
 Feature: Eating cucumbers
+
   @smoke
   Scenario: Many cucumbers
     Given I have already eaten 99 cucumbers

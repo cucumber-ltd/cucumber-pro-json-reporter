@@ -27,18 +27,18 @@ import java.net.URI;
 
 class HTTPResultsPublisher implements ResultsPublisher {
 
-    public static final String ENV_CUCUMBER_PRO_TOKEN = "CUCUMBER_PRO_TOKEN";
-    public static final String PART_ENV = "env";
-    public static final String PART_PAYLOAD = "payload";
-    public static final String PART_PROFILE_NAME = "profileName";
-    public static final String CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON = "application/x.cucumber.java.results+json";
+    private static final String ENV_CUCUMBER_PRO_TOKEN = "CUCUMBER_PRO_TOKEN";
+    private static final String PART_ENV = "env";
+    private static final String PART_PAYLOAD = "payload";
+    private static final String PART_PROFILE_NAME = "profileName";
+    private static final String CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON = "application/x.cucumber.java.results+json";
     private final String url;
     private final String authToken;
 
     /**
      * @param url where to send results
      */
-    public HTTPResultsPublisher(String url, Env env) {
+    HTTPResultsPublisher(String url, Env env) {
         this.url = url;
         authToken = env.get(ENV_CUCUMBER_PRO_TOKEN, null);
     }

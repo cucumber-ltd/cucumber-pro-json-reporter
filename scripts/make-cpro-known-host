@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-set -ef -o pipefail
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-ssh-keygen -R git.cucumber.pro
-
-echo "Adding git.cucumber.pro to known hosts"
-cat ${DIR}/data/cpro-known-hosts-line >> ~/.ssh/known_hosts

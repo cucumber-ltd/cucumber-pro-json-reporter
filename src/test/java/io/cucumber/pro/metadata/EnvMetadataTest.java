@@ -3,7 +3,6 @@ package io.cucumber.pro.metadata;
 import io.cucumber.pro.Env;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class EnvMetadataTest extends MetadataContract {
     @Override

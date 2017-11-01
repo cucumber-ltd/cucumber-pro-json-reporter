@@ -6,24 +6,16 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class JGitRevisionProvider implements RevisionProvider {
     private final Repository repository;
 
-    public JGitRevisionProvider() {
-        this(Paths.get(System.getProperty("user.dir")));
-    }
-
-    public JGitRevisionProvider(Path rootPath) {
+    JGitRevisionProvider() {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        // scan environment GIT_* variables
-        // scan up the file system tree
         try {
             repository = builder
-                    .readEnvironment() // scan environment GIT_* variables
-                    .findGitDir(rootPath.toFile()) // scan up the file system tree
+                    .readEnvironment()
+                    .findGitDir()
                     .setMustExist(true)
                     .build();
         } catch (IOException e) {

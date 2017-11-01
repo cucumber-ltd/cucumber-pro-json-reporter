@@ -5,8 +5,8 @@ import io.cucumber.pro.Env;
 public class EnvMetadata implements Metadata {
 
     public static final String ENV_CUCUMBER_PRO_PROJECT_NAME = "CUCUMBER_PRO_PROJECT_NAME";
-    public static final String ENV_TRAVIS_REPO_SLUG = "TRAVIS_REPO_SLUG";
-    public static final String[] ENV_PROJECT_NAME_VARS = new String[]{
+    private static final String ENV_TRAVIS_REPO_SLUG = "TRAVIS_REPO_SLUG";
+    private static final String[] ENV_PROJECT_NAME_VARS = new String[]{
             ENV_CUCUMBER_PRO_PROJECT_NAME, // overrides everything
             "bamboo_shortPlanName", // https://confluence.atlassian.com/bamboo/bamboo-variables-289277087.html
             "CIRCLE_PROJECT_REPONAME", // https://circleci.com/docs/2.0/env-vars/#circleci-environment-variable-descriptions
@@ -14,7 +14,7 @@ public class EnvMetadata implements Metadata {
     };
     private final Env env;
 
-    public EnvMetadata(Env env) {
+    EnvMetadata(Env env) {
         this.env = env;
     }
 

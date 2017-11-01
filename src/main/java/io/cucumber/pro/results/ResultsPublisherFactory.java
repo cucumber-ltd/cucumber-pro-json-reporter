@@ -5,8 +5,6 @@ import io.cucumber.pro.activation.EnvActivation;
 import io.cucumber.pro.metadata.MetadataFactory;
 import io.cucumber.pro.revision.RevisionProviderFactory;
 
-import java.util.Map;
-
 import static io.cucumber.pro.metadata.EnvMetadata.ENV_CUCUMBER_PRO_PROJECT_NAME;
 import static io.cucumber.pro.metadata.YamlMetadata.PROJECT_NAME_FIELD;
 import static io.cucumber.pro.metadata.YamlMetadata.YAML_FILE_NAME;

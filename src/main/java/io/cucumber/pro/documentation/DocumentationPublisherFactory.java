@@ -6,7 +6,7 @@ import io.cucumber.pro.metadata.MetadataFactory;
 
 public class DocumentationPublisherFactory {
 
-    public static final String ENV_CUCUMBER_PRO_GIT_PUBLISH = "CUCUMBER_PRO_GIT_PUBLISH";
+    private static final String ENV_CUCUMBER_PRO_GIT_PUBLISH = "CUCUMBER_PRO_GIT_PUBLISH";
 
     public static DocumentationPublisher create(Env env) {
         boolean isActive = new EnvActivation(env).isActive();

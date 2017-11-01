@@ -27,10 +27,10 @@ import org.eclipse.jgit.util.FS;
 import java.io.IOException;
 
 public class GitDocumentationPublisher implements DocumentationPublisher {
-    public static final String ENV_CUCUMBER_PRO_GIT_DEBUG = "CUCUMBER_PRO_GIT_DEBUG";
+    private static final String ENV_CUCUMBER_PRO_GIT_DEBUG = "CUCUMBER_PRO_GIT_DEBUG";
     private final String remote;
 
-    public GitDocumentationPublisher(String remote, Env env) {
+    GitDocumentationPublisher(String remote, Env env) {
         this.remote = remote;
         if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_DEBUG, false)) {
             JSch.setLogger(new VerboseJschLogger());
