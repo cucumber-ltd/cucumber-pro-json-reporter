@@ -1,8 +1,14 @@
 package io.cucumber.pro.documentation;
 
+import com.jcraft.jsch.IdentityRepository;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.agentproxy.AgentProxyException;
+import com.jcraft.jsch.agentproxy.Connector;
+import com.jcraft.jsch.agentproxy.ConnectorFactory;
+import com.jcraft.jsch.agentproxy.RemoteIdentityRepository;
+import io.cucumber.pro.Env;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.TransportConfigCallback;
@@ -19,15 +25,16 @@ import org.eclipse.jgit.transport.Transport;
 import org.eclipse.jgit.util.FS;
 
 import java.io.IOException;
-import java.util.Vector;
 
 public class GitDocumentationPublisher implements DocumentationPublisher {
+    public static final String ENV_CUCUMBER_PRO_GIT_DEBUG = "CUCUMBER_PRO_GIT_DEBUG";
     private final String remote;
-    private final String passphrase;
 
-    public GitDocumentationPublisher(String remote, String passphrase) {
+    public GitDocumentationPublisher(String remote, Env env) {
         this.remote = remote;
-        this.passphrase = passphrase;
+        if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_DEBUG, false)) {
+            JSch.setLogger(new VerboseJschLogger());
+        }
     }
 
     @Override
@@ -39,12 +46,6 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         } catch (GitAPIException e) {
             throw new RuntimeException("Git API error", e);
         } catch (JSchException e) {
-            if (e.getCause() != null) {
-                System.err.println("CAUSE");
-                e.getCause().printStackTrace();
-            }
-            System.err.println("ERROR");
-            e.printStackTrace();
             throw new RuntimeException("SSH error");
         }
     }
@@ -86,18 +87,29 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             @Override
             protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
                 JSch jsch = super.createDefaultJSch(fs);
+                jsch.setIdentityRepository(getIdentityRepository());
 
-                Vector identityNames = jsch.getIdentityNames();
-                String privkey = (String) identityNames.get(0);
-
-                if (passphrase != null) {
-                    jsch.addIdentity(privkey, passphrase);
-                } else {
-                    jsch.addIdentity(privkey);
-                }
+//                Vector identityNames = jsch.getIdentityNames();
+//                String privkey = (String) identityNames.get(0);
+//
+//                if (passphrase != null) {
+//                    jsch.addIdentity(privkey, passphrase);
+//                } else {
+//                    jsch.addIdentity(privkey);
+//                }
 
                 return jsch;
             }
         };
+    }
+
+    private IdentityRepository getIdentityRepository() throws JSchException {
+        try {
+            ConnectorFactory connectorFactory = ConnectorFactory.getDefault();
+            Connector connector = connectorFactory.createConnector();
+            return new RemoteIdentityRepository(connector);
+        } catch (AgentProxyException e) {
+            throw new JSchException("Failed to configure SSH Agent", e);
+        }
     }
 }

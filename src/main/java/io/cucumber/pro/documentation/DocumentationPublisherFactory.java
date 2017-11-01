@@ -6,7 +6,6 @@ import io.cucumber.pro.metadata.MetadataFactory;
 
 public class DocumentationPublisherFactory {
 
-    public static final String ENV_CUCUMBER_PRO_SSH_PASSPHRASE = "CUCUMBER_PRO_SSH_PASSPHRASE";
     public static final String ENV_CUCUMBER_PRO_GIT_PUBLISH = "CUCUMBER_PRO_GIT_PUBLISH";
 
     public static DocumentationPublisher create(Env env) {
@@ -16,8 +15,7 @@ public class DocumentationPublisherFactory {
         if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_PUBLISH, false)) {
             String projectName = MetadataFactory.create(env).getProjectName();
             String remote = CucumberProGitRemoteBuilder.buildCucumberProUrl(env, projectName);
-            String passphrase = env.get(ENV_CUCUMBER_PRO_SSH_PASSPHRASE, null);
-            return new GitDocumentationPublisher(remote, passphrase);
+            return new GitDocumentationPublisher(remote, env);
         } else {
             return new NullDocumentationPublisher();
         }

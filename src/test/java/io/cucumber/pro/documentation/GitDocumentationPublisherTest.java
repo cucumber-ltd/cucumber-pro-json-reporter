@@ -5,7 +5,6 @@ import com.jcraft.jsch.ConfigRepository;
 import com.jcraft.jsch.IdentityRepository;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Logger;
 import com.jcraft.jsch.OpenSSHConfig;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.agentproxy.AgentProxyException;
@@ -28,17 +27,7 @@ public class GitDocumentationPublisherTest {
 
     @Before
     public void enableLogging() {
-        JSch.setLogger(new Logger() {
-            @Override
-            public boolean isEnabled(int i) {
-                return true;
-            }
-
-            @Override
-            public void log(int i, String s) {
-                System.out.format("%d: %s\n", i, s);
-            }
-        });
+        JSch.setLogger(new VerboseJschLogger());
     }
 
     @After
@@ -68,9 +57,7 @@ public class GitDocumentationPublisherTest {
 
         ConnectorFactory cf = ConnectorFactory.getDefault();
         Connector connector = cf.createConnector();
-
         IdentityRepository identityRepository = new RemoteIdentityRepository(connector);
-
         jsch.setIdentityRepository(identityRepository);
 
         Session session = jsch.getSession("git", "git.cucumber.pro", 22);
@@ -81,4 +68,5 @@ public class GitDocumentationPublisherTest {
         channel.setInputStream(System.in);
         channel.connect(30000);
     }
+
 }
