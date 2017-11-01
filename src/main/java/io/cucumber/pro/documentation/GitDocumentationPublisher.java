@@ -76,8 +76,10 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             @Override
             protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
                 JSch jsch = super.createDefaultJSch(fs);
+                Vector identityNames = jsch.getIdentityNames();
+                System.out.println("************* identityNames = " + identityNames);
+
                 if (passphrase != null) {
-                    Vector identityNames = jsch.getIdentityNames();
                     String privkey = (String) identityNames.get(0);
                     jsch.addIdentity(privkey, passphrase);
                 }
