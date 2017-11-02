@@ -39,7 +39,7 @@ public class RunCucumberTest {
 The plugin is configured with environment variables. Most of these can be left undefined - the plugin
 provides sensible defaults.
 
-* `CUCUMBER_PRO_TOKEN` (required for `app.cucumber.pro`)
+* `CUCUMBER_PRO_TOKEN` (required for `https://app.cucumber.pro`)
     * Set it to the project-specific authentication token. Not required for appliance, where result publishing is open.
 * `CUCUMBER_PRO_BASE_URL` (required for appliance)
     * Set it to Cucumber Pro's base URL. Defaults to `https://app.cucumber.pro/`
