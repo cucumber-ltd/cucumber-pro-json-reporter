@@ -95,8 +95,10 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             @Override
             protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
                 JSch jsch = super.createDefaultJSch(fs);
-                HostKey key = new HostKey(host.getHostName(), DatatypeConverter.parseBase64Binary(hostKey));
-                jsch.getHostKeyRepository().add(key, null);
+                if(hostKey != null) {
+                    HostKey key = new HostKey(host.getHostName(), DatatypeConverter.parseBase64Binary(hostKey));
+                    jsch.getHostKeyRepository().add(key, null);
+                }
                 jsch.setIdentityRepository(getIdentityRepository());
                 return jsch;
             }
