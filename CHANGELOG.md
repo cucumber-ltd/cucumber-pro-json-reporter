@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* Plugin suggests defining `CUCUMBER_PRO_TOKEN` on auth failure (#6).
 * Added a changelog.
 
 ### Changed

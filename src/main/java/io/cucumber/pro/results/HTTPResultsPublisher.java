@@ -67,11 +67,19 @@ class HTTPResultsPublisher implements ResultsPublisher {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 response.getEntity().writeTo(baos);
                 String responseBody = new String(baos.toByteArray(), "UTF-8");
+
+                String suggestion = "";
+                if (statusCode == 401)
+                    suggestion = String.format("You need to define the %s environment variable", ENV_CUCUMBER_PRO_TOKEN);
+                if (statusCode == 403)
+                    suggestion = String.format("You need to change the value of the %s environment variable", ENV_CUCUMBER_PRO_TOKEN);
+
                 throw new RuntimeException(String.format(
-                        "Failed to publish results to Cucumber Pro URL: %s, Status: %s\nResponse:\n%s",
+                        "Failed to publish results to Cucumber Pro URL: %s, Status: %s\n%s\n%s",
                         url,
                         statusLine,
-                        responseBody
+                        responseBody,
+                        suggestion
                 ));
             }
         } catch (IOException e) {
