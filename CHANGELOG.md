@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-* #10 - Don't fail when `CUCUMBER_PRO_GIT_HOST_KEY` isn't specified.
+* Don't fail when `CUCUMBER_PRO_GIT_HOST_KEY` isn't specified (#10).
 
 ### Security
 
