@@ -1,10 +1,18 @@
-This formatter sends results as JSON to Cucumber Pro.
+# Cucumber Pro Plugin for Cucumber-JVM
 
-By default the formatter will do nothing. To activate the formatter.
-the `CUCUMBER_PRO_URL` envrionment variable *must* be defined.
+[The documentation is here]()
 
-The formatter will then try to detect whether it is running in
-a project under Git source control. If it cannot detect that it is
-running in Git, the formatter will fail the build.
+## Release process
 
-The formatter needs to detect the Git revision. It will shell out to `git` to do this.
+Artifacts are signed with GPG. Before you release, verify that you have
+GPG configured properly:
+
+    # The GPG key is in 1Password
+    gpg --use-agent --local-user devs@cucumber.io -ab README.md
+
+If that works, remove the generated `README.md.asc`. You're ready to release:
+
+    mvn release:clean
+    mvn --batch-mode -P release-sign-artifacts release:prepare
+    mvn --batch-mode -P release-sign-artifacts release:perform
+    # Log in to https://oss.sonatype.org/, close and release the project
