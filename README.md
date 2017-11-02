@@ -1,6 +1,6 @@
 # Cucumber Pro Plugin for Cucumber-JVM
 
-[The documentation is here]()
+[The documentation is here](https://app.cucumber.pro/projects/cucumber-pro-plugin-jvm)
 
 ## Release process
 

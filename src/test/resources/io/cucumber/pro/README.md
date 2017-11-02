@@ -20,7 +20,7 @@ First, install the library:
 <dependency>
     <groupId>io.cucumber</groupId>
     <artifactId>pro-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <scope>test</scope>
 </dependency>
 ```
