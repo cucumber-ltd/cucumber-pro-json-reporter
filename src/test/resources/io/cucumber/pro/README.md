@@ -43,7 +43,7 @@ public class RunCucumberTest {
 The plugin is configured with environment variables. Most of these can be left undefined - the plugin
 provides sensible defaults.
 
-* `CUCUMBER_PRO_TOKEN` (required for `https://app.cucumber.pro`, should be set per-project)
+* `CUCUMBER_PRO_TOKEN` (required for `https://app.cucumber.pro/`, should be set per-project)
     * Set it to the project-specific authentication token. Not required for privately hosted Cucumber Pro appliances with 
       unprotected results publishing.
 * `CUCUMBER_PRO_BASE_URL` (required for appliance, should be set globally)
@@ -55,7 +55,7 @@ provides sensible defaults.
       To find the host key, run `ssh git@[git host]` and accept the host key. Then run `ssh-keyscan [git host]`
       and copy the long base64-encoded string at the end of the line. It looks like `AAAAB3NzaC1.....E/Bhw==`.
 * `CUCUMBER_PRO_GIT_DEBUG` (optional, should be set per-project)
-    * Enables logging for Git SSH traffic, useful for troubleshooting
+    * Enables logging for Git SSH traffic, useful for troubleshooting.
 * `CUCUMBER_PRO_GIT_PUBLISH` (optional, should be set per-project)
     * Set to `false` or `no` to disable document publishing to git.
 * `CUCUMBER_PRO_PUBLISH` (optional, should be set globally)
@@ -104,7 +104,9 @@ You can find it in the project settings (press `?` to display it).
 
 This token should be assigned to a `CUCUMBER_PRO_TOKEN` environment variable on the build server, on a per-project basis.
 
-Your CI server should provide a mechanism for defining this environment variable.
+Consult your CI server's documentation for details about defining per-project environment variables.
+Some CI servers such as Travis and Circle CI allow you to define environment variables in a file checked into git.
+*DO NOT DO THIS* - as it would allow anyone with read acceess to your repository to publish results.
 
 ## Cucumber Profiles
 
