@@ -1,6 +1,7 @@
 package io.cucumber.pro.results;
 
 import io.cucumber.pro.Env;
+import io.cucumber.pro.TestLogger;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -10,13 +11,8 @@ import io.undertow.server.handlers.form.FormParserFactory;
 import org.junit.After;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.util.HashMap;
 
 import static io.cucumber.pro.Env.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS;
@@ -59,7 +55,7 @@ public class HTTPResultsPublisherTest {
         server.start();
 
         Env env = new Env(new HashMap<String, String>());
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, System.err);
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, new TestLogger());
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
     }
 
@@ -76,7 +72,7 @@ public class HTTPResultsPublisherTest {
         server.start();
 
         Env env = new Env(new HashMap<String, String>());
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, System.err);
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, new TestLogger());
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
             fail();
@@ -92,7 +88,7 @@ public class HTTPResultsPublisherTest {
         Env env = new Env(new HashMap<String, String>() {{
             put(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
         }});
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, System.err);
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, new TestLogger());
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
             fail();
@@ -109,12 +105,9 @@ public class HTTPResultsPublisherTest {
             put(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "true");
             put(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
         }});
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream errStream = new PrintStream(baos);
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, errStream);
+        TestLogger logger = new TestLogger();
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, logger);
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
-        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        String errorMessage = new BufferedReader(new InputStreamReader(bais, "utf-8")).readLine();
-        assertEquals("WARNING: Failed to publish results to http://localhost:8082/results", errorMessage);
+        assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.warn.get(0));
     }
 }

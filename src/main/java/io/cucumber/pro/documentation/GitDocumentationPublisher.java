@@ -10,6 +10,7 @@ import com.jcraft.jsch.agentproxy.Connector;
 import com.jcraft.jsch.agentproxy.ConnectorFactory;
 import com.jcraft.jsch.agentproxy.RemoteIdentityRepository;
 import io.cucumber.pro.Env;
+import io.cucumber.pro.Logger;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.TransportConfigCallback;
@@ -32,11 +33,13 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     private final String remote;
     private final String hostKey;
     private final Env env;
+    private final Logger logger;
 
-    GitDocumentationPublisher(String remote, String hostKey, Env env) {
+    GitDocumentationPublisher(String remote, String hostKey, Env env, Logger logger) {
         this.remote = remote;
         this.hostKey = hostKey;
         this.env = env;
+        this.logger = logger;
         if (env.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false)) {
             JSch.setLogger(new VerboseJschLogger());
         }
@@ -46,11 +49,15 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     public void publish() {
         try {
             this.publish0();
-            System.out.println("Published documentation to Cucumber Pro: " + remote);
+            logger.info("Published documentation to Cucumber Pro: " + remote);
         } catch (IOException e) {
             throw new RuntimeException("IO error", e);
         } catch (GitAPIException e) {
-            throw new RuntimeException("Git API error", e);
+            if (env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, false)) {
+                logger.warn("Failed to publish documentation to %s\n", remote);
+            } else {
+                throw new RuntimeException(String.format("Failed to publish documentation to %s\nYou can define %s=true to treat this as a warning instead of an error", remote, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR));
+            }
         } catch (JSchException e) {
             throw new RuntimeException("SSH error");
         }
@@ -94,7 +101,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             @Override
             protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
                 JSch jsch = super.createDefaultJSch(fs);
-                if(hostKey != null) {
+                if (hostKey != null) {
                     HostKey key = new HostKey(host.getHostName(), DatatypeConverter.parseBase64Binary(hostKey));
                     jsch.getHostKeyRepository().add(key, null);
                 }

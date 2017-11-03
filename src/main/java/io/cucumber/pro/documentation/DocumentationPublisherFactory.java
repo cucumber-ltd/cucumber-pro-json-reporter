@@ -1,6 +1,7 @@
 package io.cucumber.pro.documentation;
 
 import io.cucumber.pro.Env;
+import io.cucumber.pro.Logger;
 import io.cucumber.pro.activation.EnvActivation;
 import io.cucumber.pro.metadata.MetadataFactory;
 
@@ -16,7 +17,7 @@ public class DocumentationPublisherFactory {
                 throw new RuntimeException("Couldn't detect project name. Can't publish documentation to git.");
             String remote = CucumberProGitRemoteBuilder.buildCucumberProUrl(env, projectName);
             String hostKey = env.get(Env.CUCUMBER_PRO_GIT_HOST_KEY);
-            return new GitDocumentationPublisher(remote, hostKey, env);
+            return new GitDocumentationPublisher(remote, hostKey, env, Logger.System);
         } else {
             return new NullDocumentationPublisher();
         }

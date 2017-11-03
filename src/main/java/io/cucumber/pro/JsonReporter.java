@@ -44,7 +44,7 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter(String profileName) {
-        this(DocumentationPublisherFactory.create(ENV), ResultsPublisherFactory.create(ENV), System.getenv(), ENV.get(Env.CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK), profileName);
+        this(DocumentationPublisherFactory.create(ENV), ResultsPublisherFactory.create(ENV, Logger.System), System.getenv(), ENV.get(Env.CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK), profileName);
     }
 
     public JsonReporter() {

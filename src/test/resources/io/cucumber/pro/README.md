@@ -70,7 +70,7 @@ provides sensible defaults.
       project_name: HelloWorld
       ```
 * `CUCUMBER_PRO_IGNORE_CONNECTION_ERROR` (optional)
-    * Set this to `true` if you wish to treat connection errors as warnings rather than errors.
+    * Set this to `true` if you wish to treat connection errors to Cucumber Pro as warnings rather than errors.
       This can be useful to prevent build errors in case Cucumber Pro is down. Defaults to `false`.
 * `CUCUMBER_PRO_CONNECTION_TIMEOUT` (optional)
     * Set this to `10000` or some other number of milliseconds to specify a custom connection timeout to Cucumber Pro.
