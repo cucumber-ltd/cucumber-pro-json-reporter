@@ -3,8 +3,8 @@ package io.cucumber.pro.activation;
 import io.cucumber.pro.Env;
 
 public class EnvActivation implements Activation {
-    private static final String[] ENV_ACTIVATION_VARS = new String[]{
-            "CUCUMBER_PRO_PUBLISH",
+    private static final String[] ACTIVATION_ENV_VARS = new String[]{
+            Env.CUCUMBER_PRO_PUBLISH,
             "BUILD_NUMBER",
             "CIRCLE_BUILD_NUM",
             "TRAVIS_JOB_NUMBER",
@@ -18,7 +18,7 @@ public class EnvActivation implements Activation {
 
     @Override
     public boolean isActive() {
-        for (String envVar : ENV_ACTIVATION_VARS) {
+        for (String envVar : ACTIVATION_ENV_VARS) {
             if (env.getBoolean(envVar, false)) return true;
         }
         return false;

@@ -29,7 +29,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 
 public class GitDocumentationPublisher implements DocumentationPublisher {
-    private static final String ENV_CUCUMBER_PRO_GIT_DEBUG = "CUCUMBER_PRO_GIT_DEBUG";
     private final String remote;
     private final String hostKey;
     private final Env env;
@@ -38,7 +37,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         this.remote = remote;
         this.hostKey = hostKey;
         this.env = env;
-        if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_DEBUG, false)) {
+        if (env.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false)) {
             JSch.setLogger(new VerboseJschLogger());
         }
     }
@@ -66,7 +65,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
                 .build();
         Git git = new Git(repository);
         PushCommand pushCommand = git.push();
-        if (env.getBoolean(ENV_CUCUMBER_PRO_GIT_DEBUG, false)) {
+        if (env.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false)) {
             pushCommand.setProgressMonitor(new TextProgressMonitor());
         }
         pushCommand.setRemote(remote);

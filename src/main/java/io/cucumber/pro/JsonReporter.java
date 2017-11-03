@@ -21,7 +21,6 @@ public class JsonReporter implements Formatter {
     static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
     static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
     private static final Env ENV = new Env(System.getenv());
-    private static final String ENV_CUCUMBER_PRO_ENV_MASK = "CUCUMBER_PRO_ENV_MASK";
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
@@ -45,7 +44,7 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter(String profileName) {
-        this(DocumentationPublisherFactory.create(ENV), ResultsPublisherFactory.create(ENV), System.getenv(), ENV.get(ENV_CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK), profileName);
+        this(DocumentationPublisherFactory.create(ENV), ResultsPublisherFactory.create(ENV), System.getenv(), ENV.get(Env.CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK), profileName);
     }
 
     public JsonReporter() {
