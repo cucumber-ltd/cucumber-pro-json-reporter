@@ -12,6 +12,11 @@ GPG configured properly:
 
 If that works, remove the generated `README.md.asc`. You're ready to release:
 
+Make sure the version number in `pom.xml` is `[desired version]-SNAPSHOT`. If not,
+modify it and commit the change.
+
+Update `CHANGELOG.md`. Remove any empty sections for the released version. Update diff links.
+
     mvn release:clean
     mvn --batch-mode -P release-sign-artifacts release:prepare
     mvn --batch-mode -P release-sign-artifacts release:perform
