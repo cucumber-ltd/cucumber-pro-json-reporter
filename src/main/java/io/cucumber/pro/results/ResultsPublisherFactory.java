@@ -21,6 +21,6 @@ public class ResultsPublisherFactory {
         }
         String revision = RevisionProviderFactory.create(env).getRevision();
         String url = CucumberProResultsUrlBuilder.buildCucumberProUrl(env, projectName, revision);
-        return new HTTPResultsPublisher(url, env);
+        return new HTTPResultsPublisher(url, env, System.err);
     }
 }

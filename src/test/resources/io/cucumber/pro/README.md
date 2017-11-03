@@ -69,6 +69,12 @@ provides sensible defaults.
       ```yaml
       project_name: HelloWorld
       ```
+* `CUCUMBER_PRO_IGNORE_CONNECTION_ERROR` (optional)
+    * Set this to `true` if you wish to treat connection errors as warnings rather than errors.
+      This can be useful to prevent build errors in case Cucumber Pro is down. Defaults to `false`.
+* `CUCUMBER_PRO_CONNECTION_TIMEOUT` (optional)
+    * Set this to `10000` or some other number of milliseconds to specify a custom connection timeout to Cucumber Pro.
+      Defaults to `5000`.
 * `CUCUMBER_PRO_ENV_MASK` (optional)
     * The plugin sends your local environment variables to Cucumber Pro so it can detect the CI build number, 
       git branch/tag and other information about the build. Set it to a pattern of environment variables that shouldn't 

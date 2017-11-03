@@ -2,6 +2,8 @@ package io.cucumber.pro;
 
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 public class Env {
     private final Map<String, String> env;
 
@@ -23,6 +25,14 @@ public class Env {
         String value = env.get(key);
         if (value != null) {
             return !value.toLowerCase().matches("false|no");
+        }
+        return defaultValue;
+    }
+
+    public int getInt(String key, int defaultValue) {
+        String value = env.get(key);
+        if (value != null) {
+            return parseInt(value.toLowerCase());
         }
         return defaultValue;
     }

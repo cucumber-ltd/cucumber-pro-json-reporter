@@ -10,9 +10,18 @@ import io.undertow.server.handlers.form.FormParserFactory;
 import org.junit.After;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+import static io.cucumber.pro.results.HTTPResultsPublisher.ENV_CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS;
+import static io.cucumber.pro.results.HTTPResultsPublisher.ENV_CUCUMBER_PRO_IGNORE_CONNECTION_ERROR;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -22,7 +31,7 @@ public class HTTPResultsPublisherTest {
 
     @After
     public void stopServer() {
-        server.stop();
+        if (server != null) server.stop();
     }
 
     @Test
@@ -51,12 +60,12 @@ public class HTTPResultsPublisherTest {
         server.start();
 
         Env env = new Env(new HashMap<String, String>());
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env);
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, System.err);
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
     }
 
     @Test
-    public void explain_what_to_do_on_auth_error() throws InterruptedException {
+    public void explains_what_to_do_on_auth_error() throws InterruptedException {
         server = Undertow.builder()
                 .addHttpListener(8082, "localhost")
                 .setHandler(new HttpHandler() {
@@ -68,7 +77,7 @@ public class HTTPResultsPublisherTest {
         server.start();
 
         Env env = new Env(new HashMap<String, String>());
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env);
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, System.err);
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
             fail();
@@ -77,5 +86,36 @@ public class HTTPResultsPublisherTest {
             String suggestion = lines[lines.length - 1];
             assertEquals("You need to define the CUCUMBER_PRO_TOKEN environment variable", suggestion);
         }
+    }
+
+    @Test
+    public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
+        Env env = new Env(new HashMap<String, String>() {{
+            put(ENV_CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
+        }});
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, System.err);
+        try {
+            publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
+            fail();
+        } catch (RuntimeException expected) {
+            String[] lines = expected.getMessage().split("\\n");
+            String suggestion = lines[lines.length - 1];
+            assertEquals("You can define CUCUMBER_PRO_IGNORE_CONNECTION_ERROR=true to treat this as a warning instead of an error", suggestion);
+        }
+    }
+
+    @Test
+    public void prints_error_on_connection_timeout() throws InterruptedException, IOException {
+        Env env = new Env(new HashMap<String, String>() {{
+            put(ENV_CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "true");
+            put(ENV_CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
+        }});
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream errStream = new PrintStream(baos);
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, errStream);
+        publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        String errorMessage = new BufferedReader(new InputStreamReader(bais, "utf-8")).readLine();
+        assertEquals("WARNING: Failed to publish results to http://localhost:8082/results", errorMessage);
     }
 }

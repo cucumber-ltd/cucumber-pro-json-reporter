@@ -8,7 +8,9 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -22,25 +24,33 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 
 class HTTPResultsPublisher implements ResultsPublisher {
 
     private static final String ENV_CUCUMBER_PRO_TOKEN = "CUCUMBER_PRO_TOKEN";
+    public static final String ENV_CUCUMBER_PRO_IGNORE_CONNECTION_ERROR = "CUCUMBER_PRO_IGNORE_CONNECTION_ERROR";
+    public static final String ENV_CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS = "CUCUMBER_PRO_CONNECTION_TIMEOUT";
     private static final String PART_ENV = "env";
     private static final String PART_PAYLOAD = "payload";
     private static final String PART_PROFILE_NAME = "profileName";
     private static final String CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON = "application/x.cucumber.java.results+json";
     private final String url;
     private final String authToken;
+    private final Env env;
+    private final PrintStream errStream;
 
     /**
-     * @param url where to send results
+     * @param url       where to send results
+     * @param errStream where to print errors and warnings
      */
-    HTTPResultsPublisher(String url, Env env) {
+    HTTPResultsPublisher(String url, Env env, PrintStream errStream) {
         this.url = url;
+        this.env = env;
         authToken = env.get(ENV_CUCUMBER_PRO_TOKEN, null);
+        this.errStream = errStream;
     }
 
     @Override
@@ -82,6 +92,12 @@ class HTTPResultsPublisher implements ResultsPublisher {
                         suggestion
                 ));
             }
+        } catch (HttpHostConnectException e) {
+            if (env.getBoolean(ENV_CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, false)) {
+                errStream.format("WARNING: Failed to publish results to %s\n", url);
+            } else {
+                throw new RuntimeException(String.format("Failed to publish results to %s\nYou can define %s=true to treat this as a warning instead of an error", url, ENV_CUCUMBER_PRO_IGNORE_CONNECTION_ERROR));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -89,6 +105,11 @@ class HTTPResultsPublisher implements ResultsPublisher {
 
     private HttpClient buildHttpClient() {
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+
+        int timeout = env.getInt(ENV_CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, 5000);
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout).build();
+        httpClientBuilder.setDefaultRequestConfig(requestConfig);
+
         if (authToken != null) {
             CredentialsProvider provider = new BasicCredentialsProvider();
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(authToken, "");

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* Added `CUCUMBER_PRO_IGNORE_CONNECTION_ERROR` to prevent build failures (#4).
+* Added `CUCUMBER_PRO_CONNECTION_TIMEOUT` to set custom connection timeout.
 * Plugin suggests defining `CUCUMBER_PRO_TOKEN` on auth failure (#6).
 * Added a changelog.
 
