@@ -31,12 +31,14 @@ import java.io.IOException;
 
 public class GitDocumentationPublisher implements DocumentationPublisher {
     private final String remote;
+    private final int port;
     private final String hostKey;
     private final Env env;
     private final Logger logger;
 
-    GitDocumentationPublisher(String remote, String hostKey, Env env, Logger logger) {
+    GitDocumentationPublisher(String remote, int port, String hostKey, Env env, Logger logger) {
         this.remote = remote;
+        this.port = port;
         this.hostKey = hostKey;
         this.env = env;
         this.logger = logger;
@@ -96,6 +98,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         return new JschConfigSessionFactory() {
             @Override
             protected void configure(OpenSshConfig.Host host, Session session) {
+                session.setPort(port);
             }
 
             @Override

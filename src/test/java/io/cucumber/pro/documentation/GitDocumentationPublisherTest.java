@@ -16,7 +16,7 @@ public class GitDocumentationPublisherTest {
     public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
         Env env = new Env(new HashMap<String, String>());
         TestLogger logger = new TestLogger();
-        GitDocumentationPublisher publisher = new GitDocumentationPublisher("git@badhost", null, env, logger);
+        GitDocumentationPublisher publisher = new GitDocumentationPublisher("git@badhost", 22, null, env, logger);
         try {
             publisher.publish();
             fail();
@@ -33,7 +33,7 @@ public class GitDocumentationPublisherTest {
             put(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "true");
         }});
         TestLogger logger = new TestLogger();
-        GitDocumentationPublisher publisher = new GitDocumentationPublisher("git@badhost", null, env, logger);
+        GitDocumentationPublisher publisher = new GitDocumentationPublisher("git@badhost", 22, null, env, logger);
         publisher.publish();
         assertEquals("Failed to publish documentation to git@badhost\n", logger.warn.get(0));
     }

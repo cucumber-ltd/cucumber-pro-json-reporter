@@ -8,6 +8,7 @@ public class Env {
     public static final String CUCUMBER_PRO_TOKEN = "CUCUMBER_PRO_TOKEN";
     public static final String CUCUMBER_PRO_BASE_URL = "CUCUMBER_PRO_BASE_URL";
     public static final String CUCUMBER_PRO_GIT_HOST = "CUCUMBER_PRO_GIT_HOST";
+    public static final String CUCUMBER_PRO_GIT_SSH_PORT = "CUCUMBER_PRO_GIT_SSH_PORT";
     public static final String CUCUMBER_PRO_GIT_HOST_KEY = "CUCUMBER_PRO_GIT_HOST_KEY";
     public static final String CUCUMBER_PRO_GIT_DEBUG = "CUCUMBER_PRO_GIT_DEBUG";
     public static final String CUCUMBER_PRO_GIT_PUBLISH = "CUCUMBER_PRO_GIT_PUBLISH";

@@ -17,7 +17,8 @@ public class DocumentationPublisherFactory {
                 throw new RuntimeException("Couldn't detect project name. Can't publish documentation to git.");
             String remote = CucumberProGitRemoteBuilder.buildCucumberProUrl(env, projectName);
             String hostKey = env.get(Env.CUCUMBER_PRO_GIT_HOST_KEY);
-            return new GitDocumentationPublisher(remote, hostKey, env, Logger.System);
+            int port = env.getInt(Env.CUCUMBER_PRO_GIT_SSH_PORT, 22);
+            return new GitDocumentationPublisher(remote, port, hostKey, env, Logger.System);
         } else {
             return new NullDocumentationPublisher();
         }

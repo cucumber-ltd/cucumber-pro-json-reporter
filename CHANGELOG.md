@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* Added `CUCUMBER_PRO_GIT_SSH_PORT` so the port can be overridden (#12).
+
 ### Changed
 
 ### Deprecated
