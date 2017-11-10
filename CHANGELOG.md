@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-* Added `CUCUMBER_PRO_GIT_SSH_PORT` so the port can be overridden (#12).
-
 ### Changed
 
 ### Deprecated
@@ -19,7 +17,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-## [1.1.1] - 2017-09-03
+## [1.1.2] - 2017-11-03
+
+### Added
+
+* Added `CUCUMBER_PRO_GIT_SSH_PORT` so the port can be overridden (#12).
+
+## [1.1.1] - 2017-11-03
 
 ### Added
 
@@ -32,9 +36,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Don't fail when `CUCUMBER_PRO_GIT_HOST_KEY` isn't specified (#10).
 
-## 1.1.0 - 2017-09-02
+## 1.1.0 - 2017-11-02
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.2...1.1.2
 [1.1.1]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.0...1.1.1
