@@ -50,6 +50,9 @@ provides sensible defaults.
     * Set it to Cucumber Pro's base URL. Defaults to `https://app.cucumber.pro/`.
 * `CUCUMBER_PRO_GIT_HOST` (required for appliance, should be set globally)
     * Set it to the hostname where Cucumber Pro's git server is. Defaults to `git.cucumber.pro`.
+* `CUCUMBER_PRO_GIT_SSH_PORT` (optional, should be set globally)
+    * Set it to `2222` if you're publishing to a Cucumber Pro appliance that hasn't been configured
+      to use port `22` instead of `2222`. Defaults to `22`.
 * `CUCUMBER_PRO_GIT_HOST_KEY` (optional, should be set globally)
     * Only required if the build machine's `~/.ssh/known_hosts` doesn't have an entry for the git host.
       To find the host key, run `ssh git@[git host]` and accept the host key. Then run `ssh-keyscan [git host]`
