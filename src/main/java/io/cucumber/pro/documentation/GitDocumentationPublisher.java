@@ -58,10 +58,10 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             if (env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, false)) {
                 logger.warn("Failed to publish documentation to %s\n", remote);
             } else {
-                throw new RuntimeException(String.format("Failed to publish documentation to %s\nYou can define %s=true to treat this as a warning instead of an error", remote, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR));
+                throw new RuntimeException(String.format("Failed to publish documentation to %s\nYou can define %s=true to treat this as a warning instead of an error", remote, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
             }
         } catch (JSchException e) {
-            throw new RuntimeException("SSH error");
+            throw new RuntimeException("SSH error", e);
         }
     }
 
