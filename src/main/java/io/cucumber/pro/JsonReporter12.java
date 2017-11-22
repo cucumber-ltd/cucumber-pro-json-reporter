@@ -10,12 +10,9 @@ import io.cucumber.pro.results.ResultsPublisherFactory;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Map;
 
 public class JsonReporter12 extends JSONFormatter {
 
-    static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
-    static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
     private static final Env ENV = new Env(System.getenv());
     private static final File jsonFile;
 
@@ -33,20 +30,29 @@ public class JsonReporter12 extends JSONFormatter {
     private final String profileName;
     private final DocumentationPublisher documentationPublisher;
 
-    JsonReporter12(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, Map<String, String> env, String envMask, String profileName) throws IOException {
+    JsonReporter12(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, Env env, String profileName) throws IOException {
         super(new FileWriter(jsonFile));
         this.documentationPublisher = documentationPublisher;
         this.resultsPublisher = resultsPublisher;
         this.profileName = profileName;
-        filteredEnv = new FilteredEnv(envMask, env);
+        filteredEnv = new FilteredEnv(env);
     }
 
-    public JsonReporter12(String profileName) throws IOException {
-        this(DocumentationPublisherFactory.create(ENV), ResultsPublisherFactory.create(ENV, Logger.System), System.getenv(), ENV.get(Env.CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK), profileName);
+    JsonReporter12(String profileName) throws IOException {
+        this(
+                DocumentationPublisherFactory.create(ENV),
+                ResultsPublisherFactory.create(
+                        ENV,
+                        Logger.System
+                ),
+                ENV,
+                profileName
+        );
     }
 
-    public JsonReporter12() throws IOException {
-        this(ENV.get("CUCUMBER_PROFILE_NAME", DEFAULT_CUCUMBER_PROFILE_NAME));
+    public JsonReporter12(File fileUsedToGetProfileName) throws IOException {
+        this(fileUsedToGetProfileName.getName());
+        fileUsedToGetProfileName.delete();
     }
 
     @Override

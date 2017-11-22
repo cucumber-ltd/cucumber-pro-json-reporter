@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,30 +20,31 @@ public class JsonReporterTest {
 
     @Test
     public void it_publishes_the_json_report_with_filtered_environment_data() {
-//        Map<String, String> env = new HashMap<>();
-//        env.put("FOO", "bar");
-//        env.put("PASSWORD", "secret");
-//        CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
-//        Formatter reporter = new JsonReporter(
-//                new NullDocumentationPublisher(),
-//                resultsPublisher,
-//                env,
-//                JsonReporter.DEFAULT_ENV_MASK,
-//                JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME);
-//
-//        TimeService timeService = TimeService.SYSTEM;
-//        EventBus eventBus = new EventBus(timeService);
-//        reporter.setEventPublisher(eventBus);
-//        EventHandler<TestRunFinished> testRunFinishedEventHandler = new EventHandler<TestRunFinished>() {
-//            @Override
-//            public void receive(TestRunFinished event) {
-//            }
-//        };
-//        eventBus.registerHandlerFor(TestRunFinished.class, testRunFinishedEventHandler);
-//        eventBus.send(new TestRunFinished(timeService.time()));
-//
-//        assertEquals("FOO=bar\n", resultsPublisher.getPublishedEnv());
-//        assertNotNull(resultsPublisher.getPublishedFile());
+        Env env = new Env(new HashMap<String, String>() {{
+            put("FOO", "bar");
+            put("PASSWORD", "secret");
+
+        }});
+        CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
+        Formatter reporter = new JsonReporter(
+                new NullDocumentationPublisher(),
+                resultsPublisher,
+                env,
+                JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME);
+
+        TimeService timeService = TimeService.SYSTEM;
+        EventBus eventBus = new EventBus(timeService);
+        reporter.setEventPublisher(eventBus);
+        EventHandler<TestRunFinished> testRunFinishedEventHandler = new EventHandler<TestRunFinished>() {
+            @Override
+            public void receive(TestRunFinished event) {
+            }
+        };
+        eventBus.registerHandlerFor(TestRunFinished.class, testRunFinishedEventHandler);
+        eventBus.send(new TestRunFinished(timeService.time()));
+
+        assertEquals("FOO=bar\n", resultsPublisher.getPublishedEnv());
+        assertNotNull(resultsPublisher.getPublishedFile());
     }
 
     class CapturingResultsPublisher implements ResultsPublisher {
