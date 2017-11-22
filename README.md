@@ -19,6 +19,7 @@ If that works, remove the generated `README.md.asc`. You're ready to release:
 * Update `pom.xml` to `[desired version]-SNAPSHOT`. (It usually has the right number unless you're making a major or minor release).
 * Update the version number in `src/test/resources/io/cucumber/pro/README.md`
 * Update `CHANGELOG.md`. Remove any empty sections for the released version. Update diff links.
+* Commit everything.
 
     mvn release:clean
     mvn --batch-mode -P release-sign-artifacts release:prepare

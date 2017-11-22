@@ -9,18 +9,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-* Added support for Cucumber-JVM 1.2.4 and 1.2.5 (#13, #15)
-* Fetch from source repository before publishing to Cucumber Pro (#9)
-
 ### Changed
-
-* On Bamboo, get project name from `bamboo_planRepository_name` rather than `bamboo_shortPlanName` (#14)
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+
+## [1.2.0] - 2017-11-22
+
+### Added
+
+* Added support for Cucumber-JVM 1.2.4 and 1.2.5 (#13, #15)
+* Fetch from source repository before publishing to Cucumber Pro (#9)
+
+### Changed
+
+* On Bamboo, get project name from `bamboo_planRepository_name` rather than `bamboo_shortPlanName` (#14)
 
 ## [1.1.2] - 2017-11-03
 
@@ -45,6 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.2...1.2.0
 [1.1.2]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.2...1.1.2
 [1.1.1]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.0...1.1.1
