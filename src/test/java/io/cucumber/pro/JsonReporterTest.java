@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,15 +20,16 @@ public class JsonReporterTest {
 
     @Test
     public void it_publishes_the_json_report_with_filtered_environment_data() {
-        Map<String, String> env = new HashMap<>();
-        env.put("FOO", "bar");
-        env.put("PASSWORD", "secret");
+        Env env = new Env(new HashMap<String, String>() {{
+            put("FOO", "bar");
+            put("PASSWORD", "secret");
+
+        }});
         CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
         Formatter reporter = new JsonReporter(
                 new NullDocumentationPublisher(),
                 resultsPublisher,
                 env,
-                JsonReporter.DEFAULT_ENV_MASK,
                 JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME);
 
         TimeService timeService = TimeService.SYSTEM;

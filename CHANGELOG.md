@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* Added support for Cucumber-JVM 1.2.4 and 1.2.5 (#13, #15)
+
 ### Changed
 
 ### Deprecated

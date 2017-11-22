@@ -8,17 +8,19 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 class FilteredEnv {
+    private static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
     private final Pattern maskPattern;
-    private final Map<String, String> env;
+    private final Env env;
 
-    FilteredEnv(String mask, Map<String, String> env) {
+    FilteredEnv(Env env) {
+        String mask = env.get(Env.CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK);
         this.maskPattern = Pattern.compile(String.format(".*(%s).*", mask), Pattern.CASE_INSENSITIVE);
         this.env = env;
     }
 
     private Map<String, String> clean() {
         Map<String, String> result = new HashMap<>();
-        for (Map.Entry<String, String> entry : this.env.entrySet()) {
+        for (Map.Entry<String, String> entry : this.env.all().entrySet()) {
             if (!maskPattern.matcher(entry.getKey()).matches())
                 result.put(entry.getKey(), entry.getValue());
         }

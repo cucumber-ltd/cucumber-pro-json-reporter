@@ -27,13 +27,23 @@ Add the following dependency to your `pom.xml`:
 </dependency>
 ```
 
-If you're not using Maven, declare a similar dependency.
+If you're not using Maven, declare a similar dependency. Next, tell Cucumber to use the plugin. 
 
-Next, tell Cucumber to use the plugin:
+If you're on Cucumber-JVM 2.0.0 or newer:
 
 ```java
 @RunWith(Cucumber.class)
 @CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter"})
+public class RunCucumberTest {
+}
+```
+
+If you're on Cucumber-JVM 1.2.5 or older, use `io.cucumber.pro.JsonReporter12:full`.
+The `full` part is the profile name (see the "Cucumber Profiles" section below). This is mandatory for `io.cucumber.pro.JsonReporter12`.
+
+```java
+@RunWith(Cucumber.class)
+@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter12:full"})
 public class RunCucumberTest {
 }
 ```
