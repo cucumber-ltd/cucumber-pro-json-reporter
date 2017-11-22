@@ -92,7 +92,6 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         );
 
         try {
-
             this.fetch0(git, fetchSpec, fetchRemoteName);
             logger.info("Fetched all commits from " + fetchSpec.remote);
         } catch (GitAPIException e) {
