@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* On Bamboo, get project name from `bamboo_planRepository_name` rather than `bamboo_shortPlanName` (#14)
+
 ### Deprecated
 
 ### Removed
