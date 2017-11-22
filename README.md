@@ -17,9 +17,10 @@ If that works, remove the generated `README.md.asc`. You're ready to release:
 ### Update the version number
 
 * Update `pom.xml` to `[desired version]-SNAPSHOT`. (It usually has the right number unless you're making a major or minor release).
-* Update the version number in `src/test/resources/io/cucumber/pro/README.md`
+* Update the version number in `src/test/resources/io/cucumber/pro/README.md`.
 * Update `CHANGELOG.md`. Remove any empty sections for the released version. Update diff links.
 * Commit everything.
+* Update [Cucumber Pro docs](https://github.com/cucumber-ltd/cucumber-pro/blob/master/lib/cucumber-pro/web/components/test_results/installation_instructions_for_java.jsx)
 
     mvn release:clean
     mvn --batch-mode -P release-sign-artifacts release:prepare
