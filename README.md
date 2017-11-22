@@ -24,4 +24,4 @@ If that works, remove the generated `README.md.asc`. You're ready to release:
     mvn --batch-mode -P release-sign-artifacts release:prepare
     mvn --batch-mode -P release-sign-artifacts release:perform
 
-Log in to https://oss.sonatype.org/, close and release the project
+Log in to https://oss.sonatype.org/, close and release the project.
