@@ -15,10 +15,14 @@ public class DocumentationPublisherFactory {
             String projectName = MetadataFactory.create(env).getProjectName();
             if (projectName == null)
                 throw new RuntimeException("Couldn't detect project name. Can't publish documentation to git.");
-            String remote = CucumberProGitRemoteBuilder.buildCucumberProUrl(env, projectName);
-            String hostKey = env.get(Env.CUCUMBER_PRO_GIT_HOST_KEY);
-            int port = env.getInt(Env.CUCUMBER_PRO_GIT_SSH_PORT, 22);
-            return new GitDocumentationPublisher(remote, port, hostKey, env, Logger.System);
+
+            GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
+                    CucumberProGitRemoteBuilder.buildCucumberProUrl(env, projectName),
+                    env.getInt(Env.CUCUMBER_PRO_GIT_SSH_PORT, 22),
+                    env.get(Env.CUCUMBER_PRO_GIT_HOST_KEY)
+            );
+            GitDocumentationPublisher.RemoteSpec fetchSpec = null; // TODO
+            return new GitDocumentationPublisher(pushSpec, fetchSpec, env, Logger.System);
         } else {
             return new NullDocumentationPublisher();
         }
