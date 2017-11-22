@@ -19,6 +19,7 @@ import org.eclipse.jgit.api.TransportCommand;
 import org.eclipse.jgit.api.TransportConfigCallback;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.lib.TextProgressMonitor;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.FetchResult;
@@ -26,6 +27,7 @@ import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.OperationResult;
 import org.eclipse.jgit.transport.PushResult;
+import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.transport.Transport;
@@ -33,13 +35,16 @@ import org.eclipse.jgit.util.FS;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
+import java.util.List;
 
 public class GitDocumentationPublisher implements DocumentationPublisher {
+    private static final String DEFAULT_SOURCE_REMOTE_NAME = "origin";
     private final RemoteSpec pushSpec;
-    private final RemoteSpec fetchSpec;
     private final Logger logger;
     private final boolean gitDebug;
     private final boolean ignoreConnectionError;
+    private final String fetchRemoteName;
+    private final boolean fetchFromSource;
 
     static class RemoteSpec {
         private final String remote;
@@ -53,32 +58,42 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         }
     }
 
-    GitDocumentationPublisher(RemoteSpec pushSpec, RemoteSpec fetchSpec, Env env, Logger logger) {
+    GitDocumentationPublisher(RemoteSpec pushSpec, Env env, Logger logger) {
         this.pushSpec = pushSpec;
-        this.fetchSpec = fetchSpec;
         this.logger = logger;
         if (env.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false)) {
             JSch.setLogger(new VerboseJschLogger());
         }
         gitDebug = env.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false);
         ignoreConnectionError = env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, false);
+        fetchRemoteName = env.get(Env.CUCUMBER_PRO_SOURCE_REMOTE_NAME, DEFAULT_SOURCE_REMOTE_NAME);
+        fetchFromSource = env.getBoolean(Env.CUCUMBER_PRO_FETCH_FROM_SOURCE, true);
     }
 
     @Override
     public void publish() {
         try {
             Git git = getGit();
-            if(fetchSpec != null )
-                fetch(git);
+            if(fetchFromSource) {
+                fetch(git, fetchRemoteName);
+            }
             push(git);
         } catch (IOException e) {
             throw new RuntimeException("IO error", e);
         }
     }
 
-    private void fetch(Git git) throws IOException {
+    void fetch(Git git, String fetchRemoteName) throws IOException {
+        String fetchRemote = git.getRepository().getConfig().getString("remote", fetchRemoteName, "url");
+        RemoteSpec fetchSpec = new RemoteSpec(
+                fetchRemote,
+                22,
+                null
+        );
+
         try {
-            this.fetch0(git);
+
+            this.fetch0(git, fetchSpec, fetchRemoteName);
             logger.info("Fetched all commits from " + fetchSpec.remote);
         } catch (GitAPIException e) {
             if (ignoreConnectionError) {
@@ -106,13 +121,17 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         }
     }
 
-    private void fetch0(Git git) throws JSchException, GitAPIException {
-        FetchCommand fetch = git.fetch();
+    private void fetch0(Git git, RemoteSpec fetchSpec, String fetchRemoteName) throws JSchException, GitAPIException {
+        FetchCommand fetch = git.fetch().setCheckFetchedObjects(true);
         if (gitDebug) {
             fetch.setProgressMonitor(new TextProgressMonitor());
         }
         fetch.setRemote(fetchSpec.remote);
-        configureSsh(pushSpec, fetch);
+
+        StoredConfig config = git.getRepository().getConfig();
+        List<RefSpec> refSpecs = config.getRefSpecs("remote", fetchRemoteName, "fetch");
+        fetch.setRefSpecs(refSpecs);
+        configureSsh(fetchSpec, fetch);
 
         FetchResult result = fetch.call();
         logResult(result);
@@ -132,8 +151,8 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         }
     }
 
-    private <C extends GitCommand, R> void configureSsh(RemoteSpec pushSpec, TransportCommand<C, R> push) throws JSchException {
-        final SshSessionFactory sshSessionFactory = getSshSessionFactory(pushSpec);
+    private static <C extends GitCommand, R> void configureSsh(RemoteSpec remoteSpec, TransportCommand<C, R> push) throws JSchException {
+        final SshSessionFactory sshSessionFactory = getSshSessionFactory(remoteSpec);
         push.setTransportConfigCallback(new TransportConfigCallback() {
             @Override
             public void configure(Transport transport) {
@@ -149,7 +168,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         }
     }
 
-    private Git getGit() throws IOException {
+    static Git getGit() throws IOException {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repository = builder
                 .readEnvironment()
@@ -159,7 +178,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         return new Git(repository);
     }
 
-    private SshSessionFactory getSshSessionFactory(final RemoteSpec remoteSpec) throws JSchException {
+    private static SshSessionFactory getSshSessionFactory(final RemoteSpec remoteSpec) throws JSchException {
         return new JschConfigSessionFactory() {
             @Override
             protected void configure(OpenSshConfig.Host host, Session session) {
@@ -179,7 +198,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         };
     }
 
-    private IdentityRepository getIdentityRepository() throws JSchException {
+    private static IdentityRepository getIdentityRepository() throws JSchException {
         try {
             ConnectorFactory connectorFactory = ConnectorFactory.getDefault();
             Connector connector = connectorFactory.createConnector();

@@ -2,6 +2,7 @@ package io.cucumber.pro.documentation;
 
 import io.cucumber.pro.Env;
 import io.cucumber.pro.TestLogger;
+import org.eclipse.jgit.api.Git;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class GitDocumentationPublisherTest {
                 22,
                 null
         );
-        GitDocumentationPublisher publisher = new GitDocumentationPublisher(pushSpec, null, env, logger);
+        GitDocumentationPublisher publisher = new GitDocumentationPublisher(pushSpec, env, logger);
         try {
             publisher.publish();
             fail();
@@ -44,8 +45,17 @@ public class GitDocumentationPublisherTest {
                 22,
                 null
         );
-        GitDocumentationPublisher publisher = new GitDocumentationPublisher(pushSpec, null, env, logger);
+        GitDocumentationPublisher publisher = new GitDocumentationPublisher(pushSpec, env, logger);
         publisher.publish();
         assertEquals("Failed to publish documentation to git@badhost\n", logger.warn.get(0));
+    }
+
+    @Test
+    public void fetches_without_throwing_an_exception() throws IOException {
+        Env env = new Env(new HashMap<String, String>());
+        TestLogger logger = new TestLogger();
+        Git git = GitDocumentationPublisher.getGit();
+        GitDocumentationPublisher publisher = new GitDocumentationPublisher(null, env, logger);
+        publisher.fetch(git, "origin");
     }
 }

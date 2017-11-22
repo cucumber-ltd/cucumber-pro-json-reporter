@@ -21,8 +21,7 @@ public class DocumentationPublisherFactory {
                     env.getInt(Env.CUCUMBER_PRO_GIT_SSH_PORT, 22),
                     env.get(Env.CUCUMBER_PRO_GIT_HOST_KEY)
             );
-            GitDocumentationPublisher.RemoteSpec fetchSpec = null; // TODO
-            return new GitDocumentationPublisher(pushSpec, fetchSpec, env, Logger.System);
+            return new GitDocumentationPublisher(pushSpec, env, Logger.System);
         } else {
             return new NullDocumentationPublisher();
         }

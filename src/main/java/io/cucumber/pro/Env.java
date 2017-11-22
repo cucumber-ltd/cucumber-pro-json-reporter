@@ -17,6 +17,8 @@ public class Env {
     public static final String CUCUMBER_PRO_IGNORE_CONNECTION_ERROR = "CUCUMBER_PRO_IGNORE_CONNECTION_ERROR";
     public static final String CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS = "CUCUMBER_PRO_CONNECTION_TIMEOUT";
     public static final String CUCUMBER_PRO_ENV_MASK = "CUCUMBER_PRO_ENV_MASK";
+    public static final String CUCUMBER_PRO_SOURCE_REMOTE_NAME = "CUCUMBER_PRO_SOURCE_REMOTE_NAME";
+    public static final String CUCUMBER_PRO_FETCH_FROM_SOURCE = "CUCUMBER_PRO_FETCH_FROM_SOURCE";
 
     private final Map<String, String> env;
 

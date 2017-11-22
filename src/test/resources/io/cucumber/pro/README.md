@@ -71,6 +71,13 @@ provides sensible defaults.
     * Enables logging for Git SSH traffic, useful for troubleshooting.
 * `CUCUMBER_PRO_GIT_PUBLISH` (optional, should be set per-project)
     * Set to `false` or `no` to disable document publishing to git.
+* `CUCUMBER_PRO_FETCH_FROM_SOURCE` (optional, should be set per-project)
+    * Whether or not to fetch from the source repository before publishing
+      to Cucumber Pro. This is needed on CI servers that perform a shallow 
+      clone during build.
+* `CUCUMBER_PRO_SOURCE_REMOTE_NAME` (optional, should be set per-project)
+    * Where the plugin will `git fetch` from before publishing to Cucumber Pro.
+      Defaults to `origin`.
 * `CUCUMBER_PRO_PUBLISH` (optional, should be set globally)
     * Set it to `true` to enable the plugin. The plugin is enabled by default on preferred CI servers.
 * `CUCUMBER_PRO_PROJECT_NAME` (optional, should be set per-project)
