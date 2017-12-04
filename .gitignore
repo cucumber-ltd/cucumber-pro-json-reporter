@@ -4,3 +4,5 @@
 /lib
 /build/
 /.gradle/
+README.md.asc
+release.properties
