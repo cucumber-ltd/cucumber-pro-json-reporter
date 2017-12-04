@@ -52,7 +52,7 @@ public class Env {
         return defaultValue;
     }
 
-    public Map<String,String> all() {
+    public Map<String, String> all() {
         return env;
     }
 }

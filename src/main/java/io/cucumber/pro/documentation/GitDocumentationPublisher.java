@@ -46,18 +46,6 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     private final String fetchRemoteName;
     private final boolean fetchFromSource;
 
-    static class RemoteSpec {
-        private final String remote;
-        private final int port;
-        private final String hostKey;
-
-        RemoteSpec(String remote, int port, String hostKey) {
-            this.remote = remote;
-            this.port = port;
-            this.hostKey = hostKey;
-        }
-    }
-
     GitDocumentationPublisher(RemoteSpec pushSpec, Env env, Logger logger) {
         this.pushSpec = pushSpec;
         this.logger = logger;
@@ -70,11 +58,62 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         fetchFromSource = env.getBoolean(Env.CUCUMBER_PRO_FETCH_FROM_SOURCE, true);
     }
 
+    private static <C extends GitCommand, R> void configureSsh(RemoteSpec remoteSpec, TransportCommand<C, R> push) throws JSchException {
+        final SshSessionFactory sshSessionFactory = getSshSessionFactory(remoteSpec);
+        push.setTransportConfigCallback(new TransportConfigCallback() {
+            @Override
+            public void configure(Transport transport) {
+                SshTransport sshTransport = (SshTransport) transport;
+                sshTransport.setSshSessionFactory(sshSessionFactory);
+            }
+        });
+    }
+
+    static Git getGit() throws IOException {
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        Repository repository = builder
+                .readEnvironment()
+                .findGitDir()
+                .setMustExist(true)
+                .build();
+        return new Git(repository);
+    }
+
+    private static SshSessionFactory getSshSessionFactory(final RemoteSpec remoteSpec) throws JSchException {
+        return new JschConfigSessionFactory() {
+            @Override
+            protected void configure(OpenSshConfig.Host host, Session session) {
+                session.setPort(remoteSpec.port);
+            }
+
+            @Override
+            protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
+                JSch jsch = super.createDefaultJSch(fs);
+                if (remoteSpec.hostKey != null) {
+                    HostKey key = new HostKey(host.getHostName(), DatatypeConverter.parseBase64Binary(remoteSpec.hostKey));
+                    jsch.getHostKeyRepository().add(key, null);
+                }
+                jsch.setIdentityRepository(getIdentityRepository());
+                return jsch;
+            }
+        };
+    }
+
+    private static IdentityRepository getIdentityRepository() throws JSchException {
+        try {
+            ConnectorFactory connectorFactory = ConnectorFactory.getDefault();
+            Connector connector = connectorFactory.createConnector();
+            return new RemoteIdentityRepository(connector);
+        } catch (AgentProxyException e) {
+            throw new JSchException("Failed to configure SSH Agent", e);
+        }
+    }
+
     @Override
     public void publish() {
         try {
             Git git = getGit();
-            if(fetchFromSource) {
+            if (fetchFromSource) {
                 fetch(git, fetchRemoteName);
             }
             push(git);
@@ -150,60 +189,21 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         }
     }
 
-    private static <C extends GitCommand, R> void configureSsh(RemoteSpec remoteSpec, TransportCommand<C, R> push) throws JSchException {
-        final SshSessionFactory sshSessionFactory = getSshSessionFactory(remoteSpec);
-        push.setTransportConfigCallback(new TransportConfigCallback() {
-            @Override
-            public void configure(Transport transport) {
-                SshTransport sshTransport = (SshTransport) transport;
-                sshTransport.setSshSessionFactory(sshSessionFactory);
-            }
-        });
-    }
-
     private void logResult(OperationResult result) {
         if (gitDebug) {
             logger.info(result.getMessages());
         }
     }
 
-    static Git getGit() throws IOException {
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = builder
-                .readEnvironment()
-                .findGitDir()
-                .setMustExist(true)
-                .build();
-        return new Git(repository);
-    }
+    static class RemoteSpec {
+        private final String remote;
+        private final int port;
+        private final String hostKey;
 
-    private static SshSessionFactory getSshSessionFactory(final RemoteSpec remoteSpec) throws JSchException {
-        return new JschConfigSessionFactory() {
-            @Override
-            protected void configure(OpenSshConfig.Host host, Session session) {
-                session.setPort(remoteSpec.port);
-            }
-
-            @Override
-            protected JSch getJSch(OpenSshConfig.Host host, FS fs) throws JSchException {
-                JSch jsch = super.createDefaultJSch(fs);
-                if (remoteSpec.hostKey != null) {
-                    HostKey key = new HostKey(host.getHostName(), DatatypeConverter.parseBase64Binary(remoteSpec.hostKey));
-                    jsch.getHostKeyRepository().add(key, null);
-                }
-                jsch.setIdentityRepository(getIdentityRepository());
-                return jsch;
-            }
-        };
-    }
-
-    private static IdentityRepository getIdentityRepository() throws JSchException {
-        try {
-            ConnectorFactory connectorFactory = ConnectorFactory.getDefault();
-            Connector connector = connectorFactory.createConnector();
-            return new RemoteIdentityRepository(connector);
-        } catch (AgentProxyException e) {
-            throw new JSchException("Failed to configure SSH Agent", e);
+        RemoteSpec(String remote, int port, String hostKey) {
+            this.remote = remote;
+            this.port = port;
+            this.hostKey = hostKey;
         }
     }
 }
