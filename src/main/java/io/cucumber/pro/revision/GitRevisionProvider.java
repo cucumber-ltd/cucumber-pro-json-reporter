@@ -21,7 +21,7 @@ public class GitRevisionProvider implements RevisionProvider {
             if (builder.getGitDir() == null) {
                 throw new CucumberException(String.format("The current directory '%s' and none of its parent directories appear to have a '.git' directory", currentDirectory));
             } else {
-                logger.info("Current directory: '%s', Git diectory: '%s'", currentDirectory, builder.getGitDir().getAbsolutePath());
+                logger.log(Logger.Level.INFO, "Current directory: '%s', Git diectory: '%s'", currentDirectory, builder.getGitDir().getAbsolutePath());
             }
             repository = builder.build();
         } catch (IOException e) {

@@ -1,6 +1,8 @@
 package io.cucumber.pro.results;
 
+import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Env;
+import io.cucumber.pro.Logger;
 import io.cucumber.pro.TestLogger;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
@@ -76,7 +78,7 @@ public class HTTPResultsPublisherTest {
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
             fail();
-        } catch (RuntimeException expected) {
+        } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
             assertEquals("You need to define the CUCUMBER_PRO_TOKEN environment variable", suggestion);
@@ -92,7 +94,7 @@ public class HTTPResultsPublisherTest {
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
             fail();
-        } catch (RuntimeException expected) {
+        } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
             assertEquals("You can define CUCUMBER_PRO_IGNORE_CONNECTION_ERROR=true to treat this as a warning instead of an error", suggestion);
@@ -108,6 +110,6 @@ public class HTTPResultsPublisherTest {
         TestLogger logger = new TestLogger();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, logger);
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
-        assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.warn.get(0));
+        assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.getMessages(Logger.Level.WARN).get(0));
     }
 }

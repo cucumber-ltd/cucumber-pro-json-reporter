@@ -1,6 +1,8 @@
 package io.cucumber.pro.documentation;
 
+import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Env;
+import io.cucumber.pro.Logger;
 import io.cucumber.pro.TestLogger;
 import org.eclipse.jgit.api.Git;
 import org.junit.Test;
@@ -19,15 +21,15 @@ public class GitDocumentationPublisherTest {
         TestLogger logger = new TestLogger();
 
         GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
-                "git@badhost",
-                22,
+                "git@0.0.0.0",
+                9999,
                 null
         );
         GitDocumentationPublisher publisher = new GitDocumentationPublisher(pushSpec, env, logger);
         try {
             publisher.publish();
             fail();
-        } catch (RuntimeException expected) {
+        } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
             assertEquals("You can define CUCUMBER_PRO_IGNORE_CONNECTION_ERROR=true to treat this as a warning instead of an error", suggestion);
@@ -41,13 +43,13 @@ public class GitDocumentationPublisherTest {
         }});
         TestLogger logger = new TestLogger();
         GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
-                "git@badhost",
-                22,
+                "git@0.0.0.0",
+                9999,
                 null
         );
         GitDocumentationPublisher publisher = new GitDocumentationPublisher(pushSpec, env, logger);
         publisher.publish();
-        assertEquals("Failed to publish documentation to git@badhost\n", logger.warn.get(0));
+        assertEquals("Failed to publish documentation to git@0.0.0.0\n", logger.getMessages(Logger.Level.WARN).get(0));
     }
 
     @Test

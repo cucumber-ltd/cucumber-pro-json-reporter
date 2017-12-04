@@ -19,6 +19,7 @@ public class Env {
     public static final String CUCUMBER_PRO_ENV_MASK = "CUCUMBER_PRO_ENV_MASK";
     public static final String CUCUMBER_PRO_SOURCE_REMOTE_NAME = "CUCUMBER_PRO_SOURCE_REMOTE_NAME";
     public static final String CUCUMBER_PRO_FETCH_FROM_SOURCE = "CUCUMBER_PRO_FETCH_FROM_SOURCE";
+    public static final String CUCUMBER_PRO_LOG_LEVEL = "CUCUMBER_PRO_LOG_LEVEL";
 
     private final Map<String, String> env;
 

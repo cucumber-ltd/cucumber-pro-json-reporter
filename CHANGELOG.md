@@ -8,12 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+* A new `CUCUMBER_PRO_LOG_LEVEL` environment variable sets log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
 
 ### Changed
 
 ### Deprecated
 
 ### Removed
+* The `CUCUMBER_PRO_GIT_DEBUG` environment variable no longer has any effect. Replaced by `CUCUMBER_PRO_LOG_LEVEL`.
 
 ### Fixed
 

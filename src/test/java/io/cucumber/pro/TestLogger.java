@@ -1,25 +1,25 @@
 package io.cucumber.pro;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestLogger implements Logger {
-    public final List<String> info = new ArrayList<>();
-    public final List<String> warn = new ArrayList<>();
-    public final List<String> error = new ArrayList<>();
+    private final Map<Level, List<String>> messages = new HashMap<Level, List<String>>() {{
+        put(Level.DEBUG, new ArrayList<String>());
+        put(Level.INFO, new ArrayList<String>());
+        put(Level.WARN, new ArrayList<String>());
+        put(Level.ERROR, new ArrayList<String>());
+        put(Level.FATAL, new ArrayList<String>());
+    }};
 
     @Override
-    public void info(String message, Object... args) {
-        info.add(String.format(message, args));
+    public void log(Level level, String message, Object... args) {
+        messages.get(level).add(String.format(message, args));
     }
 
-    @Override
-    public void warn(String message, Object... args) {
-        warn.add(String.format(message, args));
-    }
-
-    @Override
-    public void error(String message, Object... args) {
-        error.add(String.format(message, args));
+    public List<String> getMessages(Level level) {
+        return messages.get(level);
     }
 }

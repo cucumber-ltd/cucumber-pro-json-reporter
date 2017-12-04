@@ -19,6 +19,7 @@ public class JsonReporter implements Formatter {
 
     static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
     private static final Env ENV = new Env(System.getenv());
+    private static final Logger LOGGER = new Logger.SystemLogger(ENV);
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
@@ -43,10 +44,10 @@ public class JsonReporter implements Formatter {
 
     public JsonReporter(String profileName) {
         this(
-                DocumentationPublisherFactory.create(ENV),
+                DocumentationPublisherFactory.create(ENV, LOGGER),
                 ResultsPublisherFactory.create(
                         ENV,
-                        Logger.System
+                        LOGGER
                 ),
                 ENV,
                 profileName

@@ -67,8 +67,6 @@ provides sensible defaults.
     * Only required if the build machine's `~/.ssh/known_hosts` doesn't have an entry for the git host.
       To find the host key, run `ssh git@[git host]` and accept the host key. Then run `ssh-keyscan [git host]`
       and copy the long base64-encoded string at the end of the line. It looks like `AAAAB3NzaC1.....E/Bhw==`.
-* `CUCUMBER_PRO_GIT_DEBUG` (optional, should be set per-project)
-    * Enables logging for Git SSH traffic, useful for troubleshooting.
 * `CUCUMBER_PRO_GIT_PUBLISH` (optional, should be set per-project)
     * Set to `false` or `no` to disable document publishing to git.
 * `CUCUMBER_PRO_FETCH_FROM_SOURCE` (optional, should be set per-project)
@@ -99,6 +97,8 @@ provides sensible defaults.
     * The plugin sends your local environment variables to Cucumber Pro so it can detect the CI build number, 
       git branch/tag and other information about the build. Set it to a pattern of environment variables that shouldn't 
       be sent to Cucumber Pro. Defaults to `SECRET|KEY|TOKEN|PASSWORD`.
+* `CUCUMBER_PRO_LOG_LEVEL` (optional, should be set per-project)
+    * Sets the log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
 
 ## Git Authentication
 

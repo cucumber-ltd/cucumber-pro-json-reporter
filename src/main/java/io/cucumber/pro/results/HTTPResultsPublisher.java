@@ -1,5 +1,6 @@
 package io.cucumber.pro.results;
 
+import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Env;
 import io.cucumber.pro.Logger;
 import org.apache.http.HttpEntity;
@@ -11,6 +12,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -69,7 +71,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
             if (statusCode >= 200 && statusCode < 400) {
-                logger.info("Published results to Cucumber Pro: " + url);
+                logger.log(Logger.Level.INFO, "Published results to Cucumber Pro: " + url);
             } else {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 response.getEntity().writeTo(baos);
@@ -81,7 +83,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
                 if (statusCode == 403)
                     suggestion = String.format("You need to change the value of the %s environment variable", Env.CUCUMBER_PRO_TOKEN);
 
-                throw new RuntimeException(String.format(
+                throw new CucumberException(String.format(
                         "Failed to publish results to Cucumber Pro URL: %s, Status: %s\n%s\n%s",
                         url,
                         statusLine,
@@ -89,14 +91,14 @@ class HTTPResultsPublisher implements ResultsPublisher {
                         suggestion
                 ));
             }
-        } catch (HttpHostConnectException e) {
+        } catch (ConnectTimeoutException | HttpHostConnectException e) {
             if (env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, false)) {
-                logger.warn("Failed to publish results to %s\n", url);
+                logger.log(Logger.Level.WARN, "Failed to publish results to %s\n", url);
             } else {
-                throw new RuntimeException(String.format("Failed to publish results to %s\nYou can define %s=true to treat this as a warning instead of an error", url, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
+                throw new CucumberException(String.format("Failed to publish results to %s\nYou can define %s=true to treat this as a warning instead of an error", url, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CucumberException(e);
         }
     }
 

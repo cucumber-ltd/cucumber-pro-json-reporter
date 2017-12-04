@@ -1,5 +1,7 @@
 package io.cucumber.pro;
 
+import cucumber.runtime.CucumberException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class URITemplate {
             matcher.appendReplacement(format, "%s");
             String argument = values.get(variableName);
             if (argument == null) {
-                throw new RuntimeException(String.format("Missing argument \"%s\". Template: %s Arguments: %s", variableName, template, values));
+                throw new CucumberException(String.format("Missing argument \"%s\". Template: %s Arguments: %s", variableName, template, values));
             }
             arguments.add(argument);
         }

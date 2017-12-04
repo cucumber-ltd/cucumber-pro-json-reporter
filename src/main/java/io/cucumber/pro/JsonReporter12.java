@@ -14,6 +14,7 @@ import java.io.IOException;
 public class JsonReporter12 extends JSONFormatter {
 
     private static final Env ENV = new Env(System.getenv());
+    private static final Logger LOGGER = new Logger.SystemLogger(ENV);
     private static final File jsonFile;
 
     static {
@@ -35,15 +36,15 @@ public class JsonReporter12 extends JSONFormatter {
         this.documentationPublisher = documentationPublisher;
         this.resultsPublisher = resultsPublisher;
         this.profileName = profileName;
-        filteredEnv = new FilteredEnv(env);
+        this.filteredEnv = new FilteredEnv(env);
     }
 
     JsonReporter12(String profileName) throws IOException {
         this(
-                DocumentationPublisherFactory.create(ENV),
+                DocumentationPublisherFactory.create(ENV, LOGGER),
                 ResultsPublisherFactory.create(
                         ENV,
-                        Logger.System
+                        LOGGER
                 ),
                 ENV,
                 profileName

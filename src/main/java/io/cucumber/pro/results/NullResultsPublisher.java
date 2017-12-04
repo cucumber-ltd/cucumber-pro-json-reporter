@@ -17,7 +17,7 @@ class NullResultsPublisher implements ResultsPublisher {
     @Override
     public void publish(File resultsJsonFile, String env, String profileName) throws CucumberException {
         if (warningMessage != null) {
-            logger.warn(warningMessage);
+            logger.log(Logger.Level.WARN, warningMessage);
         }
     }
 }
