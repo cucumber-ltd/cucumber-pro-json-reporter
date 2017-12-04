@@ -8,11 +8,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
-* A new `CUCUMBER_PRO_LOG_LEVEL` environment variable sets log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
 
 ### Changed
 
 ### Deprecated
+
+### Removed
+
+### Fixed
+
+## [1.2.1] - 2017-12-04
+
+### Added
+* A new `CUCUMBER_PRO_LOG_LEVEL` environment variable sets log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
 
 ### Removed
 * The `CUCUMBER_PRO_GIT_DEBUG` environment variable no longer has any effect. Replaced by `CUCUMBER_PRO_LOG_LEVEL`.
@@ -55,7 +63,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.0...1.2.1
 [1.2.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.2...1.2.0
 [1.1.2]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.2...1.1.2
 [1.1.1]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.0...1.1.1
