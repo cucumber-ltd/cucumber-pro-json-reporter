@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.cucumber</groupId>
@@ -29,8 +30,8 @@
         <connection>scm:git:git://github.com/cucumber-ltd/cucumber-pro-plugin-jvm.git</connection>
         <developerConnection>scm:git:git@github.com:cucumber-ltd/cucumber-pro-plugin-jvm.git</developerConnection>
         <url>git://github.com/cucumber-ltd/cucumber-pro-plugin-jvm.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -168,7 +169,7 @@
                 <version>3.3.0</version>
                 <configuration>
                     <instructions>
-                        <Bundle-Description />
+                        <Bundle-Description/>
                         <Export-Package>io.cucumber.cucumberexpressions.*</Export-Package>
                     </instructions>
                 </configuration>
@@ -225,6 +226,88 @@
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <!-- These also exist in com.jcraft:jsch.agentproxy.core -->
+                                    <artifact>com.jcraft:jsch.agentproxy.connector-factory</artifact>
+                                    <excludes>
+                                        <exclude>com/jcraft/jsch/agentproxy/USocketFactory$Socket.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/Buffer.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/Identity.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/USocketFactory.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/AgentProxy.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/AgentProxyException.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/Connector.class</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                                    <addHeader>false</addHeader>
+                                </transformer>
+                            </transformers>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.apache</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.org.apache</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>mozilla</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.mozilla</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.eclipse</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.org.eclipse</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.googlecode</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.com.googlecode</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.jcraft</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.com.jcraft</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.org.slf4j</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.yaml</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.org.yaml</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.sun</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.com.sun</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
