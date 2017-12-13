@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.cucumber</groupId>
     <artifactId>pro-plugin</artifactId>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>1.2.2</version>
 
     <packaging>bundle</packaging>
     <name>pro-resultsPublisher</name>
@@ -30,7 +29,7 @@
         <connection>scm:git:git://github.com/cucumber-ltd/cucumber-pro-plugin-jvm.git</connection>
         <developerConnection>scm:git:git@github.com:cucumber-ltd/cucumber-pro-plugin-jvm.git</developerConnection>
         <url>git://github.com/cucumber-ltd/cucumber-pro-plugin-jvm.git</url>
-        <tag>HEAD</tag>
+        <tag>v1.2.2</tag>
     </scm>
 
     <dependencies>
@@ -169,7 +168,7 @@
                 <version>3.3.0</version>
                 <configuration>
                     <instructions>
-                        <Bundle-Description/>
+                        <Bundle-Description />
                         <Export-Package>io.cucumber.cucumberexpressions.*</Export-Package>
                     </instructions>
                 </configuration>
@@ -263,11 +262,9 @@
                                 </filter>
                             </filters>
                             <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
                                 </transformer>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
                                     <addHeader>false</addHeader>
                                 </transformer>
                             </transformers>
