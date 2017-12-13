@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [1.2.2] - 2017-12-13
+
+### Changed
+
+* The published jar bundles all dependencies so there are no transitive maven dependencies. This simplifies installation into
+  local nexus repositories, as there are fewer jars to manage.
+
 ## [1.2.1] - 2017-12-04
 
 ### Added
