@@ -248,6 +248,19 @@
                                         <exclude>META-INF/*.RSA</exclude>
                                     </excludes>
                                 </filter>
+                                <filter>
+                                    <!-- These also exist in com.jcraft:jsch.agentproxy.core -->
+                                    <artifact>com.jcraft:jsch.agentproxy.connector-factory</artifact>
+                                    <excludes>
+                                        <exclude>com/jcraft/jsch/agentproxy/USocketFactory$Socket.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/Buffer.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/Identity.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/USocketFactory.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/AgentProxy.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/AgentProxyException.class</exclude>
+                                        <exclude>com/jcraft/jsch/agentproxy/Connector.class</exclude>
+                                    </excludes>
+                                </filter>
                             </filters>
                         </configuration>
                     </execution>
