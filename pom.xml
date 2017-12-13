@@ -271,6 +271,40 @@
                                     <addHeader>false</addHeader>
                                 </transformer>
                             </transformers>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.apache</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.org.apache</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>mozilla</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.mozilla</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.eclipse</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.org.eclipse</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.googlecode</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.com.googlecode</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.jcraft</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.com.jcraft</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.org.slf4j</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.yaml</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.org.yaml</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.sun</pattern>
+                                    <shadedPattern>io.cucumber.pro.shaded.com.sun</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
