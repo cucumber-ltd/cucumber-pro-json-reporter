@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [1.2.3] - 2017-12-14
+
+### Added
+
+* Allow using Bamboo build server variable to get git revision.
+
 ## [1.2.2] - 2017-12-13
 
 ### Changed
