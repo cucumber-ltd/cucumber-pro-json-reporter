@@ -5,6 +5,7 @@ import io.cucumber.pro.Logger;
 import io.cucumber.pro.activation.EnvActivation;
 import io.cucumber.pro.metadata.MetadataFactory;
 import io.cucumber.pro.revision.GitRevisionProvider;
+import io.cucumber.pro.revision.BambooEnvGitRevisionProvider;
 import io.cucumber.pro.revision.RevisionProvider;
 
 import static io.cucumber.pro.Env.CUCUMBER_PRO_PROJECT_NAME;
@@ -21,7 +22,12 @@ public class ResultsPublisherFactory {
             String message = String.format("Project name missing. Either define an environment variable called %s or create %s with key %s", CUCUMBER_PRO_PROJECT_NAME, YAML_FILE_NAME, PROJECT_NAME_FIELD);
             return new NullResultsPublisher(logger, message);
         }
-        RevisionProvider revisionProvider = new GitRevisionProvider(logger);
+        RevisionProvider revisionProvider;
+        if (env.getBoolean(Env.CUCUMBER_PRO_REVISION_PROVIDED_BY_BAMBOO, false)) {
+            revisionProvider = new BambooEnvGitRevisionProvider(env);
+        } else {
+            revisionProvider = new GitRevisionProvider(logger);
+        }
         String revision = revisionProvider.getRevision();
         String url = CucumberProResultsUrlBuilder.buildCucumberProUrl(env, projectName, revision);
         return new HTTPResultsPublisher(url, env, logger);

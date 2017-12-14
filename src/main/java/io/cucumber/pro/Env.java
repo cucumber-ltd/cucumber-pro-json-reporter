@@ -5,6 +5,7 @@ import java.util.Map;
 import static java.lang.Integer.parseInt;
 
 public class Env {
+    public static final String bamboo_planRepository_revision = "bamboo_planRepository_revision";
     public static final String CUCUMBER_PRO_TOKEN = "CUCUMBER_PRO_TOKEN";
     public static final String CUCUMBER_PRO_BASE_URL = "CUCUMBER_PRO_BASE_URL";
     public static final String CUCUMBER_PRO_GIT_HOST = "CUCUMBER_PRO_GIT_HOST";
@@ -20,6 +21,7 @@ public class Env {
     public static final String CUCUMBER_PRO_SOURCE_REMOTE_NAME = "CUCUMBER_PRO_SOURCE_REMOTE_NAME";
     public static final String CUCUMBER_PRO_FETCH_FROM_SOURCE = "CUCUMBER_PRO_FETCH_FROM_SOURCE";
     public static final String CUCUMBER_PRO_LOG_LEVEL = "CUCUMBER_PRO_LOG_LEVEL";
+    public static final String CUCUMBER_PRO_REVISION_PROVIDED_BY_BAMBOO = "CUCUMBER_PRO_REVISION_PROVIDED_BY_BAMBOO";
 
     private final Map<String, String> env;
 
