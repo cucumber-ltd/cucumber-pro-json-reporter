@@ -45,7 +45,7 @@ After running this you should have a copy of the plugin jar in `maven/io/cucumbe
 ## Add the jars to source control
 
 ```
-mvn add -f maven
+git add -f maven
 ```
 
 ## Add a new Maven repo
