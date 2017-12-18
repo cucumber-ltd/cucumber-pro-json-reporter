@@ -7,6 +7,7 @@ import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.formatter.PluginFactory;
+import io.cucumber.pro.activation.EnvActivation;
 import io.cucumber.pro.documentation.DocumentationPublisher;
 import io.cucumber.pro.documentation.DocumentationPublisherFactory;
 import io.cucumber.pro.results.ResultsPublisher;
@@ -40,6 +41,8 @@ public class JsonReporter implements Formatter {
         jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
 
         filteredEnv = new FilteredEnv(env);
+
+        System.out.println("Cucumber Pro Plugin Environment:\n" + filteredEnv);
     }
 
     public JsonReporter(String profileName) {

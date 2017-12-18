@@ -22,7 +22,7 @@ Add the following dependency to your `pom.xml`:
 <dependency>
     <groupId>io.cucumber</groupId>
     <artifactId>pro-plugin</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <scope>test</scope>
 </dependency>
 ```

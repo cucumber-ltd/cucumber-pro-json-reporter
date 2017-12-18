@@ -17,6 +17,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [1.2.4] - 2017-12-18
+
+### Added
+
+* Always print filtered environment variables. When plugin runs. This was added to diagnose
+  why the plugin behaves surprisingly in some environments, and will be removed in a future
+  release.
+
 ## [1.2.3] - 2017-12-14
 
 ### Added
@@ -76,7 +84,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.4...HEAD
+[1.2.4]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.3...v1.2.4
+[1.2.3]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.1.2...v1.2.0
