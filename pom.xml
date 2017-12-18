@@ -7,9 +7,9 @@
     <version>1.2.4-SNAPSHOT</version>
 
     <packaging>bundle</packaging>
-    <name>pro-resultsPublisher</name>
+    <name>cucumber-pro-plugin</name>
     <description>Cucumber Pro Plugin</description>
-    <url>https://github.com/cucumber/cucumber-pro-plugin-jvm</url>
+    <url>https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm</url>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
