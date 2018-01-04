@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class JsonReporter12 extends JSONFormatter {
 
-    private static final Env ENV = new Env(System.getenv());
+    private static final Env ENV = EnvFactory.create(System.getenv());
     private static final Logger LOGGER = new Logger.SystemLogger(ENV);
     private static final File jsonFile;
 

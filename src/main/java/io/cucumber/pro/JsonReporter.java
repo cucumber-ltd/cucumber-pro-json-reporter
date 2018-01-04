@@ -19,7 +19,7 @@ import java.io.IOException;
 public class JsonReporter implements Formatter {
 
     static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
-    private static final Env ENV = new Env(System.getenv());
+    private static final Env ENV = EnvFactory.create(System.getenv());
     private static final Logger LOGGER = new Logger.SystemLogger(ENV);
     private final Formatter jsonFormatter;
     private final File jsonFile;

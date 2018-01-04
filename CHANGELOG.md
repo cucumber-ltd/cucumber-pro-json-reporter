@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [1.2.6] - 2018-01-04
+
+### Added
+
+* Environment variables set in Bamboo are recognised. This is done by stripping away the `bamboo_` prefix that
+  Bamboo prepends. Environment variables set by the build tool (e.g. Maven) take precendence in case the same environment
+  variable is defined in both Bamboo and the build tool. It is still possible to access the environment variables
+  with the `bamboo_` prefix.
+
 ## [1.2.5] - 2018-01-04
 
 ### Added
@@ -95,7 +104,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.5...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.6...HEAD
+[1.2.6]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.5...v1.2.6
 [1.2.5]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.2...v1.2.3
