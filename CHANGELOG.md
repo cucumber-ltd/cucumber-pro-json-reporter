@@ -9,18 +9,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-* Revision is detected from environment variables set by CI servers. Currently supports Bamboo, Travis, Circle CI, and Jenkins.
-* Revision detection falls back to git if no supported CI environment is detected.
-
 ### Changed
-
-* Document publishing is off by default. It needs to be explicitly enabled with the environment variable `CUCUMBER_PRO_GIT_PUBLISH=true`.
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+## [1.2.5] - 2018-01-04
+
+### Added
+
+* Revision is detected from environment variables set by CI servers. Currently supports Bamboo, Travis, Circle CI, and Jenkins.
+* Revision detection falls back to git if no supported CI environment is detected.
+
+### Changed
+
+* Document publishing is off by default. It needs to be explicitly enabled with the environment variable `CUCUMBER_PRO_GIT_PUBLISH=true`.
 
 ## [1.2.4] - 2017-12-18
 
@@ -89,7 +95,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.4...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.5...HEAD
+[1.2.5]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.1...v1.2.2
