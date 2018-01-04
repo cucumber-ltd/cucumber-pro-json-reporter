@@ -21,7 +21,9 @@ public class Env {
     public static final String CUCUMBER_PRO_SOURCE_REMOTE_NAME = "CUCUMBER_PRO_SOURCE_REMOTE_NAME";
     public static final String CUCUMBER_PRO_FETCH_FROM_SOURCE = "CUCUMBER_PRO_FETCH_FROM_SOURCE";
     public static final String CUCUMBER_PRO_LOG_LEVEL = "CUCUMBER_PRO_LOG_LEVEL";
-    public static final String CUCUMBER_PRO_REVISION_PROVIDED_BY_BAMBOO = "CUCUMBER_PRO_REVISION_PROVIDED_BY_BAMBOO";
+    public static final String CIRCLE_SHA1 = "CIRCLE_SHA1";
+    public static final String GIT_COMMIT = "GIT_COMMIT";
+    public static final String TRAVIS_COMMIT = "TRAVIS_COMMIT";
 
     private final Map<String, String> env;
 

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* Revision is detected from environment variables set by CI servers. Currently supports Bamboo, Travis, Circle CI, and Jenkins.
+* Revision detection falls back to git if no supported CI environment is detected.
+
 ### Changed
 
 * Document publishing is off by default. It needs to be explicitly enabled with the environment variable `CUCUMBER_PRO_GIT_PUBLISH=true`.
