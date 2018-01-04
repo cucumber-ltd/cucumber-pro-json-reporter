@@ -12,7 +12,7 @@ public class DocumentationPublisherFactory {
         boolean isActive = new EnvActivation(env).isActive();
         if (!isActive) return new NullDocumentationPublisher();
 
-        if (env.getBoolean(Env.CUCUMBER_PRO_GIT_PUBLISH, true)) {
+        if (env.getBoolean(Env.CUCUMBER_PRO_GIT_PUBLISH, false)) {
             String projectName = MetadataFactory.create(env).getProjectName();
             if (projectName == null)
                 throw new CucumberException("Couldn't detect project name. Can't publish documentation to git.");
