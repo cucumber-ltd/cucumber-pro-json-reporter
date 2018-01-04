@@ -24,8 +24,10 @@ If that works, remove the generated `README.md.asc`. You're ready to release:
 * Commit everything.
 * Update [Cucumber Pro docs](https://github.com/cucumber-ltd/cucumber-pro/blob/master/lib/cucumber-pro/web/components/test_results/installation_instructions_for_java.jsx)
 
-    mvn release:clean
-    mvn --batch-mode -P release-sign-artifacts release:prepare
-    mvn --batch-mode -P release-sign-artifacts release:perform
+```
+mvn release:clean
+mvn --batch-mode -P release-sign-artifacts release:prepare
+mvn --batch-mode -P release-sign-artifacts release:perform
+```
 
 Log in to https://oss.sonatype.org/, close and release the project.
