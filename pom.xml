@@ -4,7 +4,7 @@
 
     <groupId>io.cucumber</groupId>
     <artifactId>pro-plugin</artifactId>
-    <version>1.2.5-SNAPSHOT</version>
+    <version>1.2.5</version>
 
     <packaging>bundle</packaging>
     <name>cucumber-pro-plugin</name>
@@ -23,7 +23,7 @@
         <connection>scm:git:git://github.com/cucumber-ltd/cucumber-pro-plugin-jvm.git</connection>
         <developerConnection>scm:git:git@github.com:cucumber-ltd/cucumber-pro-plugin-jvm.git</developerConnection>
         <url>git://github.com/cucumber-ltd/cucumber-pro-plugin-jvm.git</url>
-        <tag>HEAD</tag>
+        <tag>v1.2.5</tag>
     </scm>
 
     <!--
