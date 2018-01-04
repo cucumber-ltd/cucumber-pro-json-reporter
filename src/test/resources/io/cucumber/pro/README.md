@@ -68,7 +68,7 @@ provides sensible defaults.
       To find the host key, run `ssh git@[git host]` and accept the host key. Then run `ssh-keyscan [git host]`
       and copy the long base64-encoded string at the end of the line. It looks like `AAAAB3NzaC1.....E/Bhw==`.
 * `CUCUMBER_PRO_GIT_PUBLISH` (optional, should be set per-project)
-    * Set to `true` or `yes` to enable document publishing to git.
+    * Set to `true` or `yes` to enable document publishing to git. Defaults to `false`.
 * `CUCUMBER_PRO_FETCH_FROM_SOURCE` (optional, should be set per-project)
     * Whether or not to fetch from the source repository before publishing
       to Cucumber Pro. This is needed on CI servers that perform a shallow 
