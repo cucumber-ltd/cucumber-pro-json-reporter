@@ -4,7 +4,7 @@ public interface Logger {
     void log(Level level, String message, Object... args);
 
 
-    public enum Level {
+    enum Level {
         DEBUG(0), INFO(1), WARN(2), ERROR(3), FATAL(4);
         private final int value;
 
@@ -14,10 +14,17 @@ public interface Logger {
     }
 
     class SystemLogger implements Logger {
-        private final Level level;
+        public final Level level;
 
         public SystemLogger(Env env) {
-            this.level = Level.valueOf(env.get(Env.CUCUMBER_PRO_LOG_LEVEL, Level.WARN.toString()));
+            String name = env.get(Env.CUCUMBER_PRO_LOG_LEVEL, Level.WARN.toString()).toUpperCase();
+            Level level;
+            try {
+                level = Level.valueOf(name);
+            } catch (IllegalArgumentException e) {
+                level = Level.WARN;
+            }
+            this.level = level;
         }
 
         @Override
