@@ -17,6 +17,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [1.2.7] - 2018-01-05
+
+### Added
+
+* The value of `CUCUMBER_PRO_LOG_LEVEL` is now case insensitive
+
+### Fixed
+
+* Don't throw `NoClassDefFoundError` when `CUCUMBER_PRO_LOG_LEVEL` doesn't match exactly `DEBUG`, `INFO`, `WARN`, `ERROR`, or `FATAL`, but default to `WARN`.
+
 ## [1.2.6] - 2018-01-04
 
 ### Added
@@ -104,7 +114,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.6...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.7...HEAD
+[1.2.7]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.6...v1.2.7
 [1.2.6]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.5...v1.2.6
 [1.2.5]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.3...v1.2.4
