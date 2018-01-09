@@ -11,16 +11,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-* By default, builds won't fail if Cucumber Pro is unreachable. 
-  The default value of `CUCUMBER_PRO_IGNORE_CONNECTION_ERROR` is now `true`.
-
 ### Deprecated
 
 ### Removed
 
-* The plugin no longer prints the filtered environment variables.
-
 ### Fixed
+
+## [1.2.8] - 2018-01-09
+
+### Changed
+
+* By default, builds won't fail if Cucumber Pro is unreachable. 
+  The default value of `CUCUMBER_PRO_IGNORE_CONNECTION_ERROR` is now `true`.
+
+### Removed
+
+* The plugin no longer prints the filtered environment variables.
 
 ## [1.2.7] - 2018-01-05
 
@@ -119,7 +125,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.7...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.8...HEAD
+[1.2.8]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.7...v1.2.8
 [1.2.7]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.6...v1.2.7
 [1.2.6]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.5...v1.2.6
 [1.2.5]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.4...v1.2.5
