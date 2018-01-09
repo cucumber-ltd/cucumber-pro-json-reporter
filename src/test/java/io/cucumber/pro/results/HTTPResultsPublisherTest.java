@@ -88,6 +88,7 @@ public class HTTPResultsPublisherTest {
     @Test
     public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
         Env env = new Env(new HashMap<String, String>() {{
+            put(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "false");
             put(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
         }});
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, new TestLogger());
@@ -104,7 +105,6 @@ public class HTTPResultsPublisherTest {
     @Test
     public void prints_error_on_connection_timeout() throws InterruptedException, IOException {
         Env env = new Env(new HashMap<String, String>() {{
-            put(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "true");
             put(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
         }});
         TestLogger logger = new TestLogger();

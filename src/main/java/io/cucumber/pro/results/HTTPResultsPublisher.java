@@ -92,7 +92,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
                 ));
             }
         } catch (ConnectTimeoutException | HttpHostConnectException e) {
-            if (env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, false)) {
+            if (env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true)) {
                 logger.log(Logger.Level.WARN, "Failed to publish results to %s\n", url);
             } else {
                 throw new CucumberException(String.format("Failed to publish results to %s\nYou can define %s=true to treat this as a warning instead of an error", url, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);

@@ -17,7 +17,9 @@ import static org.junit.Assert.fail;
 public class GitDocumentationPublisherTest {
     @Test
     public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
-        Env env = new Env(new HashMap<String, String>());
+        Env env = new Env(new HashMap<String, String>() {{
+            put(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "false");
+        }});
         TestLogger logger = new TestLogger();
 
         GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
@@ -38,9 +40,7 @@ public class GitDocumentationPublisherTest {
 
     @Test
     public void prints_error_on_connection_timeout() throws InterruptedException, IOException {
-        Env env = new Env(new HashMap<String, String>() {{
-            put(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "true");
-        }});
+        Env env = new Env(new HashMap<String, String>());
         TestLogger logger = new TestLogger();
         GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
                 "git@0.0.0.0",

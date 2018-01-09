@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* By default, builds won't fail if Cucumber Pro is unreachable. 
+  The default value of `CUCUMBER_PRO_IGNORE_CONNECTION_ERROR` is now `true`.
+
 ### Deprecated
 
 ### Removed

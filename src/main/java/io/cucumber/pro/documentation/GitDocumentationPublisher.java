@@ -52,7 +52,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         if (env.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false)) {
             JSch.setLogger(new JschLogger(logger));
         }
-        ignoreConnectionError = env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, false);
+        ignoreConnectionError = env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true);
         fetchRemoteName = env.get(Env.CUCUMBER_PRO_SOURCE_REMOTE_NAME, DEFAULT_SOURCE_REMOTE_NAME);
         fetchFromSource = env.getBoolean(Env.CUCUMBER_PRO_FETCH_FROM_SOURCE, true);
     }
