@@ -41,8 +41,6 @@ public class JsonReporter implements Formatter {
         jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
 
         filteredEnv = new FilteredEnv(env);
-
-        System.out.println("Cucumber Pro Plugin Environment:\n" + filteredEnv);
     }
 
     public JsonReporter(String profileName) {

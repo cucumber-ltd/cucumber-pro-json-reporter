@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
+* The plugin no longer prints the filtered environment variables.
+
 ### Fixed
 
 ## [1.2.7] - 2018-01-05
