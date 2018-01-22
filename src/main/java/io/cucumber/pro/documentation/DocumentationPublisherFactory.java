@@ -4,15 +4,16 @@ import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Env;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.activation.EnvActivation;
+import io.cucumber.pro.config.Config;
 import io.cucumber.pro.metadata.MetadataFactory;
 
 public class DocumentationPublisherFactory {
 
-    public static DocumentationPublisher create(Env env, Logger logger) {
+    public static DocumentationPublisher create(Env env, Config config, Logger logger) {
         boolean isActive = new EnvActivation(env).isActive();
         if (!isActive) return new NullDocumentationPublisher();
 
-        if (env.getBoolean(Env.CUCUMBER_PRO_GIT_PUBLISH, false)) {
+        if (config.getBoolean(Env.CUCUMBER_PRO_GIT_PUBLISH_KEY, false)) {
             String projectName = MetadataFactory.create(env).getProjectName();
             if (projectName == null)
                 throw new CucumberException("Couldn't detect project name. Can't publish documentation to git.");

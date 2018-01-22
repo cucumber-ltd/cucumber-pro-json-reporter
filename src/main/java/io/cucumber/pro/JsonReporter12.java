@@ -2,6 +2,8 @@ package io.cucumber.pro;
 
 import cucumber.runtime.CucumberException;
 import gherkin.formatter.JSONFormatter;
+import io.cucumber.pro.config.Config;
+import io.cucumber.pro.config.ConfigFactory;
 import io.cucumber.pro.documentation.DocumentationPublisher;
 import io.cucumber.pro.documentation.DocumentationPublisherFactory;
 import io.cucumber.pro.results.ResultsPublisher;
@@ -14,6 +16,7 @@ import java.io.IOException;
 public class JsonReporter12 extends JSONFormatter {
 
     private static final Env ENV = EnvFactory.create(System.getenv());
+    private static final Config CONFIG = ConfigFactory.create("^(?:cucumber\\.pro)");
     private static final Logger LOGGER = new Logger.SystemLogger(ENV);
     private static final File jsonFile;
 
@@ -41,7 +44,7 @@ public class JsonReporter12 extends JSONFormatter {
 
     JsonReporter12(String profileName) throws IOException {
         this(
-                DocumentationPublisherFactory.create(ENV, LOGGER),
+                DocumentationPublisherFactory.create(ENV, CONFIG, LOGGER),
                 ResultsPublisherFactory.create(
                         ENV,
                         LOGGER

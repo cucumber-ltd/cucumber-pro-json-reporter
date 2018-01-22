@@ -7,7 +7,8 @@ import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.formatter.PluginFactory;
-import io.cucumber.pro.activation.EnvActivation;
+import io.cucumber.pro.config.Config;
+import io.cucumber.pro.config.ConfigFactory;
 import io.cucumber.pro.documentation.DocumentationPublisher;
 import io.cucumber.pro.documentation.DocumentationPublisherFactory;
 import io.cucumber.pro.results.ResultsPublisher;
@@ -19,6 +20,7 @@ import java.io.IOException;
 public class JsonReporter implements Formatter {
 
     static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
+    private static final Config CONFIG = ConfigFactory.create("^(?:cucumber\\.pro)");
     private static final Env ENV = EnvFactory.create(System.getenv());
     private static final Logger LOGGER = new Logger.SystemLogger(ENV);
     private final Formatter jsonFormatter;
@@ -45,7 +47,7 @@ public class JsonReporter implements Formatter {
 
     public JsonReporter(String profileName) {
         this(
-                DocumentationPublisherFactory.create(ENV, LOGGER),
+                DocumentationPublisherFactory.create(ENV, CONFIG, LOGGER),
                 ResultsPublisherFactory.create(
                         ENV,
                         LOGGER

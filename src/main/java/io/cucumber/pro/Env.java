@@ -13,6 +13,7 @@ public class Env {
     public static final String CUCUMBER_PRO_GIT_HOST_KEY = "CUCUMBER_PRO_GIT_HOST_KEY";
     public static final String CUCUMBER_PRO_GIT_DEBUG = "CUCUMBER_PRO_GIT_DEBUG";
     public static final String CUCUMBER_PRO_GIT_PUBLISH = "CUCUMBER_PRO_GIT_PUBLISH";
+    public static final String CUCUMBER_PRO_GIT_PUBLISH_KEY = "cucumber.pro.git.publish";
     public static final String CUCUMBER_PRO_PUBLISH = "CUCUMBER_PRO_PUBLISH";
     public static final String CUCUMBER_PRO_PROJECT_NAME = "CUCUMBER_PRO_PROJECT_NAME";
     public static final String CUCUMBER_PRO_IGNORE_CONNECTION_ERROR = "CUCUMBER_PRO_IGNORE_CONNECTION_ERROR";
