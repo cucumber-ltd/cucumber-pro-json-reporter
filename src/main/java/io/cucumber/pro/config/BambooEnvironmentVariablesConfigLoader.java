@@ -1,7 +1,10 @@
 package io.cucumber.pro.config;
 
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,12 +26,22 @@ public class BambooEnvironmentVariablesConfigLoader implements ConfigLoader {
 
     @Override
     public void load(Config config) {
-        for (Map.Entry<String, String> entry : env.entrySet()) {
-            String key = entry.getKey();
+        SortedSet<String> variables = new TreeSet<>(new Comparator<String>() {
+            @Override
+            public int compare(String v1, String v2) {
+                if (BAMBOO_PATTERN.matcher(v1).lookingAt()) return -1;
+                if (BAMBOO_PATTERN.matcher(v2).lookingAt()) return 1;
+                return 0;
+            }
+        });
+        variables.addAll(env.keySet());
+
+        for (String key : variables) {
             Matcher matcher = BAMBOO_PATTERN.matcher(key);
             if (matcher.lookingAt()) {
-                config.setIn(matcher.group(1).replace('_', '.').toLowerCase(Locale.ENGLISH), entry.getValue());
-                config.setIn(key.replace('_', '.').toLowerCase(Locale.ENGLISH), entry.getValue());
+                String value = env.get(key);
+                String strippedKey = matcher.group(1);
+                config.set(strippedKey, value);
             }
         }
     }

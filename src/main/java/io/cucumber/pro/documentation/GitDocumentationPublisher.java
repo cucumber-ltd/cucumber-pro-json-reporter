@@ -12,6 +12,7 @@ import com.jcraft.jsch.agentproxy.RemoteIdentityRepository;
 import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Env;
 import io.cucumber.pro.Logger;
+import io.cucumber.pro.config.Config;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.GitCommand;
@@ -46,15 +47,15 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     private final String fetchRemoteName;
     private final boolean fetchFromSource;
 
-    GitDocumentationPublisher(RemoteSpec pushSpec, Env env, Logger logger) {
+    GitDocumentationPublisher(RemoteSpec pushSpec, Config config, Logger logger) {
         this.pushSpec = pushSpec;
         this.logger = logger;
-        if (env.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false)) {
+        if (config.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false)) {
             JSch.setLogger(new JschLogger(logger));
         }
-        ignoreConnectionError = env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true);
-        fetchRemoteName = env.get(Env.CUCUMBER_PRO_SOURCE_REMOTE_NAME, DEFAULT_SOURCE_REMOTE_NAME);
-        fetchFromSource = env.getBoolean(Env.CUCUMBER_PRO_FETCH_FROM_SOURCE, true);
+        ignoreConnectionError = config.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true);
+        fetchRemoteName = config.get(Env.CUCUMBER_PRO_SOURCE_REMOTE_NAME, DEFAULT_SOURCE_REMOTE_NAME);
+        fetchFromSource = config.getBoolean(Env.CUCUMBER_PRO_FETCH_FROM_SOURCE, true);
     }
 
     private static <C extends GitCommand, R> void configureSsh(RemoteSpec remoteSpec, TransportCommand<C, R> push) throws JSchException {
@@ -136,7 +137,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             if (ignoreConnectionError) {
                 logger.log(Logger.Level.INFO, "Failed to fetch commits from %s\n", fetchSpec.remote);
             } else {
-                throw new CucumberException(String.format("Failed to fetch commits from %s\nYou can define %s=true to treat this as a warning instead of an error", fetchSpec.remote, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
+                throw new CucumberException(String.format("Failed to fetch commits from %s\nYou can set %s to true to treat this as a warning instead of an error", fetchSpec.remote, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
             }
         } catch (JSchException e) {
             throw new CucumberException("SSH error", e);
@@ -151,7 +152,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             if (ignoreConnectionError) {
                 logger.log(Logger.Level.WARN, "Failed to publish documentation to %s\n", pushSpec.remote);
             } else {
-                throw new CucumberException(String.format("Failed to publish documentation to %s\nYou can define %s=true to treat this as a warning instead of an error", pushSpec.remote, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
+                throw new CucumberException(String.format("Failed to publish documentation to %s\nYou can set %s to true to treat this as a warning instead of an error", pushSpec.remote, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
             }
         } catch (JSchException e) {
             throw new CucumberException("SSH error", e);

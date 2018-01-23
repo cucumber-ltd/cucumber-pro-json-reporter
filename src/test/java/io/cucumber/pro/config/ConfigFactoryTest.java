@@ -6,7 +6,7 @@ public class ConfigFactoryTest {
     @Test
     public void create_cofig() {
         try {
-            Config config = ConfigFactory.create("^(?:cucumber)");
+            Config config = ConfigFactory.create();
             System.out.println(config.get("user.dir"));
         } catch (Exception e) {
             e.printStackTrace();

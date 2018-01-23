@@ -1,5 +1,7 @@
 package io.cucumber.pro;
 
+import io.cucumber.pro.config.Config;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,17 +12,17 @@ import java.util.regex.Pattern;
 class FilteredEnv {
     private static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
     private final Pattern maskPattern;
-    private final Env env;
+    private final Map<String, String> env;
 
-    FilteredEnv(Env env) {
-        String mask = env.get(Env.CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK);
+    FilteredEnv(Map<String, String> env, Config config) {
+        String mask = config.get(Env.CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK);
         this.maskPattern = Pattern.compile(String.format(".*(%s).*", mask), Pattern.CASE_INSENSITIVE);
         this.env = env;
     }
 
     private Map<String, String> clean() {
         Map<String, String> result = new HashMap<>();
-        for (Map.Entry<String, String> entry : this.env.all().entrySet()) {
+        for (Map.Entry<String, String> entry : this.env.entrySet()) {
             if (!maskPattern.matcher(entry.getKey()).matches())
                 result.put(entry.getKey(), entry.getValue());
         }

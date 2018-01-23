@@ -1,9 +1,9 @@
 package io.cucumber.pro.results;
 
 import cucumber.runtime.CucumberException;
-import io.cucumber.pro.Env;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.TestLogger;
+import io.cucumber.pro.config.Config;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import static io.cucumber.pro.Env.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS;
 import static io.cucumber.pro.Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR;
@@ -56,8 +55,8 @@ public class HTTPResultsPublisherTest {
                 }).build();
         server.start();
 
-        Env env = new Env(new HashMap<String, String>());
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, new TestLogger());
+        Config config = new Config();
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
     }
 
@@ -73,42 +72,40 @@ public class HTTPResultsPublisherTest {
                 }).build();
         server.start();
 
-        Env env = new Env(new HashMap<String, String>());
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, new TestLogger());
+        Config config = new Config();
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
             fail();
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
-            assertEquals("You need to define the CUCUMBER_PRO_TOKEN environment variable", suggestion);
+            assertEquals("You need to define cucumber.pro.token", suggestion);
         }
     }
 
     @Test
     public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
-        Env env = new Env(new HashMap<String, String>() {{
-            put(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "false");
-            put(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
-        }});
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, new TestLogger());
+        Config config = new Config();
+        config.set(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "false");
+        config.set(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
             fail();
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
-            assertEquals("You can define CUCUMBER_PRO_IGNORE_CONNECTION_ERROR=true to treat this as a warning instead of an error", suggestion);
+            assertEquals("You can set cucumber.pro.ignore.connection.error to true to treat this as a warning instead of an error", suggestion);
         }
     }
 
     @Test
     public void prints_error_on_connection_timeout() throws InterruptedException, IOException {
-        Env env = new Env(new HashMap<String, String>() {{
-            put(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
-        }});
+        Config config = new Config();
+        config.set(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
         TestLogger logger = new TestLogger();
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", env, logger);
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
         assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.getMessages(Logger.Level.WARN).get(0));
     }

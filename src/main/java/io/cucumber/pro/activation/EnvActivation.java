@@ -1,6 +1,7 @@
 package io.cucumber.pro.activation;
 
 import io.cucumber.pro.Env;
+import io.cucumber.pro.config.Config;
 
 public class EnvActivation implements Activation {
     private static final String[] ACTIVATION_ENV_VARS = new String[]{
@@ -10,16 +11,16 @@ public class EnvActivation implements Activation {
             "TRAVIS_JOB_NUMBER",
             "bamboo_buildNumber"
     };
-    private final Env env;
+    private final Config config;
 
-    public EnvActivation(Env env) {
-        this.env = env;
+    public EnvActivation(Config config) {
+        this.config = config;
     }
 
     @Override
     public boolean isActive() {
         for (String envVar : ACTIVATION_ENV_VARS) {
-            if (env.getBoolean(envVar, false)) return true;
+            if (config.getBoolean(envVar, false)) return true;
         }
         return false;
 

@@ -3,6 +3,7 @@ package io.cucumber.pro.results;
 import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Env;
 import io.cucumber.pro.Logger;
+import io.cucumber.pro.config.Config;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -38,17 +39,17 @@ class HTTPResultsPublisher implements ResultsPublisher {
     private static final String CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON = "application/x.cucumber.java.results+json";
     private final String url;
     private final String authToken;
-    private final Env env;
+    private final Config config;
     private final Logger logger;
 
     /**
      * @param url    where to send results
      * @param logger where to print errors and warnings
      */
-    HTTPResultsPublisher(String url, Env env, Logger logger) {
+    HTTPResultsPublisher(String url, Config config, Logger logger) {
         this.url = url;
-        this.env = env;
-        authToken = env.get(Env.CUCUMBER_PRO_TOKEN, null);
+        this.config = config;
+        authToken = config.get(Env.CUCUMBER_PRO_TOKEN, null);
         this.logger = logger;
     }
 
@@ -79,9 +80,9 @@ class HTTPResultsPublisher implements ResultsPublisher {
 
                 String suggestion = "";
                 if (statusCode == 401)
-                    suggestion = String.format("You need to define the %s environment variable", Env.CUCUMBER_PRO_TOKEN);
+                    suggestion = String.format("You need to define %s", Env.CUCUMBER_PRO_TOKEN);
                 if (statusCode == 403)
-                    suggestion = String.format("You need to change the value of the %s environment variable", Env.CUCUMBER_PRO_TOKEN);
+                    suggestion = String.format("You need to change the value of %s", Env.CUCUMBER_PRO_TOKEN);
 
                 throw new CucumberException(String.format(
                         "Failed to publish results to Cucumber Pro URL: %s, Status: %s\n%s\n%s",
@@ -92,10 +93,10 @@ class HTTPResultsPublisher implements ResultsPublisher {
                 ));
             }
         } catch (ConnectTimeoutException | HttpHostConnectException e) {
-            if (env.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true)) {
+            if (config.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true)) {
                 logger.log(Logger.Level.WARN, "Failed to publish results to %s\n", url);
             } else {
-                throw new CucumberException(String.format("Failed to publish results to %s\nYou can define %s=true to treat this as a warning instead of an error", url, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
+                throw new CucumberException(String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
             }
         } catch (IOException e) {
             throw new CucumberException(e);
@@ -105,7 +106,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
     private HttpClient buildHttpClient() {
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
-        int timeout = env.getInt(Env.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, 5000);
+        int timeout = config.getInt(Env.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, 5000);
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout).build();
         httpClientBuilder.setDefaultRequestConfig(requestConfig);
 

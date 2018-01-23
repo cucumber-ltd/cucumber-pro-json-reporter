@@ -1,6 +1,7 @@
 package io.cucumber.pro.metadata;
 
 import io.cucumber.pro.Env;
+import io.cucumber.pro.config.Config;
 
 public class EnvMetadata implements Metadata {
 
@@ -11,16 +12,16 @@ public class EnvMetadata implements Metadata {
             "CIRCLE_PROJECT_REPONAME", // https://circleci.com/docs/2.0/env-vars/#circleci-environment-variable-descriptions
             ENV_TRAVIS_REPO_SLUG, // https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
     };
-    private final Env env;
+    private final Config config;
 
-    EnvMetadata(Env env) {
-        this.env = env;
+    EnvMetadata(Config config) {
+        this.config = config;
     }
 
     @Override
     public String getProjectName() {
         for (String envVar : ENV_PROJECT_NAME_VARS) {
-            String value = env.get(envVar, null);
+            String value = config.get(envVar);
             if (value == null) continue;
             if (envVar.equals(ENV_TRAVIS_REPO_SLUG)) {
                 return value.split("/")[1];

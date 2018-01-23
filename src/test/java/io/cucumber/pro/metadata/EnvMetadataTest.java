@@ -1,15 +1,15 @@
 package io.cucumber.pro.metadata;
 
 import io.cucumber.pro.Env;
+import io.cucumber.pro.config.Config;
 
 import java.util.HashMap;
 
 public class EnvMetadataTest extends MetadataContract {
     @Override
     protected Metadata createMetadata() {
-        Env env = new Env(new HashMap<String, String>() {{
-            put("CUCUMBER_PRO_PROJECT_NAME", "cucumber-pro-plugin-jvm");
-        }});
-        return new EnvMetadata(env);
+        Config config = new Config();
+        config.set(Env.CUCUMBER_PRO_PROJECT_NAME, "cucumber-pro-plugin-jvm");
+        return new EnvMetadata(config);
     }
 }

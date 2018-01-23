@@ -1,11 +1,11 @@
 package io.cucumber.pro.metadata;
 
-import io.cucumber.pro.Env;
+import io.cucumber.pro.config.Config;
 
 import static java.util.Arrays.asList;
 
 public class MetadataFactory {
-    public static Metadata create(Env env) {
-        return new ChainedMetadata(asList(new EnvMetadata(env), YamlMetadata.create()));
+    public static Metadata create(Config config) {
+        return new ChainedMetadata(asList(new EnvMetadata(config), YamlMetadata.create()));
     }
 }

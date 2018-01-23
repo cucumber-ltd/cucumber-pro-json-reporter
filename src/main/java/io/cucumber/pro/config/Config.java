@@ -1,9 +1,13 @@
 package io.cucumber.pro.config;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * Nested configuration. Keys are hierarchical.
@@ -21,11 +25,17 @@ public class Config {
     }
 
     public boolean getBoolean(String key, boolean notSetValue) {
-        return get(key, notSetValue ? "true" : "false").matches("false|no");
+        String value = get(key);
+        if (value != null) return !value.matches("false|no");
+        return notSetValue;
+    }
+
+    public int getInt(String key, int notSetValue) {
+        return parseInt(get(key, Integer.toString(notSetValue)));
     }
 
     // Use by loaders
-    void setIn(String key, String value) {
+    public void set(String key, String value) {
         setIn(toPath(key), value);
     }
 
@@ -50,11 +60,44 @@ public class Config {
             if (i == path.size() - 1) {
                 return config.getValue(key, notSetValue);
             } else {
-                config = configByKey.get(key.toLowerCase());
+                config = config.getChild(key.toLowerCase());
                 if (config == null) return notSetValue;
             }
         }
         throw new RuntimeException("path cannot be empty");
+    }
+
+    private Config getChild(String key) {
+        return configByKey.get(key);
+    }
+
+    public String toYaml() {
+        try {
+            StringBuilder out = new StringBuilder();
+            this.print(0, out);
+            return out.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void print(int depth, Appendable out) throws IOException {
+        for (Map.Entry<String, String> entry : valueByKey.entrySet()) {
+            indent(depth, out);
+            out.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+        }
+        for (Map.Entry<String, Config> entry : configByKey.entrySet()) {
+            indent(depth, out);
+            out.append(entry.getKey()).append(":\n");
+            Config config = entry.getValue();
+            config.print(depth + 1, out);
+        }
+    }
+
+    private void indent(int depth, Appendable out) throws IOException {
+        for (int i = 0; i < depth; i++) {
+            out.append("  ");
+        }
     }
 
     private void setIn(List<String> path, String value) {
@@ -65,7 +108,7 @@ public class Config {
                 config.setValue(key, value);
                 return;
             } else {
-                Config childConfig = configByKey.get(key.toLowerCase());
+                Config childConfig = config.getChild(key.toLowerCase());
                 if (childConfig == null) {
                     childConfig = new Config();
                     config.setConfig(key, childConfig);
@@ -73,15 +116,9 @@ public class Config {
                 }
             }
         }
-        throw new RuntimeException(String.format("path cannot be empty: %s -> %s", path, value));
     }
 
     private List<String> toPath(String key) {
-        String[] segments = key.split("\\.");
-        List<String> path = new ArrayList<>(segments.length);
-        for (String segment : segments) {
-            path.add(segment);
-        }
-        return path;
+        return Arrays.asList(key.replace('_', '.').toLowerCase(Locale.ENGLISH).split("\\."));
     }
 }

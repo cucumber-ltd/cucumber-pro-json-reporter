@@ -2,6 +2,7 @@ package io.cucumber.pro.revision;
 
 import io.cucumber.pro.Env;
 import io.cucumber.pro.Logger;
+import io.cucumber.pro.config.Config;
 
 public class RevisionProviderFactory {
     private static final String[] REVISION_ENV_VARS = new String[]{
@@ -11,13 +12,13 @@ public class RevisionProviderFactory {
             Env.TRAVIS_COMMIT                   // Travis
     };
 
-    public static RevisionProvider create(final Env env, Logger logger) {
+    public static RevisionProvider create(final Config config, Logger logger) {
         for (final String envVar : REVISION_ENV_VARS) {
-            if (env.get(envVar) != null) {
+            if (config.get(envVar) != null) {
                 return new RevisionProvider() {
                     @Override
                     public String getRevision() {
-                        return env.get(envVar);
+                        return config.get(envVar);
                     }
                 };
             }

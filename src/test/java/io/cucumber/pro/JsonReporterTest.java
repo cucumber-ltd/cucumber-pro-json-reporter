@@ -6,12 +6,15 @@ import cucumber.api.formatter.Formatter;
 import cucumber.runner.EventBus;
 import cucumber.runner.TimeService;
 import cucumber.runtime.CucumberException;
+import io.cucumber.pro.config.Config;
+import io.cucumber.pro.config.EnvironmentVariablesConfigLoader;
 import io.cucumber.pro.documentation.NullDocumentationPublisher;
 import io.cucumber.pro.results.ResultsPublisher;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,17 +23,20 @@ public class JsonReporterTest {
 
     @Test
     public void it_publishes_the_json_report_with_filtered_environment_data() {
-        Env env = new Env(new HashMap<String, String>() {{
+        Map<String, String> env = new HashMap<String, String>() {{
             put("FOO", "bar");
             put("PASSWORD", "secret");
 
-        }});
+        }};
+        Config config = new Config();
+        new EnvironmentVariablesConfigLoader(env).load(config);
         CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
         Formatter reporter = new JsonReporter(
                 new NullDocumentationPublisher(),
                 resultsPublisher,
-                env,
-                JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME);
+                JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME,
+                config,
+                env);
 
         TimeService timeService = TimeService.SYSTEM;
         EventBus eventBus = new EventBus(timeService);

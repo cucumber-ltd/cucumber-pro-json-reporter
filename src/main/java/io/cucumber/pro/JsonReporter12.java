@@ -15,9 +15,8 @@ import java.io.IOException;
 
 public class JsonReporter12 extends JSONFormatter {
 
-    private static final Env ENV = EnvFactory.create(System.getenv());
-    private static final Config CONFIG = ConfigFactory.create("^(?:cucumber\\.pro)");
-    private static final Logger LOGGER = new Logger.SystemLogger(ENV);
+    private static final Config CONFIG = ConfigFactory.create();
+    private static final Logger LOGGER = new Logger.SystemLogger(CONFIG);
     private static final File jsonFile;
 
     static {
@@ -34,22 +33,21 @@ public class JsonReporter12 extends JSONFormatter {
     private final String profileName;
     private final DocumentationPublisher documentationPublisher;
 
-    JsonReporter12(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, Env env, String profileName) throws IOException {
+    JsonReporter12(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, String profileName) throws IOException {
         super(new FileWriter(jsonFile));
         this.documentationPublisher = documentationPublisher;
         this.resultsPublisher = resultsPublisher;
         this.profileName = profileName;
-        this.filteredEnv = new FilteredEnv(env);
+        this.filteredEnv = new FilteredEnv(System.getenv(), CONFIG);
     }
 
     JsonReporter12(String profileName) throws IOException {
         this(
-                DocumentationPublisherFactory.create(ENV, CONFIG, LOGGER),
+                DocumentationPublisherFactory.create(CONFIG, LOGGER),
                 ResultsPublisherFactory.create(
-                        ENV,
+                        CONFIG,
                         LOGGER
                 ),
-                ENV,
                 profileName
         );
     }

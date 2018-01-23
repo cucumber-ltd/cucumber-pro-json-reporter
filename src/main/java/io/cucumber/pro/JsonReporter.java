@@ -16,13 +16,13 @@ import io.cucumber.pro.results.ResultsPublisherFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class JsonReporter implements Formatter {
 
     static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
-    private static final Config CONFIG = ConfigFactory.create("^(?:cucumber\\.pro)");
-    private static final Env ENV = EnvFactory.create(System.getenv());
-    private static final Logger LOGGER = new Logger.SystemLogger(ENV);
+    private static final Config CONFIG = ConfigFactory.create();
+    private static final Logger LOGGER = new Logger.SystemLogger(CONFIG);
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final FilteredEnv filteredEnv;
@@ -30,7 +30,7 @@ public class JsonReporter implements Formatter {
     private final String profileName;
     private final DocumentationPublisher documentationPublisher;
 
-    JsonReporter(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, Env env, String profileName) {
+    JsonReporter(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, String profileName, Config config, Map<String, String> env) {
         this.documentationPublisher = documentationPublisher;
         this.resultsPublisher = resultsPublisher;
         this.profileName = profileName;
@@ -42,23 +42,23 @@ public class JsonReporter implements Formatter {
         jsonFile.deleteOnExit();
         jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
 
-        filteredEnv = new FilteredEnv(env);
+        filteredEnv = new FilteredEnv(env, config);
     }
 
     public JsonReporter(String profileName) {
         this(
-                DocumentationPublisherFactory.create(ENV, CONFIG, LOGGER),
+                DocumentationPublisherFactory.create(CONFIG, LOGGER),
                 ResultsPublisherFactory.create(
-                        ENV,
+                        CONFIG,
                         LOGGER
                 ),
-                ENV,
-                profileName
-        );
+                profileName,
+                CONFIG,
+                System.getenv());
     }
 
     public JsonReporter() {
-        this(ENV.get("CUCUMBER_PROFILE_NAME", DEFAULT_CUCUMBER_PROFILE_NAME));
+        this(CONFIG.get(Env.CUCUMBER_PROFILE_NAME, DEFAULT_CUCUMBER_PROFILE_NAME));
     }
 
     @Override

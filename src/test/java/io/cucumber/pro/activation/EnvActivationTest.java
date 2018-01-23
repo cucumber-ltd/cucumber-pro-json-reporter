@@ -1,9 +1,8 @@
 package io.cucumber.pro.activation;
 
 import io.cucumber.pro.Env;
+import io.cucumber.pro.config.Config;
 import org.junit.Test;
-
-import java.util.HashMap;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -11,20 +10,21 @@ import static org.junit.Assert.assertTrue;
 public class EnvActivationTest {
     @Test
     public void is_active_when_env_var_anything() {
-        assertTrue(new EnvActivation(new Env(new HashMap<String, String>() {{
-            put("CUCUMBER_PRO_PUBLISH", "true");
-        }})).isActive());
+        Config config = new Config();
+        config.set(Env.CUCUMBER_PRO_PUBLISH, "true");
+        assertTrue(new EnvActivation(config).isActive());
     }
 
     @Test
     public void is_inactive_when_env_var_false() {
-        assertFalse(new EnvActivation(new Env(new HashMap<String, String>() {{
-            put("CUCUMBER_PRO_PUBLISH", "false");
-        }})).isActive());
+        Config config = new Config();
+        config.set(Env.CUCUMBER_PRO_PUBLISH, "false");
+        assertFalse(new EnvActivation(config).isActive());
     }
 
     @Test
     public void is_inactive_when_env_var_undefined() {
-        assertFalse(new EnvActivation(new Env(new HashMap<String, String>())).isActive());
+        Config config = new Config();
+        assertFalse(new EnvActivation(config).isActive());
     }
 }

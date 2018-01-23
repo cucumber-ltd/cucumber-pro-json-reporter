@@ -1,5 +1,7 @@
 package io.cucumber.pro;
 
+import io.cucumber.pro.config.Config;
+
 public interface Logger {
     void log(Level level, String message, Object... args);
 
@@ -16,8 +18,8 @@ public interface Logger {
     class SystemLogger implements Logger {
         public final Level level;
 
-        public SystemLogger(Env env) {
-            String name = env.get(Env.CUCUMBER_PRO_LOG_LEVEL, Level.WARN.toString()).toUpperCase();
+        public SystemLogger(Config config) {
+            String name = config.get(Env.CUCUMBER_PRO_LOG_LEVEL, Level.WARN.toString()).toUpperCase();
             Level level;
             try {
                 level = Level.valueOf(name);
