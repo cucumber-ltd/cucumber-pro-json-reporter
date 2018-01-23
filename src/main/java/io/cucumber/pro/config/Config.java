@@ -67,39 +67,6 @@ public class Config {
         throw new RuntimeException("path cannot be empty");
     }
 
-    private Config getChild(String key) {
-        return configByKey.get(key);
-    }
-
-    public String toYaml() {
-        try {
-            StringBuilder out = new StringBuilder();
-            this.print(0, out);
-            return out.toString();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void print(int depth, Appendable out) throws IOException {
-        for (Map.Entry<String, String> entry : valueByKey.entrySet()) {
-            indent(depth, out);
-            out.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
-        }
-        for (Map.Entry<String, Config> entry : configByKey.entrySet()) {
-            indent(depth, out);
-            out.append(entry.getKey()).append(":\n");
-            Config config = entry.getValue();
-            config.print(depth + 1, out);
-        }
-    }
-
-    private void indent(int depth, Appendable out) throws IOException {
-        for (int i = 0; i < depth; i++) {
-            out.append("  ");
-        }
-    }
-
     private void setIn(List<String> path, String value) {
         Config config = this;
         for (int i = 0; i < path.size(); i++) {
@@ -112,9 +79,46 @@ public class Config {
                 if (childConfig == null) {
                     childConfig = new Config();
                     config.setConfig(key, childConfig);
-                    config = childConfig;
                 }
+                config = childConfig;
             }
+        }
+    }
+
+    private Config getChild(String key) {
+        return configByKey.get(key);
+    }
+
+    public String toYaml(String rootKey) {
+        try {
+            StringBuilder out = new StringBuilder();
+            this.print(0, rootKey, out);
+            return out.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void print(int depth, String rootKey, Appendable out) throws IOException {
+        for (Map.Entry<String, String> entry : valueByKey.entrySet()) {
+            if (rootKey == null || rootKey.equals(entry.getKey())) {
+                indent(depth, out);
+                out.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            }
+        }
+        for (Map.Entry<String, Config> entry : configByKey.entrySet()) {
+            if (rootKey == null || rootKey.equals(entry.getKey())) {
+                indent(depth, out);
+                out.append(entry.getKey()).append(":\n");
+                Config config = entry.getValue();
+                config.print(depth + 1, null, out);
+            }
+        }
+    }
+
+    private void indent(int depth, Appendable out) throws IOException {
+        for (int i = 0; i < depth; i++) {
+            out.append("  ");
         }
     }
 

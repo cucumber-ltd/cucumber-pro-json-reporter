@@ -46,21 +46,24 @@ public class ConfigTest {
 
     @Test
     public void has_yaml_representation() {
-        Config root = new Config();
-
-        Config one = new Config();
-        root.setConfig("one", one);
-
-        Config two = new Config();
-        one.setConfig("two", two);
-
-        two.setValue("hello", "world");
+        Config config = new Config();
+        config.set("a.b.c.d.e", "1");
+        config.set("aa.x.y.z", "X");
+        config.set("a.c.d.e", "3");
+        config.set("a.d.e", "4");
 
         String expected = "" +
-                "one:\n" +
-                "  two:\n" +
-                "    hello: world\n" +
+                "a:\n" +
+                "  b:\n" +
+                "    c:\n" +
+                "      d:\n" +
+                "        e: 1\n" +
+                "  c:\n" +
+                "    d:\n" +
+                "      e: 3\n" +
+                "  d:\n" +
+                "    e: 4\n" +
                 "";
-        assertEquals(expected, root.toYaml());
+        assertEquals(expected, config.toYaml("a"));
     }
 }
