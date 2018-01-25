@@ -1,5 +1,6 @@
 package io.cucumber.pro.config;
 
+import io.cucumber.pro.config.loaders.ConfigLoader;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

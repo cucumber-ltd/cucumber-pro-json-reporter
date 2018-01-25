@@ -1,4 +1,7 @@
-package io.cucumber.pro.config;
+package io.cucumber.pro.config.loaders;
+
+import io.cucumber.pro.config.Config;
+import io.cucumber.pro.config.loaders.ConfigLoader;
 
 import java.util.Map;
 

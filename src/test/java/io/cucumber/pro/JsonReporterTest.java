@@ -7,7 +7,7 @@ import cucumber.runner.EventBus;
 import cucumber.runner.TimeService;
 import cucumber.runtime.CucumberException;
 import io.cucumber.pro.config.Config;
-import io.cucumber.pro.config.EnvironmentVariablesConfigLoader;
+import io.cucumber.pro.config.loaders.EnvironmentVariablesConfigLoader;
 import io.cucumber.pro.documentation.NullDocumentationPublisher;
 import io.cucumber.pro.results.ResultsPublisher;
 import org.junit.Test;

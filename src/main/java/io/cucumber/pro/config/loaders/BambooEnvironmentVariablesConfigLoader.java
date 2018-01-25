@@ -1,7 +1,9 @@
-package io.cucumber.pro.config;
+package io.cucumber.pro.config.loaders;
+
+import io.cucumber.pro.config.Config;
+import io.cucumber.pro.config.loaders.ConfigLoader;
 
 import java.util.Comparator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;

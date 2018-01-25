@@ -1,5 +1,7 @@
-package io.cucumber.pro.config;
+package io.cucumber.pro.config.loaders;
 
+import io.cucumber.pro.config.Config;
+import io.cucumber.pro.config.RealValue;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -14,27 +16,23 @@ public class YamlConfigLoader implements ConfigLoader {
     private static final Yaml YAML = new Yaml();
     private final Map<String, Object> map;
 
-    public static final String[] YAML_FILE_NAMES = new String[]{
-            "cucumber.yml",
-            ".cucumber.yml",
-            ".cucumber/cucumber.yml",
-            ".cucumberpro.yml"
-    };
 
-    static ConfigLoader create() {
-        for (String yamlFileName : YAML_FILE_NAMES) {
-            File file = new File(yamlFileName);
-            if (file.isFile()) {
-                Reader reader = null;
-                try {
-                    reader = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
-                    return new YamlConfigLoader(reader);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+    public static void load(String[] yamlFileNames, Config config) {
+        for (String yamlFileName : yamlFileNames) {
+            getConfigLoader(yamlFileName).load(config);
         }
-        return new NullConfigLoader();
+    }
+
+    private static ConfigLoader getConfigLoader(String yamlFileName) {
+        File file = new File(yamlFileName);
+        if (!file.isFile()) return new NullConfigLoader();
+
+        try {
+            Reader reader = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
+            return new YamlConfigLoader(reader);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public YamlConfigLoader(Reader reader) {

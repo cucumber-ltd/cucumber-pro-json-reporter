@@ -46,16 +46,12 @@ public class Config {
         setIn(normalize(key), RealValue.fromBoolean(value));
     }
 
-    private void set(String key, Value value) {
-        setIn(normalize(key), value);
-    }
-
     // Use by loaders
-    void setValue(String property, Value value) {
+    public void setValue(String property, Value value) {
         this.valueByProperty.put(property.toLowerCase(), value);
     }
 
-    void setConfig(String property, Config childConfig) {
+    public void setConfig(String property, Config childConfig) {
         this.configByProperty.put(property.toLowerCase(), childConfig);
     }
 

@@ -1,7 +1,7 @@
 package io.cucumber.pro;
 
 import io.cucumber.pro.config.Config;
-import io.cucumber.pro.config.EnvironmentVariablesConfigLoader;
+import io.cucumber.pro.config.loaders.EnvironmentVariablesConfigLoader;
 import org.junit.Test;
 
 import java.util.HashMap;
