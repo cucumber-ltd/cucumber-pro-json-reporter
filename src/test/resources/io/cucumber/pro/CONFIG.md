@@ -15,7 +15,7 @@ be anywhere. We define a `key` for this called `album.cat.server`.
 The program could then access the value of that key like this:
 
 ```java
-String catServer = config.getString('album.cat.webserver');
+String catServer = config.getString("album.cat.webserver");
 ```
 
 ## Assigning values to keys
