@@ -33,7 +33,6 @@ public class YamlConfigLoaderTest extends ConfigLoaderContract {
                 "  cucumberprofile: cucumber-jvm-unspecified-profile\n" +
                 "  envmask: SECRET|KEY|TOKEN|PASSWORD\n" +
                 "  logging: debug\n" +
-                "  token:\n" +
                 "  url: https://app.cucumber.pro/\n" +
                 "  connection:\n" +
                 "    ignoreerror: true\n" +
@@ -49,7 +48,8 @@ public class YamlConfigLoaderTest extends ConfigLoaderContract {
                 "  project:\n" +
                 "    name:\n" +
                 "  results:\n" +
-                "    publish:\n";
+                "    publish:\n" +
+                "    token:\n";
 
         Config config = new Config();
         ConfigLoader configLoader = new YamlConfigLoader(new StringReader(yaml));

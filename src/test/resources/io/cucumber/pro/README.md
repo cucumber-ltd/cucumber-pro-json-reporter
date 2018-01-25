@@ -131,7 +131,7 @@ cucumberpro:
     # This is only required if you're using Cucumber Pro SaaS, as results publishing in privately hosted 
     # Cucumber Pro appliances is unprotected.
     # Set this to the project-specific authentication token available from your Cucumber Pro settings page.
-    # For security reasons we recommend setting this in a `CUCUMBERPRO_TOKEN` environment variable on your
+    CUCUMBERPRO_RESULTS_TOKEN
     # CI server, and not check it in to source control.
     token:
 

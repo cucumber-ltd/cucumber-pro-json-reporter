@@ -31,6 +31,7 @@ public class ConfigFactory {
         YamlConfigLoader.load(GLOBAL_YAML_FILE_NAMES, config);
         new EnvironmentVariablesConfigLoader().load(config);
         new BambooEnvironmentVariablesConfigLoader().load(config);
+        new DeprecatedEnvironmentVariablesConfigLoader().load(config);
         new SystemPropertiesConfigLoader().load(config);
         YamlConfigLoader.load(LOCAL_YAML_FILE_NAMES, config);
 

@@ -49,7 +49,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
     HTTPResultsPublisher(String url, Config config, Logger logger) {
         this.url = url;
         this.config = config;
-        authToken = config.getString(Keys.CUCUMBERPRO_TOKEN);
+        authToken = config.getString(Keys.CUCUMBERPRO_RESULTS_TOKEN);
         this.logger = logger;
     }
 
@@ -80,9 +80,9 @@ class HTTPResultsPublisher implements ResultsPublisher {
 
                 String suggestion = "";
                 if (statusCode == 401)
-                    suggestion = String.format("You need to define %s", Keys.CUCUMBERPRO_TOKEN);
+                    suggestion = String.format("You need to define %s", Keys.CUCUMBERPRO_RESULTS_TOKEN);
                 if (statusCode == 403)
-                    suggestion = String.format("You need to change the value of %s", Keys.CUCUMBERPRO_TOKEN);
+                    suggestion = String.format("You need to change the value of %s", Keys.CUCUMBERPRO_RESULTS_TOKEN);
 
                 throw new CucumberException(String.format(
                         "Failed to publish results to Cucumber Pro URL: %s, Status: %s\n%s\n%s",

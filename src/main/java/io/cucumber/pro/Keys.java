@@ -3,7 +3,6 @@ package io.cucumber.pro;
 import io.cucumber.pro.config.Config;
 
 public class Keys {
-    public static final String CUCUMBERPRO_TOKEN = "cucumberpro.token";
     public static final String CUCUMBERPRO_URL = "cucumberpro.url";
     public static final String CUCUMBERPRO_GIT_PUBLISH = "cucumberpro.git.publish";
     public static final String CUCUMBERPRO_GIT_SSHPORT = "cucumberpro.git.sshport";
@@ -11,6 +10,7 @@ public class Keys {
     public static final String CUCUMBERPRO_GIT_HOSTKEY = "cucumberpro.git.hostkey";
     public static final String CUCUMBERPRO_GIT_SOURCE_REMOTE = "cucumberpro.git.source.remote";
     public static final String CUCUMBERPRO_GIT_SOURCE_FETCH = "cucumberpro.git.source.fetch";
+    public static final String CUCUMBERPRO_RESULTS_TOKEN = "cucumberpro.results.token";
     public static final String CUCUMBERPRO_RESULTS_PUBLISH = "cucumberpro.results.publish";
     public static final String CUCUMBERPRO_CONNECTION_IGNOREERROR = "cucumberpro.connection.ignoreerror";
     public static final String CUCUMBERPRO_CONNECTION_TIMEOUT = "cucumberpro.connection.timeout";
@@ -40,7 +40,7 @@ public class Keys {
 
     public static Config createConfig() {
         Config config = new Config();
-        config.setNull(CUCUMBERPRO_TOKEN);
+        config.setNull(CUCUMBERPRO_RESULTS_TOKEN);
         config.set(CUCUMBERPRO_URL, "https://app.cucumber.pro/");
         config.set(CUCUMBERPRO_GIT_SSHPORT, 22);
         config.set(CUCUMBERPRO_GIT_HOSTNAME, "git.cucumber.pro");
