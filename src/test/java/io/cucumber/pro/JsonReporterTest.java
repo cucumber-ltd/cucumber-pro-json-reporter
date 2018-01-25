@@ -32,7 +32,7 @@ public class JsonReporterTest {
         Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
         CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
-        String profileName = config.getString(Keys.CUCUMBERPRO_CUCUMBERPROFILE);
+        String profileName = "testing-testing";
         Logger logger = new TestLogger();
         Formatter reporter = new JsonReporter(
                 new NullDocumentationPublisher(),

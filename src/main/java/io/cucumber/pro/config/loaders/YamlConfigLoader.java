@@ -17,6 +17,10 @@ public class YamlConfigLoader implements ConfigLoader {
     private final Map<String, Object> map;
 
 
+    public YamlConfigLoader(Reader reader) {
+        this.map = YAML.load(reader);
+    }
+
     public static void load(String[] yamlFileNames, Config config) {
         for (String yamlFileName : yamlFileNames) {
             getConfigLoader(yamlFileName).load(config);
@@ -35,10 +39,6 @@ public class YamlConfigLoader implements ConfigLoader {
         }
     }
 
-    public YamlConfigLoader(Reader reader) {
-        this.map = YAML.load(reader);
-    }
-
     @Override
     public void load(Config config) {
         populate(config, map);
@@ -49,12 +49,20 @@ public class YamlConfigLoader implements ConfigLoader {
             String key = entry.getKey();
             key = key.replaceAll("_", "");
             Object value = entry.getValue();
-            if (value instanceof String) {
-                config.setValue(key, new RealValue((String) value));
+            if (value == null) {
+                config.setNull(key);
+            } else if (value instanceof String) {
+                config.setValue(key, RealValue.fromString((String) value));
+            } else if (value instanceof Boolean) {
+                config.setValue(key, RealValue.fromBoolean((Boolean) value));
+            } else if (value instanceof Integer) {
+                config.setValue(key, RealValue.fromInteger((Integer) value));
             } else if (value instanceof Map) {
                 Config childConfig = new Config();
                 config.setConfig(key, childConfig);
                 populate(childConfig, (Map<String, Object>) value);
+            } else {
+                throw new RuntimeException(String.format("Unsupported YAML type: %s (%s)", value, value.getClass()));
             }
         }
 

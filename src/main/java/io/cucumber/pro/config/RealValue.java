@@ -6,8 +6,20 @@ public class RealValue implements Value {
     private String value;
 
     public RealValue(String value) {
-        if(value == null) throw new NullPointerException("value cannot be null");
+        if (value == null) throw new NullPointerException("value cannot be null");
         this.value = value;
+    }
+
+    public static Value fromString(String value) {
+        return new RealValue(value);
+    }
+
+    public static Value fromInteger(int value) {
+        return new RealValue(Integer.toString(value));
+    }
+
+    public static Value fromBoolean(boolean value) {
+        return new RealValue(Boolean.toString(value));
     }
 
     @Override
@@ -28,17 +40,5 @@ public class RealValue implements Value {
     @Override
     public boolean isNull() {
         return false;
-    }
-
-    public static Value fromString(String value) {
-        return new RealValue(value);
-    }
-
-    public static Value fromInt(int value) {
-        return new RealValue(Integer.toString(value));
-    }
-
-    public static Value fromBoolean(boolean value) {
-        return new RealValue(Boolean.toString(value));
     }
 }

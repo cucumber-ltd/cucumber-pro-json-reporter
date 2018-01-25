@@ -3,7 +3,6 @@ package io.cucumber.pro;
 import cucumber.runtime.CucumberException;
 import gherkin.formatter.JSONFormatter;
 import io.cucumber.pro.config.Config;
-import io.cucumber.pro.config.ConfigFactory;
 import io.cucumber.pro.documentation.DocumentationPublisher;
 import io.cucumber.pro.documentation.DocumentationPublisherFactory;
 import io.cucumber.pro.results.ResultsPublisher;

@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static io.cucumber.pro.Keys.CUCUMBERPRO_ENVMASK;
 import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 

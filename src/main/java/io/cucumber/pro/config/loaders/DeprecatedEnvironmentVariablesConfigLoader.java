@@ -5,6 +5,8 @@ import io.cucumber.pro.config.Config;
 import java.util.Map;
 
 public class DeprecatedEnvironmentVariablesConfigLoader implements ConfigLoader {
+    public static final String CUCUMBER_PRO_PUBLISH = "cucumber.pro.publish";
+    public static final String CUCUMBER_PRO_PROJECT_NAME = "cucumber.pro.project.name";
     private static final String CUCUMBER_PRO_TOKEN = "cucumber.pro.token";
     private static final String CUCUMBER_PRO_BASE_URL = "cucumber.pro.base.url";
     private static final String CUCUMBER_PRO_GIT_SSH_PORT = "cucumber.pro.git.ssh.port";
@@ -19,10 +21,6 @@ public class DeprecatedEnvironmentVariablesConfigLoader implements ConfigLoader 
     private static final String CUCUMBER_PRO_FETCH_FROM_SOURCE = "cucumber.pro.fetch.from.source";
     private static final String CUCUMBER_PRO_LOG_LEVEL = "cucumber.pro.log.level";
     private static final String CUCUMBER_PROFILE_NAME = "cucumber.profile.name";
-
-    public static final String CUCUMBER_PRO_PUBLISH = "cucumber.pro.publish";
-    public static final String CUCUMBER_PRO_PROJECT_NAME = "cucumber.pro.project.name";
-
     private final Map<String, String> env;
 
     public DeprecatedEnvironmentVariablesConfigLoader() {

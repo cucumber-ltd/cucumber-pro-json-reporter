@@ -8,7 +8,6 @@ import cucumber.api.formatter.Formatter;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.formatter.PluginFactory;
 import io.cucumber.pro.config.Config;
-import io.cucumber.pro.config.ConfigFactory;
 import io.cucumber.pro.documentation.DocumentationPublisher;
 import io.cucumber.pro.documentation.DocumentationPublisherFactory;
 import io.cucumber.pro.results.ResultsPublisher;
@@ -63,7 +62,7 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter() {
-        this(CONFIG.getString(Keys.CUCUMBERPRO_CUCUMBERPROFILE));
+        this("cucumber-jvm-unspecified-profile");
     }
 
     @Override

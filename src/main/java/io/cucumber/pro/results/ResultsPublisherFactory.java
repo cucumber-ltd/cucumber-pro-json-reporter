@@ -10,7 +10,7 @@ import io.cucumber.pro.revision.RevisionProviderFactory;
 
 public class ResultsPublisherFactory {
     public static ResultsPublisher create(Config config, Logger logger) {
-        boolean explicitPublish = !config.isNull(Keys.CUCUMBERPRO_RESULTS_PUBLISH) && config.isNull(Keys.CUCUMBERPRO_RESULTS_PUBLISH);
+        boolean explicitPublish = !config.isNull(Keys.CUCUMBERPRO_RESULTS_PUBLISH) && config.getBoolean(Keys.CUCUMBERPRO_RESULTS_PUBLISH);
         if (new CiDetection(config).isRunningInCi() || explicitPublish) {
             String projectName = new ProjectName(config).getProjectName();
             RevisionProvider revisionProvider = RevisionProviderFactory.create(config, logger);

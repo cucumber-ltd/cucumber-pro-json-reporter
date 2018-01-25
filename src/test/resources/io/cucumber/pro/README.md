@@ -33,126 +33,27 @@ If you're on Cucumber-JVM 2.0.0 or newer:
 
 ```java
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter"})
+@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter:all"})
 public class RunCucumberTest {
 }
 ```
 
-If you're on Cucumber-JVM 1.2.5 or older, use `io.cucumber.pro.JsonReporter12:full`.
-The `full` part is the profile name (see the "Cucumber Profiles" section below). This is mandatory for `io.cucumber.pro.JsonReporter12`.
+If you're on Cucumber-JVM 1.2.5 or older, use `io.cucumber.pro.JsonReporter12:all`.
+The `all` part is the profile name (see the "Cucumber Profiles" section below). This is mandatory for `io.cucumber.pro.JsonReporter12`.
 
 ```java
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter12:full"})
+@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter12:all"})
 public class RunCucumberTest {
 }
 ```
 
-## Configuration
+### Profiles
 
-The plugin is configured with environment variables. Most of these can be left undefined - the plugin
-provides sensible defaults.
-
-* `CUCUMBER_PRO_TOKEN` (required for `https://app.cucumber.pro/`, should be set per-project)
-    * Set it to the project-specific authentication token. Not required for privately hosted Cucumber Pro appliances with 
-      unprotected results publishing.
-* `CUCUMBER_PRO_BASE_URL` (required for appliance, should be set globally)
-    * Set it to Cucumber Pro's base URL. Defaults to `https://app.cucumber.pro/`.
-* `CUCUMBER_PRO_GIT_HOST` (required for appliance, should be set globally)
-    * Set it to the hostname where Cucumber Pro's git server is. Defaults to `git.cucumber.pro`.
-* `CUCUMBER_PRO_GIT_SSH_PORT` (optional, should be set globally)
-    * Set it to `2222` if you're publishing to a Cucumber Pro appliance that hasn't been configured
-      to use port `22` instead of `2222`. Defaults to `22`.
-* `CUCUMBER_PRO_GIT_HOST_KEY` (optional, should be set globally)
-    * Only required if the build machine's `~/.ssh/known_hosts` doesn't have an entry for the git host.
-      To find the host key, run `ssh git@[git host]` and accept the host key. Then run `ssh-keyscan [git host]`
-      and copy the long base64-encoded string at the end of the line. It looks like `AAAAB3NzaC1.....E/Bhw==`.
-* `CUCUMBER_PRO_GIT_PUBLISH` (optional, should be set per-project)
-    * Set to `true` or `yes` to enable document publishing to git. Defaults to `false`.
-* `CUCUMBER_PRO_FETCH_FROM_SOURCE` (optional, should be set per-project)
-    * Whether or not to fetch from the source repository before publishing
-      to Cucumber Pro. This is needed on CI servers that perform a shallow 
-      clone during build.
-* `CUCUMBER_PRO_SOURCE_REMOTE_NAME` (optional, should be set per-project)
-    * Where the plugin will `git fetch` from before publishing to Cucumber Pro.
-      Defaults to `origin`.
-* `CUCUMBER_PRO_PUBLISH` (optional, should be set globally)
-    * Set it to `true` to enable the plugin. The plugin is enabled by default on preferred CI servers.
-* `CUCUMBER_PRO_PROJECT_NAME` (optional, should be set per-project)
-    * Not needed if the build is running on a preferred CI server and the Cucumber Pro project name is identical to the 
-      CI server project name. Define this environment variable to override the project name.
-      Alternatively you can add a `.cucumberpro.yml` file to the root directory of the git repository, with the following
-      content:
-      
-      ```yaml
-      project_name: HelloWorld
-      ```
-* `CUCUMBER_PRO_IGNORE_CONNECTION_ERROR` (optional)
-    * Set this to `false` if you wish to treat connection errors to Cucumber Pro as build errors rather than 
-      just printing warnings.
-      This can be useful if you want builds to fail in case Cucumber Pro is down. Defaults to `true`.
-* `CUCUMBER_PRO_CONNECTION_TIMEOUT` (optional)
-    * Set this to `10000` or some other number of milliseconds to specify a custom connection timeout to Cucumber Pro.
-      Defaults to `5000`.
-* `CUCUMBER_PRO_ENV_MASK` (optional)
-    * The plugin sends your local environment variables to Cucumber Pro so it can detect the CI build number, 
-      git branch/tag and other information about the build. Set it to a pattern of environment variables that shouldn't 
-      be sent to Cucumber Pro. Defaults to `SECRET|KEY|TOKEN|PASSWORD`.
-* `CUCUMBER_PRO_LOG_LEVEL` (optional, should be set per-project)
-    * Sets the log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
-
-## Git Authentication
-
-### SSH machine user
-
-The plugin will perform a `git push` to Cucumber Pro to publish `.feature` files and Markdown (`.md`) documents.
-
-Cucumber Pro only allows project collaborators to do this, so the plugin must authenticate as a project collaborator.
-
-The `https://app.cucumber.pro/` (SaaS) instance of Cucumber Pro has a machine user with email `devs@cucumber.io`.
-
-For private appliance installations a system administrator should create a "machine account" in the local email server
-(for example `cpro@example.com`). Then, sign up to Cucumber Pro with this email and activate the account.
-
-After activating the account on Cucumber Pro, generate an SSH keypair and upload the public key to the machine account's settings page on Cucumber Pro. 
-The private key should then be installed on the CI server.
-
-### Make the machine user a collaborator
-
-Every project on Cucumber Pro needs to add the machine user as a collaborator, and a system administrator (or someone
-else with access to the machine user's mailbox) needs to accept the collaboration invitation.
-
-## Results authentication
-
-(This configuration can be skipped for private Cucumber Pro appliance installations where results publishing is open).
-
-Results are published to Cucumber Pro using HTTP/HTTPS. Each Cucumber Pro project has a token for this purpose.
-You can find it in the project settings (press `?` to display it).
-
-This token should be assigned to a `CUCUMBER_PRO_TOKEN` environment variable on the build server, on a per-project basis.
-
-Consult your CI server's documentation for details about defining per-project environment variables.
-Some CI servers such as Travis and Circle CI allow you to define environment variables in a file checked into git.
-*DO NOT DO THIS* - as it would allow anyone with read acceess to your repository to publish results.
-
-## Cucumber Profiles
-
-If you run Cucumber several times as part of your build (with different options), you can
+If you run Cucumber several times as part of your build (with different options, perhaps different tags), you can
 specify a different *profile name* for each run. This allows Cucumber Pro to show separate results for each profile.
 
-### Cucumber-JVM 2.0.1 and below
-
-With Cucumber-JVM 2.0.1 and below you can specify the profile name with an environment variable:
-
-```
-export CUCUMBER_PROFILE_NAME=smoke
-```
-
-If you run Cucumber several times, you simply specify a different environment variable before each run.
-
-### Cucumber-JVM 2.1.0 and above
-
-With Cucumber-JVM 2.1.0 and above you can specify the profile by appending a colon and a profile name to the class name:
+The profile name is specified by appending a colon and a profile name to the class name:
 
 ```java
 @RunWith(Cucumber.class)
@@ -163,7 +64,139 @@ public class RunCucumberTest {
 
 ```java
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter:full"}, tags = "not @ui and not @smoke")
+@CucumberOptions(plugin = {"io.cucumber.pro.JsonReporter:all"}, tags = "not @ui and not @smoke")
 public class RunCucumberTest {
 }
 ```
+
+## Configuration
+
+The default configuration of the plugin is as follows:
+
+```yaml
+cucumberpro:
+  # The plugin sends your local environment variables to Cucumber Pro so it can detect the CI build number, 
+  # git branch/tag and other information about the build. This mask is a regular expression for filtering
+  # out sensitive values that should not be sent to Cucumber Pro.
+  envmask: SECRET|KEY|TOKEN|PASSWORD
+
+  # Sets the log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
+  # Setting it to `DEBUG` will also print the current configuration when the plugin runs.
+  logging: warn
+
+  # Not needed if the build is running on a preferred CI server and the Cucumber Pro project 
+  # name is identical to the CI server project name. Define this environment variable to override 
+  # the project name.
+  projectname:
+
+  # Override this if you are using a privately hosted Cucumber Pro appliance.
+  # We recommend setting this with a CUCUMBERPRO_URL environment variable defined globally on your build server.
+  url: https://app.cucumber.pro/
+
+  connection:
+    # Set this to false if you want the build to break in case Cucumber Pro is unavailable.
+    ignoreerror: true
+
+    # If a http or ssh connection takes longer than this (milliseconds), time out the connection.
+    timeout: 5000
+
+  git:
+    # Only required if the build machine's `~/.ssh/known_hosts` doesn't have an entry for the git hostname.
+    # To find the host key, run `ssh git@[git host]` and accept the host key. Then run `ssh-keyscan [git host]`
+    # and copy the long base64-encoded string at the end of the line. It looks like `AAAAB3NzaC1.....E/Bhw==`.
+    # We recommend setting this with a global CUCUMBERPRO_GIT_HOSTKEY environment variable.
+    hostkey:
+
+    # Override this if you are using a privately hosted Cucumber Pro appliance.
+    hostname: git.cucumber.pro
+
+    # Set this to 2222 if you're publishing to a privately hosted Cucumber Pro appliance that hasn't been 
+    # configured to use port `22` instead of `2222`. Defaults to `22`.
+    sshport: 22
+
+    # Set this to true if you want the plugin to publish documentation with a git push.
+    publish: false
+
+    source:
+      # Whether or not to fetch from the source repository (GitHub, BitBucket, GitLab etc) 
+      # before publishing to Cucumber Pro. This is needed on CI servers that perform a shallow 
+      # clone during build.
+      fetch: true
+
+      # Where the plugin will `git fetch` from before publishing to Cucumber Pro.
+      # Defaults to `origin`.
+      remote: origin
+
+  results:
+    # This is only required if you're using Cucumber Pro SaaS, as results publishing in privately hosted 
+    # Cucumber Pro appliances is unprotected.
+    # Set this to the project-specific authentication token available from your Cucumber Pro settings page.
+    # For security reasons we recommend setting this in a `CUCUMBERPRO_TOKEN` environment variable on your
+    # CI server, and not check it in to source control.
+    token:
+
+    # Whether or not to publish results to Cucumber Pro. Normally you should *not* provide
+    # a value for this setting - the plugin automatically publishes if it detects it is running
+    # in a CI environment. We recommend setting this to true only if you are experimenting with
+    # the configuration locally.
+    publish:
+```
+
+Depending on your environment you will have to override some of the defaults, or specify some of the
+settings that don't have a default value.
+
+The simplest way to override defaults is to create a file called `.cucumberpro.yml` at the root of your
+repository, paste the above contents and make modifications. Then check it in to source control.
+
+Every setting can also be overridden with environment variables or Java system properties.
+
+For example, if you want to enable git publishing, you can define an environment variable:
+
+```
+# Linux / OS X
+export CUCUMBERPRO_GIT_PUBLISH=true
+
+# Windows
+SET CUCUMBERPRO_GIT_PUBLISH=true
+```
+
+Alternatively, you can specify a Java System property (in Maven, Gradle or other build tool):
+
+```
+-Dcucumberpro.git.publish=true
+```
+
+## Results authentication
+
+(This configuration can be skipped for private Cucumber Pro appliance installations where results publishing is open).
+
+Results are published to Cucumber Pro using HTTP/HTTPS. Each Cucumber Pro project has a token for this purpose.
+You can find it in the project settings (press `?` to display it).
+
+This token should be assigned to a `CUCUMBERPRO_TOKEN` environment variable on the build server, on a per-project basis.
+
+Consult your CI server's documentation for details about defining per-project environment variables.
+Some CI servers such as Travis and Circle CI allow you to define environment variables in a file checked into git.
+*DO NOT DO THIS* - as it would allow anyone with read acceess to your repository to publish results.
+
+## Git Authentication
+
+The plugin can perform a `git push` to Cucumber Pro to publish `.feature` files and Markdown (`.md`) documents.
+Cucumber Pro only allows project collaborators to do this, so the plugin must authenticate as a project collaborator.
+
+### SSH machine user
+
+The `https://app.cucumber.pro/` (SaaS) instance of Cucumber Pro has a machine user with email `devs@cucumber.io`.
+
+For private appliance installations a system administrator should create a "machine account" in the local 
+user directory or email server (for example `cpro@example.com`). 
+
+Then, sign up to Cucumber Pro with this email and activate the account.
+
+After activating the account on Cucumber Pro, generate an SSH key pair and upload the public key to the 
+machine account's settings page on Cucumber Pro. The private key should then be installed on the CI server.
+
+### Make the machine user a collaborator
+
+Every project on Cucumber Pro needs to add the machine user as a collaborator, and a system administrator (or someone
+else with access to the machine user's mailbox) needs to accept the collaboration invitation.

@@ -16,8 +16,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_TIMEOUT;
 import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR;
+import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_TIMEOUT;
 import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

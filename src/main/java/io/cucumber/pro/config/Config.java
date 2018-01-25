@@ -2,17 +2,17 @@ package io.cucumber.pro.config;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Nested configuration. Keys are hierarchical.
  */
 public class Config {
-    private final Map<String, Value> valueByProperty = new HashMap<>();
-    private final Map<String, Config> configByProperty = new HashMap<>();
+    private final Map<String, Value> valueByProperty = new TreeMap<>();
+    private final Map<String, Config> configByProperty = new TreeMap<>();
 
     public String getString(String key) {
         return getIn(normalize(key)).getString();
@@ -39,7 +39,7 @@ public class Config {
     }
 
     public void set(String key, int value) {
-        setIn(normalize(key), RealValue.fromInt(value));
+        setIn(normalize(key), RealValue.fromInteger(value));
     }
 
     public void set(String key, boolean value) {
@@ -114,8 +114,15 @@ public class Config {
     private void print(int depth, String rootKey, Appendable out) throws IOException {
         for (Map.Entry<String, Value> entry : valueByProperty.entrySet()) {
             if (rootKey == null || rootKey.equals(entry.getKey())) {
+                String key = entry.getKey();
+
+                // Print the key/value
                 indent(depth, out);
-                out.append(entry.getKey()).append(": ").append(entry.getValue().getString()).append("\n");
+                out.append(entry.getKey()).append(":");
+                if (!entry.getValue().isNull()) {
+                    out.append(" ").append(entry.getValue().getString());
+                }
+                out.append("\n");
             }
         }
         for (Map.Entry<String, Config> entry : configByProperty.entrySet()) {

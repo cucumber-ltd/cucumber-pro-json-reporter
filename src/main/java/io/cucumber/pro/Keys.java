@@ -16,7 +16,6 @@ public class Keys {
     public static final String CUCUMBERPRO_CONNECTION_TIMEOUT = "cucumberpro.connection.timeout";
     public static final String CUCUMBERPRO_ENVMASK = "cucumberpro.envmask";
     public static final String CUCUMBERPRO_LOGGING = "cucumberpro.logging";
-    public static final String CUCUMBERPRO_CUCUMBERPROFILE = "cucumberpro.cucumberprofile";
 
     // Revisions
     public static final String bamboo_planRepository_revision = "bamboo_planRepository_revision";
@@ -31,7 +30,7 @@ public class Keys {
     public static final String bamboo_buildNumber = "bamboo_buildNumber";
 
     // Project name
-    public static final String CUCUMBERPRO_PROJECTNAME = "cucumberpro.project.name";
+    public static final String CUCUMBERPRO_PROJECTNAME = "cucumberpro.projectname";
     // https://confluence.atlassian.com/bamboo/bamboo-variables-289277087.html
     public static final String bamboo_planRepository_name = "bamboo_planRepository_name";
     // https://circleci.com/docs/2.0/env-vars/#circleci-environment-variable-descriptions
@@ -53,7 +52,6 @@ public class Keys {
         config.set(CUCUMBERPRO_GIT_SOURCE_REMOTE, "origin");
         config.set(CUCUMBERPRO_GIT_SOURCE_FETCH, true);
         config.set(CUCUMBERPRO_LOGGING, "WARN");
-        config.set(CUCUMBERPRO_CUCUMBERPROFILE, "cucumber-jvm-unspecified-profile");
 
         config.setNull(bamboo_planRepository_revision);
         config.setNull(CIRCLE_SHA1);
