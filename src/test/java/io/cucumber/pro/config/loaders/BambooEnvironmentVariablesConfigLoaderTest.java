@@ -1,8 +1,6 @@
-package io.cucumber.pro.config;
+package io.cucumber.pro.config.loaders;
 
-import io.cucumber.pro.config.loaders.BambooEnvironmentVariablesConfigLoader;
-import io.cucumber.pro.config.loaders.ConfigLoader;
-import io.cucumber.pro.config.loaders.EnvironmentVariablesConfigLoader;
+import io.cucumber.pro.config.Config;
 import org.junit.Test;
 
 import java.util.HashMap;
