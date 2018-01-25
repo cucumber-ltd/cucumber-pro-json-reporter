@@ -128,11 +128,13 @@ cucumberpro:
       remote: origin
 
   results:
-    # This is only required if you're using Cucumber Pro SaaS, as results publishing in privately hosted 
-    # Cucumber Pro appliances is unprotected.
-    # Set this to the project-specific authentication token available from your Cucumber Pro settings page.
-    CUCUMBERPRO_RESULTS_TOKEN
-    # CI server, and not check it in to source control.
+    # (This configuration can be skipped for private Cucumber Pro appliance installations where results publishing is open).
+    # Results are published to Cucumber Pro using HTTP/HTTPS. Each Cucumber Pro project has a token for this purpose.
+    # You can find it in the project settings (press `?` to display it).
+    # This token should be assigned to a `CUCUMBERPRO_RESULTS_TOKEN` environment variable on the build server, on a per-project basis.
+    # Consult your CI server's documentation for details about defining per-project environment variables.
+    # Some CI servers such as Travis and Circle CI allow you to define environment variables in a file checked into git.
+    # *DO NOT DO THIS* - as it would allow anyone with read acceess to your repository to publish results.
     token:
 
     # Whether or not to publish results to Cucumber Pro. Normally you should *not* provide
@@ -165,19 +167,6 @@ Alternatively, you can specify a Java System property (in Maven, Gradle or other
 ```
 -Dcucumberpro.git.publish=true
 ```
-
-## Results authentication
-
-(This configuration can be skipped for private Cucumber Pro appliance installations where results publishing is open).
-
-Results are published to Cucumber Pro using HTTP/HTTPS. Each Cucumber Pro project has a token for this purpose.
-You can find it in the project settings (press `?` to display it).
-
-This token should be assigned to a `CUCUMBERPRO_TOKEN` environment variable on the build server, on a per-project basis.
-
-Consult your CI server's documentation for details about defining per-project environment variables.
-Some CI servers such as Travis and Circle CI allow you to define environment variables in a file checked into git.
-*DO NOT DO THIS* - as it would allow anyone with read acceess to your repository to publish results.
 
 ## Git Authentication
 
