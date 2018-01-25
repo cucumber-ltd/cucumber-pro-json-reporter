@@ -19,7 +19,7 @@ public interface Logger {
         public final Level level;
 
         public SystemLogger(Config config) {
-            String name = config.getString(Env.CUCUMBER_PRO_LOG_LEVEL).toUpperCase();
+            String name = config.getString(Keys.CUCUMBER_PRO_LOG_LEVEL).toUpperCase();
             Level level;
             try {
                 level = Level.valueOf(name);

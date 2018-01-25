@@ -1,6 +1,6 @@
 package io.cucumber.pro.results;
 
-import io.cucumber.pro.Env;
+import io.cucumber.pro.Keys;
 import io.cucumber.pro.URITemplate;
 import io.cucumber.pro.config.Config;
 
@@ -19,7 +19,7 @@ class CucumberProResultsUrlBuilder {
     }
 
     private static String getCucumberProUrl(Config config) {
-        String cucumberProUrl = config.getString(Env.CUCUMBER_PRO_BASE_URL);
+        String cucumberProUrl = config.getString(Keys.CUCUMBER_PRO_BASE_URL);
         if (!cucumberProUrl.endsWith("/")) cucumberProUrl += "/";
         return cucumberProUrl;
     }

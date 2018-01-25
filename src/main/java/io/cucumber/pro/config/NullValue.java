@@ -3,7 +3,7 @@ package io.cucumber.pro.config;
 public class NullValue implements Value {
     @Override
     public String getString() {
-        return "";
+        return null;
     }
 
     @Override

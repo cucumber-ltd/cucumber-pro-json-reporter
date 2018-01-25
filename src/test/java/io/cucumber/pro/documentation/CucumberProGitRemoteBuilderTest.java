@@ -1,12 +1,9 @@
 package io.cucumber.pro.documentation;
 
-import io.cucumber.pro.Env;
 import io.cucumber.pro.config.Config;
 import org.junit.Test;
 
-import java.util.HashMap;
-
-import static io.cucumber.pro.Env.createConfig;
+import static io.cucumber.pro.Keys.createConfig;
 import static junit.framework.TestCase.assertEquals;
 
 public class CucumberProGitRemoteBuilderTest {

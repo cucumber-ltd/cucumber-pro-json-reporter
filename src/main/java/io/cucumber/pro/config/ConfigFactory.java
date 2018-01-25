@@ -1,6 +1,6 @@
 package io.cucumber.pro.config;
 
-import static io.cucumber.pro.Env.createConfig;
+import static io.cucumber.pro.Keys.createConfig;
 
 public class ConfigFactory {
     public static Config create() {

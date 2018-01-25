@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.cucumber.pro.Env.createConfig;
+import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -32,7 +32,7 @@ public class JsonReporterTest {
         Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
         CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
-        String profileName = config.getString(Env.CUCUMBER_PROFILE_NAME);
+        String profileName = config.getString(Keys.CUCUMBER_PROFILE_NAME);
         Logger logger = new TestLogger();
         Formatter reporter = new JsonReporter(
                 new NullDocumentationPublisher(),

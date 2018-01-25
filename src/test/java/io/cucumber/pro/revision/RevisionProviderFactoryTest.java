@@ -1,13 +1,11 @@
 package io.cucumber.pro.revision;
 
-import io.cucumber.pro.Env;
+import io.cucumber.pro.Keys;
 import io.cucumber.pro.TestLogger;
 import io.cucumber.pro.config.Config;
 import org.junit.Test;
 
-import java.util.HashMap;
-
-import static io.cucumber.pro.Env.createConfig;
+import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -15,7 +13,7 @@ public class RevisionProviderFactoryTest {
     @Test
     public void finds_revision_from_environment_variable() {
         Config config = createConfig();
-        config.set(Env.bamboo_planRepository_revision, "foo");
+        config.set(Keys.bamboo_planRepository_revision, "foo");
         RevisionProvider revisionProvider = RevisionProviderFactory.create(config, null);
         assertEquals("foo", revisionProvider.getRevision());
     }

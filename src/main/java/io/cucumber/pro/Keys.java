@@ -2,7 +2,7 @@ package io.cucumber.pro;
 
 import io.cucumber.pro.config.Config;
 
-public class Env {
+public class Keys {
     public static final String CUCUMBER_PRO_TOKEN = "cucumber.pro.token";
     public static final String CUCUMBER_PRO_BASE_URL = "cucumber.pro.base.url";
     public static final String CUCUMBER_PRO_GIT_SSH_PORT = "cucumber.pro.git.ssh.port";
@@ -10,7 +10,6 @@ public class Env {
     public static final String CUCUMBER_PRO_GIT_HOST_KEY = "cucumber.pro.git.host.key";
     public static final String CUCUMBER_PRO_GIT_DEBUG = "cucumber.pro.git.debug";
     public static final String CUCUMBER_PRO_GIT_PUBLISH = "cucumber.pro.git.publish";
-    public static final String CUCUMBER_PRO_PROJECT_NAME = "cucumber.pro.project.name";
     public static final String CUCUMBER_PRO_IGNORE_CONNECTION_ERROR = "cucumber.pro.ignore.connection.error";
     public static final String CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS = "cucumber.pro.connection.timeout.millis";
     public static final String CUCUMBER_PRO_ENV_MASK = "cucumber.pro.env.mask";
@@ -25,13 +24,21 @@ public class Env {
     public static final String GIT_COMMIT = "GIT_COMMIT";
     public static final String TRAVIS_COMMIT = "TRAVIS_COMMIT";
 
-    // Activation
+    // Activation (via CI)
     public static final String CUCUMBER_PRO_PUBLISH = "cucumber.pro.publish";
     public static final String BUILD_NUMBER = "BUILD_NUMBER";
     public static final String CIRCLE_BUILD_NUM = "CIRCLE_BUILD_NUM";
     public static final String TRAVIS_JOB_NUMBER = "TRAVIS_JOB_NUMBER";
     public static final String bamboo_buildNumber = "bamboo_buildNumber";
 
+    // Project name
+    public static final String CUCUMBER_PRO_PROJECT_NAME = "cucumber.pro.project.name";
+    // https://confluence.atlassian.com/bamboo/bamboo-variables-289277087.html
+    public static final String bamboo_planRepository_name = "bamboo_planRepository_name";
+    // https://circleci.com/docs/2.0/env-vars/#circleci-environment-variable-descriptions
+    public static final String CIRCLE_PROJECT_REPONAME = "CIRCLE_PROJECT_REPONAME";
+    // https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
+    public static final String TRAVIS_REPO_SLUG = "TRAVIS_REPO_SLUG";
 
     // Defaults
     private static final String DEFAULT_CUCUMBER_PRO_URL = "https://app.cucumber.pro/";
@@ -49,7 +56,6 @@ public class Env {
         config.setNull(CUCUMBER_PRO_GIT_HOST_KEY);
         config.set(CUCUMBER_PRO_GIT_DEBUG, false);
         config.set(CUCUMBER_PRO_GIT_PUBLISH, false);
-        config.setNull(CUCUMBER_PRO_PROJECT_NAME);
         config.set(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true);
         config.set(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, 5000);
         config.set(CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK);
@@ -69,6 +75,11 @@ public class Env {
         config.setNull(CIRCLE_BUILD_NUM);
         config.setNull(TRAVIS_JOB_NUMBER);
         config.setNull(bamboo_buildNumber);
+
+        config.setNull(CUCUMBER_PRO_PROJECT_NAME);
+        config.setNull(bamboo_planRepository_name);
+        config.setNull(CIRCLE_PROJECT_REPONAME);
+        config.setNull(TRAVIS_REPO_SLUG);
         return config;
     }
 }

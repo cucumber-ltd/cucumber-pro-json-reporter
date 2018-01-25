@@ -63,7 +63,7 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter() {
-        this(CONFIG.getString(Env.CUCUMBER_PROFILE_NAME));
+        this(CONFIG.getString(Keys.CUCUMBER_PROFILE_NAME));
     }
 
     @Override
