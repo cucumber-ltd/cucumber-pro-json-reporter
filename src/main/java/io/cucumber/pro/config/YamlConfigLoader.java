@@ -49,6 +49,7 @@ public class YamlConfigLoader implements ConfigLoader {
     private void populate(Config config, Map<String, Object> map) {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
+            key = key.replaceAll("_", "");
             Object value = entry.getValue();
             if (value instanceof String) {
                 config.setValue(key, new RealValue((String) value));
