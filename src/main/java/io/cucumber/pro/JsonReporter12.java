@@ -68,7 +68,7 @@ public class JsonReporter12 extends JSONFormatter {
     @Override
     public void close() {
         super.close();
-        logger.log(Logger.Level.DEBUG, "%s config:\n\n%s", getClass().getName(), config.toYaml("cucumber"));
+        logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", config.toYaml("cucumberpro"));
         this.documentationPublisher.publish();
         this.resultsPublisher.publish(jsonFile, filteredEnv.toString(), profileName);
     }

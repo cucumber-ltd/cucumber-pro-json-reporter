@@ -17,7 +17,7 @@ public class SystemLoggerTest {
     @Test
     public void ignores_log_level_case() {
         Config config = createConfig();
-        config.set(Keys.CUCUMBER_PRO_LOG_LEVEL, "deBug");
+        config.set(Keys.CUCUMBERPRO_LOGGING, "deBug");
         Logger.SystemLogger logger = new Logger.SystemLogger(config);
         assertEquals(Logger.Level.DEBUG, logger.level);
     }
@@ -25,7 +25,7 @@ public class SystemLoggerTest {
     @Test
     public void defaults_to_WARN_when_unknown_log_level_is_set() {
         Config config = createConfig();
-        config.set(Keys.CUCUMBER_PRO_LOG_LEVEL, "Bogus");
+        config.set(Keys.CUCUMBERPRO_LOGGING, "Bogus");
         Logger.SystemLogger logger = new Logger.SystemLogger(config);
         assertEquals(Logger.Level.WARN, logger.level);
     }

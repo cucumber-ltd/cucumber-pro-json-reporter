@@ -19,7 +19,7 @@ class CucumberProResultsUrlBuilder {
     }
 
     private static String getCucumberProUrl(Config config) {
-        String cucumberProUrl = config.getString(Keys.CUCUMBER_PRO_BASE_URL);
+        String cucumberProUrl = config.getString(Keys.CUCUMBERPRO_URL);
         if (!cucumberProUrl.endsWith("/")) cucumberProUrl += "/";
         return cucumberProUrl;
     }

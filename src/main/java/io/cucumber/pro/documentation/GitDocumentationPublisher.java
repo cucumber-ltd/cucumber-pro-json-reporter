@@ -49,12 +49,10 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     GitDocumentationPublisher(RemoteSpec pushSpec, Config config, Logger logger) {
         this.pushSpec = pushSpec;
         this.logger = logger;
-        if (config.getBoolean(Keys.CUCUMBER_PRO_GIT_DEBUG)) {
-            JSch.setLogger(new JschLogger(logger));
-        }
-        ignoreConnectionError = config.getBoolean(Keys.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR);
-        fetchRemoteName = config.getString(Keys.CUCUMBER_PRO_SOURCE_REMOTE_NAME);
-        fetchFromSource = config.getBoolean(Keys.CUCUMBER_PRO_FETCH_FROM_SOURCE);
+        JSch.setLogger(new JschLogger(logger));
+        ignoreConnectionError = config.getBoolean(Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR);
+        fetchRemoteName = config.getString(Keys.CUCUMBERPRO_GIT_SOURCE_REMOTE);
+        fetchFromSource = config.getBoolean(Keys.CUCUMBERPRO_GIT_SOURCE_FETCH);
     }
 
     private static <C extends GitCommand, R> void configureSsh(RemoteSpec remoteSpec, TransportCommand<C, R> push) throws JSchException {
@@ -136,7 +134,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             if (ignoreConnectionError) {
                 logger.log(Logger.Level.INFO, "Failed to fetch commits from %s\n", fetchSpec.remote);
             } else {
-                throw new CucumberException(String.format("Failed to fetch commits from %s\nYou can set %s to true to treat this as a warning instead of an error", fetchSpec.remote, Keys.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
+                throw new CucumberException(String.format("Failed to fetch commits from %s\nYou can set %s to true to treat this as a warning instead of an error", fetchSpec.remote, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR), e);
             }
         } catch (JSchException e) {
             throw new CucumberException("SSH error", e);
@@ -151,7 +149,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             if (ignoreConnectionError) {
                 logger.log(Logger.Level.WARN, "Failed to publish documentation to %s\n", pushSpec.remote);
             } else {
-                throw new CucumberException(String.format("Failed to publish documentation to %s\nYou can set %s to true to treat this as a warning instead of an error", pushSpec.remote, Keys.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
+                throw new CucumberException(String.format("Failed to publish documentation to %s\nYou can set %s to true to treat this as a warning instead of an error", pushSpec.remote, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR), e);
             }
         } catch (JSchException e) {
             throw new CucumberException("SSH error", e);

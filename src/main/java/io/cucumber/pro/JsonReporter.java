@@ -63,7 +63,7 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter() {
-        this(CONFIG.getString(Keys.CUCUMBER_PROFILE_NAME));
+        this(CONFIG.getString(Keys.CUCUMBERPRO_CUCUMBERPROFILE));
     }
 
     @Override
@@ -87,7 +87,7 @@ public class JsonReporter implements Formatter {
                 publisher.registerHandlerFor(TestRunFinished.class, new EventHandler<TestRunFinished>() {
                     @Override
                     public void receive(TestRunFinished event) {
-                        JsonReporter.this.logger.log(Logger.Level.DEBUG, "%s config:\n\n%s", JsonReporter.class.getName(), JsonReporter.this.config.toYaml("cucumber"));
+                        JsonReporter.this.logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", JsonReporter.this.config.toYaml("cucumberpro"));
                         JsonReporter.this.documentationPublisher.publish();
                         JsonReporter.this.resultsPublisher.publish(jsonFile, filteredEnv.toString(), profileName);
                     }

@@ -3,20 +3,20 @@ package io.cucumber.pro;
 import io.cucumber.pro.config.Config;
 
 public class Keys {
-    public static final String CUCUMBER_PRO_TOKEN = "cucumber.pro.token";
-    public static final String CUCUMBER_PRO_BASE_URL = "cucumber.pro.base.url";
-    public static final String CUCUMBER_PRO_GIT_SSH_PORT = "cucumber.pro.git.ssh.port";
-    public static final String CUCUMBER_PRO_GIT_HOST = "cucumber.pro.git.host";
-    public static final String CUCUMBER_PRO_GIT_HOST_KEY = "cucumber.pro.git.host.key";
-    public static final String CUCUMBER_PRO_GIT_DEBUG = "cucumber.pro.git.debug";
-    public static final String CUCUMBER_PRO_GIT_PUBLISH = "cucumber.pro.git.publish";
-    public static final String CUCUMBER_PRO_IGNORE_CONNECTION_ERROR = "cucumber.pro.ignore.connection.error";
-    public static final String CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS = "cucumber.pro.connection.timeout.millis";
-    public static final String CUCUMBER_PRO_ENV_MASK = "cucumber.pro.env.mask";
-    public static final String CUCUMBER_PRO_SOURCE_REMOTE_NAME = "cucumber.pro.source.remote.name";
-    public static final String CUCUMBER_PRO_FETCH_FROM_SOURCE = "cucumber.pro.fetch.from.source";
-    public static final String CUCUMBER_PRO_LOG_LEVEL = "cucumber.pro.log.level";
-    public static final String CUCUMBER_PROFILE_NAME = "cucumber.profile.name";
+    public static final String CUCUMBERPRO_TOKEN = "cucumberpro.token";
+    public static final String CUCUMBERPRO_URL = "cucumberpro.url";
+    public static final String CUCUMBERPRO_GIT_PUBLISH = "cucumberpro.git.publish";
+    public static final String CUCUMBERPRO_GIT_SSHPORT = "cucumberpro.git.sshport";
+    public static final String CUCUMBERPRO_GIT_HOSTNAME = "cucumberpro.git.hostname";
+    public static final String CUCUMBERPRO_GIT_HOSTKEY = "cucumberpro.git.hostkey";
+    public static final String CUCUMBERPRO_GIT_SOURCE_REMOTE = "cucumberpro.git.source.remote";
+    public static final String CUCUMBERPRO_GIT_SOURCE_FETCH = "cucumberpro.git.source.fetch";
+    public static final String CUCUMBERPRO_RESULTS_PUBLISH = "cucumberpro.results.publish";
+    public static final String CUCUMBERPRO_CONNECTION_IGNOREERROR = "cucumberpro.connection.ignoreerror";
+    public static final String CUCUMBERPRO_CONNECTION_TIMEOUT = "cucumberpro.connection.timeout";
+    public static final String CUCUMBERPRO_ENVMASK = "cucumberpro.envmask";
+    public static final String CUCUMBERPRO_LOGGING = "cucumberpro.logging";
+    public static final String CUCUMBERPRO_CUCUMBERPROFILE = "cucumberpro.cucumberprofile";
 
     // Revisions
     public static final String bamboo_planRepository_revision = "bamboo_planRepository_revision";
@@ -24,15 +24,14 @@ public class Keys {
     public static final String GIT_COMMIT = "GIT_COMMIT";
     public static final String TRAVIS_COMMIT = "TRAVIS_COMMIT";
 
-    // Activation (via CI)
-    public static final String CUCUMBER_PRO_PUBLISH = "cucumber.pro.publish";
+    // CI detection
     public static final String BUILD_NUMBER = "BUILD_NUMBER";
     public static final String CIRCLE_BUILD_NUM = "CIRCLE_BUILD_NUM";
     public static final String TRAVIS_JOB_NUMBER = "TRAVIS_JOB_NUMBER";
     public static final String bamboo_buildNumber = "bamboo_buildNumber";
 
     // Project name
-    public static final String CUCUMBER_PRO_PROJECT_NAME = "cucumber.pro.project.name";
+    public static final String CUCUMBERPRO_PROJECTNAME = "cucumberpro.project.name";
     // https://confluence.atlassian.com/bamboo/bamboo-variables-289277087.html
     public static final String bamboo_planRepository_name = "bamboo_planRepository_name";
     // https://circleci.com/docs/2.0/env-vars/#circleci-environment-variable-descriptions
@@ -40,29 +39,21 @@ public class Keys {
     // https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
     public static final String TRAVIS_REPO_SLUG = "TRAVIS_REPO_SLUG";
 
-    // Defaults
-    private static final String DEFAULT_CUCUMBER_PRO_URL = "https://app.cucumber.pro/";
-    private static final String DEFAULT_ENV_MASK = "SECRET|KEY|TOKEN|PASSWORD";
-    private static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
-    private static final String DEFAULT_GIT_HOST = "git.cucumber.pro";
-    private static final String DEFAULT_SOURCE_REMOTE_NAME = "origin";
-
     public static Config createConfig() {
         Config config = new Config();
-        config.setNull(CUCUMBER_PRO_TOKEN);
-        config.set(CUCUMBER_PRO_BASE_URL, DEFAULT_CUCUMBER_PRO_URL);
-        config.set(CUCUMBER_PRO_GIT_SSH_PORT, 22);
-        config.set(CUCUMBER_PRO_GIT_HOST, DEFAULT_GIT_HOST);
-        config.setNull(CUCUMBER_PRO_GIT_HOST_KEY);
-        config.set(CUCUMBER_PRO_GIT_DEBUG, false);
-        config.set(CUCUMBER_PRO_GIT_PUBLISH, false);
-        config.set(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true);
-        config.set(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, 5000);
-        config.set(CUCUMBER_PRO_ENV_MASK, DEFAULT_ENV_MASK);
-        config.set(CUCUMBER_PRO_SOURCE_REMOTE_NAME, DEFAULT_SOURCE_REMOTE_NAME);
-        config.set(CUCUMBER_PRO_FETCH_FROM_SOURCE, true);
-        config.set(CUCUMBER_PRO_LOG_LEVEL, "WARN");
-        config.set(CUCUMBER_PROFILE_NAME, DEFAULT_CUCUMBER_PROFILE_NAME);
+        config.setNull(CUCUMBERPRO_TOKEN);
+        config.set(CUCUMBERPRO_URL, "https://app.cucumber.pro/");
+        config.set(CUCUMBERPRO_GIT_SSHPORT, 22);
+        config.set(CUCUMBERPRO_GIT_HOSTNAME, "git.cucumber.pro");
+        config.setNull(CUCUMBERPRO_GIT_HOSTKEY);
+        config.set(CUCUMBERPRO_GIT_PUBLISH, false);
+        config.set(CUCUMBERPRO_CONNECTION_IGNOREERROR, true);
+        config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, 5000);
+        config.set(CUCUMBERPRO_ENVMASK, "SECRET|KEY|TOKEN|PASSWORD");
+        config.set(CUCUMBERPRO_GIT_SOURCE_REMOTE, "origin");
+        config.set(CUCUMBERPRO_GIT_SOURCE_FETCH, true);
+        config.set(CUCUMBERPRO_LOGGING, "WARN");
+        config.set(CUCUMBERPRO_CUCUMBERPROFILE, "cucumber-jvm-unspecified-profile");
 
         config.setNull(bamboo_planRepository_revision);
         config.setNull(CIRCLE_SHA1);
@@ -70,13 +61,13 @@ public class Keys {
         config.setNull(TRAVIS_COMMIT);
         config.setNull(bamboo_planRepository_revision);
 
-        config.setNull(CUCUMBER_PRO_PUBLISH);
+        config.setNull(CUCUMBERPRO_RESULTS_PUBLISH);
         config.setNull(BUILD_NUMBER);
         config.setNull(CIRCLE_BUILD_NUM);
         config.setNull(TRAVIS_JOB_NUMBER);
         config.setNull(bamboo_buildNumber);
 
-        config.setNull(CUCUMBER_PRO_PROJECT_NAME);
+        config.setNull(CUCUMBERPRO_PROJECTNAME);
         config.setNull(bamboo_planRepository_name);
         config.setNull(CIRCLE_PROJECT_REPONAME);
         config.setNull(TRAVIS_REPO_SLUG);

@@ -19,7 +19,7 @@ public class CucumberProUrlBuilderTest {
     @Test
     public void builds_url_for_appliance_when_env_var_is_set() {
         Config config = createConfig();
-        config.set(Keys.CUCUMBER_PRO_BASE_URL, "http://example.com:8090");
+        config.set(Keys.CUCUMBERPRO_URL, "http://example.com:8090");
         String url = CucumberProResultsUrlBuilder.buildCucumberProUrl(config, "my-project", "my-revision");
         assertEquals("http://example.com:8090/tests/results/my-project/my-revision", url);
     }

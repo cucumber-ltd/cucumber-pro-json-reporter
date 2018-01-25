@@ -49,7 +49,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
     HTTPResultsPublisher(String url, Config config, Logger logger) {
         this.url = url;
         this.config = config;
-        authToken = config.getString(Keys.CUCUMBER_PRO_TOKEN);
+        authToken = config.getString(Keys.CUCUMBERPRO_TOKEN);
         this.logger = logger;
     }
 
@@ -80,9 +80,9 @@ class HTTPResultsPublisher implements ResultsPublisher {
 
                 String suggestion = "";
                 if (statusCode == 401)
-                    suggestion = String.format("You need to define %s", Keys.CUCUMBER_PRO_TOKEN);
+                    suggestion = String.format("You need to define %s", Keys.CUCUMBERPRO_TOKEN);
                 if (statusCode == 403)
-                    suggestion = String.format("You need to change the value of %s", Keys.CUCUMBER_PRO_TOKEN);
+                    suggestion = String.format("You need to change the value of %s", Keys.CUCUMBERPRO_TOKEN);
 
                 throw new CucumberException(String.format(
                         "Failed to publish results to Cucumber Pro URL: %s, Status: %s\n%s\n%s",
@@ -93,10 +93,10 @@ class HTTPResultsPublisher implements ResultsPublisher {
                 ));
             }
         } catch (ConnectTimeoutException | HttpHostConnectException e) {
-            if (config.getBoolean(Keys.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR)) {
+            if (config.getBoolean(Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR)) {
                 logger.log(Logger.Level.WARN, "Failed to publish results to %s\n", url);
             } else {
-                throw new CucumberException(String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Keys.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
+                throw new CucumberException(String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR), e);
             }
         } catch (IOException e) {
             throw new CucumberException(e);
@@ -106,7 +106,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
     private HttpClient buildHttpClient() {
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
-        int timeout = config.getInteger(Keys.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS);
+        int timeout = config.getInteger(Keys.CUCUMBERPRO_CONNECTION_TIMEOUT);
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout).build();
         httpClientBuilder.setDefaultRequestConfig(requestConfig);
 

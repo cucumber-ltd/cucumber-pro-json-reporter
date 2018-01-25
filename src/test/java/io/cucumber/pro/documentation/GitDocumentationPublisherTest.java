@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static io.cucumber.pro.Keys.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR;
+import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR;
 import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -18,7 +18,7 @@ public class GitDocumentationPublisherTest {
     @Test
     public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
         Config config = createConfig();
-        config.set(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "false");
+        config.set(CUCUMBERPRO_CONNECTION_IGNOREERROR, "false");
         TestLogger logger = new TestLogger();
 
         GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
@@ -33,7 +33,7 @@ public class GitDocumentationPublisherTest {
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
-            assertEquals("You can set cucumber.pro.ignore.connection.error to true to treat this as a warning instead of an error", suggestion);
+            assertEquals("You can set cucumberpro.connection.ignoreerror to true to treat this as a warning instead of an error", suggestion);
         }
     }
 

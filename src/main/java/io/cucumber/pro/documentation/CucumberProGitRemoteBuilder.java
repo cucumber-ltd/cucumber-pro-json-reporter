@@ -12,7 +12,7 @@ class CucumberProGitRemoteBuilder {
         String template = "git@{gitHost}:{projectName}.git";
         URITemplate uriTemplate = new URITemplate(template);
         return uriTemplate.expand(new HashMap<String, String>() {{
-            put("gitHost", config.getString(Keys.CUCUMBER_PRO_GIT_HOST));
+            put("gitHost", config.getString(Keys.CUCUMBERPRO_GIT_HOSTNAME));
             put("projectName", projectName);
         }});
     }

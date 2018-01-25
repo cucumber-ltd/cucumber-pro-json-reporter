@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static io.cucumber.pro.Keys.CUCUMBERPRO_ENVMASK;
 import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 
@@ -31,7 +32,7 @@ public class FilteredEnvTest {
     @Test
     public void allows_overriding_mask() {
         HashMap<String, String> env = new HashMap<String, String>() {{
-            put("CUCUMBER_PRO_ENV_MASK", "KEY|TOKEN");
+            put("CUCUMBERPRO_ENVMASK", "KEY|TOKEN");
             put("my_secret__token", "abcd");
             put("MY_SECRET_TOKEN", "abcd");
             put("A_KEY_TO_A_DOOR", "clef");
@@ -44,6 +45,6 @@ public class FilteredEnvTest {
         new EnvironmentVariablesConfigLoader(env).load(config);
         FilteredEnv filteredEnv = new FilteredEnv(env, config);
         String actual = filteredEnv.toString();
-        assertEquals("ALPHA=BETA\nCUCUMBER_PRO_ENV_MASK=KEY|TOKEN\nDOO=dar\nFOO=BAR\nPASSWORD_A=drowssap\n", actual);
+        assertEquals("ALPHA=BETA\nCUCUMBERPRO_ENVMASK=KEY|TOKEN\nDOO=dar\nFOO=BAR\nPASSWORD_A=drowssap\n", actual);
     }
 }

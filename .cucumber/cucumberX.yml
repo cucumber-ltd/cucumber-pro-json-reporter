@@ -1,0 +1,55 @@
+cucumberpro:
+  projectname:
+  url: https://app.cucumber.pro/
+  cucumberprofile: cucumber-jvm-unspecified-profile
+  publish:
+  token:
+  envmask: SECRET|KEY|TOKEN|PASSWORD
+  git:
+    publish: false
+    debug: false
+    hostname: git.cucumber.pro
+    sshport: 22
+    hostkey:
+    source:
+      fetch: true
+      remote: origin
+  logging: debug
+  connection:
+    timeout: 5000
+    ignoreerror: true
+
+#cucumber:
+#  profile:
+#    name: cucumber-jvm-unspecified-profile
+#  pro:
+#    publish: null
+#    token: null
+#    git:
+#      debug: false
+#      publish: false
+#      host: git.cucumber.pro
+#      host:
+#        key: null
+#      ssh:
+#        port: 22
+#    log:
+#      level: debug
+#    fetch:
+#      from:
+#        source: true
+#    ignore:
+#      connection:
+#        error: true
+#    project:
+#      name: null
+#    connection:
+#      timeout:
+#        millis: 5000
+#    source:
+#      remote:
+#        name: origin
+#    env:
+#      mask: SECRET|KEY|TOKEN|PASSWORD
+#    base:
+#      url: https://app.cucumber.pro/

@@ -16,8 +16,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static io.cucumber.pro.Keys.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS;
-import static io.cucumber.pro.Keys.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR;
+import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_TIMEOUT;
+import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR;
 import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -81,15 +81,15 @@ public class HTTPResultsPublisherTest {
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
-            assertEquals("You need to define cucumber.pro.token", suggestion);
+            assertEquals("You need to define cucumberpro.token", suggestion);
         }
     }
 
     @Test
     public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
         Config config = createConfig();
-        config.set(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "false");
-        config.set(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
+        config.set(CUCUMBERPRO_CONNECTION_IGNOREERROR, "false");
+        config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
@@ -97,14 +97,14 @@ public class HTTPResultsPublisherTest {
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
-            assertEquals("You can set cucumber.pro.ignore.connection.error to true to treat this as a warning instead of an error", suggestion);
+            assertEquals("You can set cucumberpro.connection.ignoreerror to true to treat this as a warning instead of an error", suggestion);
         }
     }
 
     @Test
     public void prints_error_on_connection_timeout() throws InterruptedException, IOException {
         Config config = createConfig();
-        config.set(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
+        config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
         TestLogger logger = new TestLogger();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");

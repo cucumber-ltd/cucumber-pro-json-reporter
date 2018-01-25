@@ -14,7 +14,7 @@ class FilteredEnv {
     private final Map<String, String> env;
 
     FilteredEnv(Map<String, String> env, Config config) {
-        String mask = config.getString(Keys.CUCUMBER_PRO_ENV_MASK);
+        String mask = config.getString(Keys.CUCUMBERPRO_ENVMASK);
         this.maskPattern = Pattern.compile(String.format(".*(%s).*", mask), Pattern.CASE_INSENSITIVE);
         this.env = env;
     }
