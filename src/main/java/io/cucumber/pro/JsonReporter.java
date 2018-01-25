@@ -27,12 +27,16 @@ public class JsonReporter implements Formatter {
     private final FilteredEnv filteredEnv;
     private final ResultsPublisher resultsPublisher;
     private final String profileName;
+    private final Logger logger;
     private final DocumentationPublisher documentationPublisher;
+    private final Config config;
 
-    JsonReporter(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, String profileName, Config config, Map<String, String> env) {
+    JsonReporter(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, String profileName, Config config, Logger logger, Map<String, String> env) {
         this.documentationPublisher = documentationPublisher;
         this.resultsPublisher = resultsPublisher;
         this.profileName = profileName;
+        this.config = config;
+        this.logger = logger;
         try {
             jsonFile = File.createTempFile("cucumber-json", ".json");
         } catch (IOException e) {
@@ -53,7 +57,9 @@ public class JsonReporter implements Formatter {
                 ),
                 profileName,
                 CONFIG,
-                System.getenv());
+                LOGGER,
+                System.getenv()
+        );
     }
 
     public JsonReporter() {
@@ -81,6 +87,7 @@ public class JsonReporter implements Formatter {
                 publisher.registerHandlerFor(TestRunFinished.class, new EventHandler<TestRunFinished>() {
                     @Override
                     public void receive(TestRunFinished event) {
+                        JsonReporter.this.logger.log(Logger.Level.DEBUG, "%s config:\n\n%s", JsonReporter.class.getName(), JsonReporter.this.config.toYaml("cucumber"));
                         JsonReporter.this.documentationPublisher.publish();
                         JsonReporter.this.resultsPublisher.publish(jsonFile, filteredEnv.toString(), profileName);
                     }

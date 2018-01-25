@@ -33,11 +33,13 @@ public class JsonReporterTest {
         new EnvironmentVariablesConfigLoader(env).load(config);
         CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
         String profileName = config.getString(Env.CUCUMBER_PROFILE_NAME);
+        Logger logger = new TestLogger();
         Formatter reporter = new JsonReporter(
                 new NullDocumentationPublisher(),
                 resultsPublisher,
                 profileName,
                 config,
+                logger,
                 env);
 
         TimeService timeService = TimeService.SYSTEM;

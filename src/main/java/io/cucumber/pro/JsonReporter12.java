@@ -12,6 +12,7 @@ import io.cucumber.pro.results.ResultsPublisherFactory;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
 
 public class JsonReporter12 extends JSONFormatter {
 
@@ -28,17 +29,21 @@ public class JsonReporter12 extends JSONFormatter {
         }
     }
 
+    private final Config config;
+    private final Logger logger;
     private final FilteredEnv filteredEnv;
     private final ResultsPublisher resultsPublisher;
     private final String profileName;
     private final DocumentationPublisher documentationPublisher;
 
-    JsonReporter12(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, String profileName) throws IOException {
+    JsonReporter12(DocumentationPublisher documentationPublisher, ResultsPublisher resultsPublisher, String profileName, Config config, Logger logger, Map<String, String> env) throws IOException {
         super(new FileWriter(jsonFile));
         this.documentationPublisher = documentationPublisher;
         this.resultsPublisher = resultsPublisher;
         this.profileName = profileName;
-        this.filteredEnv = new FilteredEnv(System.getenv(), CONFIG);
+        this.config = config;
+        this.logger = logger;
+        this.filteredEnv = new FilteredEnv(env, CONFIG);
     }
 
     JsonReporter12(String profileName) throws IOException {
@@ -48,7 +53,10 @@ public class JsonReporter12 extends JSONFormatter {
                         CONFIG,
                         LOGGER
                 ),
-                profileName
+                profileName,
+                CONFIG,
+                LOGGER,
+                System.getenv()
         );
     }
 
@@ -60,6 +68,7 @@ public class JsonReporter12 extends JSONFormatter {
     @Override
     public void close() {
         super.close();
+        logger.log(Logger.Level.DEBUG, "%s config:\n\n%s", getClass().getName(), config.toYaml("cucumber"));
         this.documentationPublisher.publish();
         this.resultsPublisher.publish(jsonFile, filteredEnv.toString(), profileName);
     }
