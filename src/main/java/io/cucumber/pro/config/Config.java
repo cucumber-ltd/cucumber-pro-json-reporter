@@ -7,67 +7,83 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static java.lang.Integer.parseInt;
-
 /**
  * Nested configuration. Keys are hierarchical.
  */
 public class Config {
-    private final Map<String, String> valueByKey = new HashMap<>();
-    private final Map<String, Config> configByKey = new HashMap<>();
+    private final Map<String, Value> valueByProperty = new HashMap<>();
+    private final Map<String, Config> configByProperty = new HashMap<>();
 
-    public String get(String key) {
-        return get(key, null);
+    public String getString(String key) {
+        return getIn(normalize(key)).getString();
     }
 
-    public String get(String key, String notSetValue) {
-        return getIn(toPath(key), notSetValue);
+    public Boolean getBoolean(String key) {
+        return getIn(normalize(key)).getBoolean();
     }
 
-    public boolean getBoolean(String key, boolean notSetValue) {
-        String value = get(key);
-        if (value != null) return !value.matches("false|no");
-        return notSetValue;
+    public Integer getInteger(String key) {
+        return getIn(normalize(key)).getInt();
     }
 
-    public int getInt(String key, int notSetValue) {
-        return parseInt(get(key, Integer.toString(notSetValue)));
+    public boolean isNull(String key) {
+        return getIn(normalize(key)).isNull();
     }
 
-    // Use by loaders
+    public void setNull(String key) {
+        setIn(normalize(key), new NullValue());
+    }
+
     public void set(String key, String value) {
-        setIn(toPath(key), value);
+        setIn(normalize(key), RealValue.fromString(value));
+    }
+
+    public void set(String key, int value) {
+        setIn(normalize(key), RealValue.fromInt(value));
+    }
+
+    public void set(String key, boolean value) {
+        setIn(normalize(key), RealValue.fromBoolean(value));
+    }
+
+    private void set(String key, Value value) {
+        setIn(normalize(key), value);
     }
 
     // Use by loaders
-    void setValue(String key, String value) {
-        this.valueByKey.put(key.toLowerCase(), value);
+    void setValue(String property, Value value) {
+        this.valueByProperty.put(property.toLowerCase(), value);
     }
 
-    void setConfig(String key, Config childConfig) {
-        this.configByKey.put(key.toLowerCase(), childConfig);
+    void setConfig(String property, Config childConfig) {
+        this.configByProperty.put(property.toLowerCase(), childConfig);
     }
 
-    private String getValue(String key, String notSetValue) {
-        String value = this.valueByKey.get(key.toLowerCase());
-        return value != null ? value : notSetValue;
+    private Value getValue(String property) {
+        return this.valueByProperty.get(property.toLowerCase());
     }
 
-    private String getIn(List<String> path, String notSetValue) {
+    private Value getIn(String normalizedKey) {
+        List<String> path = toPath(normalizedKey);
         Config config = this;
         for (int i = 0; i < path.size(); i++) {
-            String key = path.get(i);
+            String property = path.get(i);
             if (i == path.size() - 1) {
-                return config.getValue(key, notSetValue);
+                Value value = config.getValue(property);
+                if (value != null) return value;
+                throw new UndefinedKeyException(normalizedKey);
             } else {
-                config = config.getChild(key.toLowerCase());
-                if (config == null) return notSetValue;
+                config = config.getChild(property.toLowerCase());
+                if (config == null) {
+                    throw new UndefinedKeyException(normalizedKey);
+                }
             }
         }
         throw new RuntimeException("path cannot be empty");
     }
 
-    private void setIn(List<String> path, String value) {
+    private void setIn(String normalizedKey, Value value) {
+        List<String> path = toPath(normalizedKey);
         Config config = this;
         for (int i = 0; i < path.size(); i++) {
             String key = path.get(i);
@@ -86,7 +102,7 @@ public class Config {
     }
 
     private Config getChild(String key) {
-        return configByKey.get(key);
+        return configByProperty.get(key);
     }
 
     public String toYaml(String rootKey) {
@@ -100,13 +116,13 @@ public class Config {
     }
 
     private void print(int depth, String rootKey, Appendable out) throws IOException {
-        for (Map.Entry<String, String> entry : valueByKey.entrySet()) {
+        for (Map.Entry<String, Value> entry : valueByProperty.entrySet()) {
             if (rootKey == null || rootKey.equals(entry.getKey())) {
                 indent(depth, out);
-                out.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+                out.append(entry.getKey()).append(": ").append(entry.getValue().getString()).append("\n");
             }
         }
-        for (Map.Entry<String, Config> entry : configByKey.entrySet()) {
+        for (Map.Entry<String, Config> entry : configByProperty.entrySet()) {
             if (rootKey == null || rootKey.equals(entry.getKey())) {
                 indent(depth, out);
                 out.append(entry.getKey()).append(":\n");
@@ -123,6 +139,10 @@ public class Config {
     }
 
     private List<String> toPath(String key) {
-        return Arrays.asList(key.replace('_', '.').toLowerCase(Locale.ENGLISH).split("\\."));
+        return Arrays.asList(normalize(key).split("\\."));
+    }
+
+    private String normalize(String key) {
+        return key.replace('_', '.').toLowerCase(Locale.ENGLISH);
     }
 }

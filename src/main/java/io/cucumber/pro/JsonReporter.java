@@ -20,7 +20,6 @@ import java.util.Map;
 
 public class JsonReporter implements Formatter {
 
-    static final String DEFAULT_CUCUMBER_PROFILE_NAME = "cucumber-jvm-unspecified-profile";
     private static final Config CONFIG = ConfigFactory.create();
     private static final Logger LOGGER = new Logger.SystemLogger(CONFIG);
     private final Formatter jsonFormatter;
@@ -58,7 +57,7 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter() {
-        this(CONFIG.get(Env.CUCUMBER_PROFILE_NAME, DEFAULT_CUCUMBER_PROFILE_NAME));
+        this(CONFIG.getString(Env.CUCUMBER_PROFILE_NAME));
     }
 
     @Override

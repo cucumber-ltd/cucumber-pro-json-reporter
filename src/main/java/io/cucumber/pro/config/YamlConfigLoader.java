@@ -51,7 +51,7 @@ public class YamlConfigLoader implements ConfigLoader {
             String key = entry.getKey();
             Object value = entry.getValue();
             if (value instanceof String) {
-                config.setValue(key, (String) value);
+                config.setValue(key, new RealValue((String) value));
             } else if (value instanceof Map) {
                 Config childConfig = new Config();
                 config.setConfig(key, childConfig);

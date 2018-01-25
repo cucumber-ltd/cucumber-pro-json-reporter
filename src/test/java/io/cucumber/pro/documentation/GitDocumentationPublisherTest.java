@@ -10,13 +10,14 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static io.cucumber.pro.Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR;
+import static io.cucumber.pro.Env.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class GitDocumentationPublisherTest {
     @Test
     public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
-        Config config = new Config();
+        Config config = createConfig();
         config.set(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "false");
         TestLogger logger = new TestLogger();
 
@@ -38,7 +39,7 @@ public class GitDocumentationPublisherTest {
 
     @Test
     public void prints_error_on_connection_timeout() throws InterruptedException, IOException {
-        Config config = new Config();
+        Config config = createConfig();
         TestLogger logger = new TestLogger();
         GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
                 "git@0.0.0.0",
@@ -52,7 +53,7 @@ public class GitDocumentationPublisherTest {
 
     @Test
     public void fetches_without_throwing_an_exception() throws IOException {
-        Config config = new Config();
+        Config config = createConfig();
         TestLogger logger = new TestLogger();
         Git git = GitDocumentationPublisher.getGit();
         GitDocumentationPublisher publisher = new GitDocumentationPublisher(null, config, logger);

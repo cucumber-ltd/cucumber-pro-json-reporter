@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import static io.cucumber.pro.Env.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS;
 import static io.cucumber.pro.Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR;
+import static io.cucumber.pro.Env.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -55,7 +56,7 @@ public class HTTPResultsPublisherTest {
                 }).build();
         server.start();
 
-        Config config = new Config();
+        Config config = createConfig();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
     }
@@ -72,7 +73,7 @@ public class HTTPResultsPublisherTest {
                 }).build();
         server.start();
 
-        Config config = new Config();
+        Config config = createConfig();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
             publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
@@ -86,7 +87,7 @@ public class HTTPResultsPublisherTest {
 
     @Test
     public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
-        Config config = new Config();
+        Config config = createConfig();
         config.set(CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, "false");
         config.set(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
@@ -102,7 +103,7 @@ public class HTTPResultsPublisherTest {
 
     @Test
     public void prints_error_on_connection_timeout() throws InterruptedException, IOException {
-        Config config = new Config();
+        Config config = createConfig();
         config.set(CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, "100");
         TestLogger logger = new TestLogger();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);

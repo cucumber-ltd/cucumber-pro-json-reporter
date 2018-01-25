@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.cucumber.pro.Env.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -28,13 +29,14 @@ public class JsonReporterTest {
             put("PASSWORD", "secret");
 
         }};
-        Config config = new Config();
+        Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
         CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
+        String profileName = config.getString(Env.CUCUMBER_PROFILE_NAME);
         Formatter reporter = new JsonReporter(
                 new NullDocumentationPublisher(),
                 resultsPublisher,
-                JsonReporter.DEFAULT_CUCUMBER_PROFILE_NAME,
+                profileName,
                 config,
                 env);
 

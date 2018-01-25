@@ -7,13 +7,14 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static io.cucumber.pro.Env.createConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RevisionProviderFactoryTest {
     @Test
     public void finds_revision_from_environment_variable() {
-        Config config = new Config();
+        Config config = createConfig();
         config.set(Env.bamboo_planRepository_revision, "foo");
         RevisionProvider revisionProvider = RevisionProviderFactory.create(config, null);
         assertEquals("foo", revisionProvider.getRevision());
@@ -21,7 +22,7 @@ public class RevisionProviderFactoryTest {
 
     @Test
     public void falls_back_to_find_revision_from_git() {
-        Config config = new Config();
+        Config config = createConfig();
         RevisionProvider revisionProvider = RevisionProviderFactory.create(config, new TestLogger());
         assertTrue(
                 String.format("Not a git revision: %s", revisionProvider.getRevision()),

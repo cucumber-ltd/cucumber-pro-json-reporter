@@ -21,7 +21,7 @@ public class EnvMetadata implements Metadata {
     @Override
     public String getProjectName() {
         for (String envVar : ENV_PROJECT_NAME_VARS) {
-            String value = config.get(envVar);
+            String value = config.getString(envVar);
             if (value == null) continue;
             if (envVar.equals(ENV_TRAVIS_REPO_SLUG)) {
                 return value.split("/")[1];

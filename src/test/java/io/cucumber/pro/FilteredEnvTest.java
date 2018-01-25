@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static io.cucumber.pro.Env.createConfig;
 import static org.junit.Assert.assertEquals;
 
 public class FilteredEnvTest {
@@ -20,7 +21,7 @@ public class FilteredEnvTest {
             put("DOO", "dar");
             put("PASSWORD_A", "drowssap");
         }};
-        Config config = new Config();
+        Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
         FilteredEnv filteredEnv = new FilteredEnv(env, config);
         String actual = filteredEnv.toString();
@@ -39,7 +40,7 @@ public class FilteredEnvTest {
             put("DOO", "dar");
             put("PASSWORD_A", "drowssap");
         }};
-        Config config = new Config();
+        Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
         FilteredEnv filteredEnv = new FilteredEnv(env, config);
         String actual = filteredEnv.toString();

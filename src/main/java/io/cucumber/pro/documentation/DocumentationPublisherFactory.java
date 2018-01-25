@@ -13,15 +13,15 @@ public class DocumentationPublisherFactory {
         boolean isActive = new EnvActivation(config).isActive();
         if (!isActive) return new NullDocumentationPublisher();
 
-        if (config.getBoolean(Env.CUCUMBER_PRO_GIT_PUBLISH, false)) {
+        if (config.getBoolean(Env.CUCUMBER_PRO_GIT_PUBLISH)) {
             String projectName = MetadataFactory.create(config).getProjectName();
             if (projectName == null)
                 throw new CucumberException("Couldn't detect project name. Can't publish documentation to git.");
 
             GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
                     CucumberProGitRemoteBuilder.buildCucumberProUrl(config, projectName),
-                    config.getInt(Env.CUCUMBER_PRO_GIT_SSH_PORT, 22),
-                    config.get(Env.CUCUMBER_PRO_GIT_HOST_KEY)
+                    config.getInteger(Env.CUCUMBER_PRO_GIT_SSH_PORT),
+                    config.getString(Env.CUCUMBER_PRO_GIT_HOST_KEY)
             );
             return new GitDocumentationPublisher(pushSpec, config, logger);
         } else {

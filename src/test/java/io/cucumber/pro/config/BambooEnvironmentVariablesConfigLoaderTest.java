@@ -24,8 +24,8 @@ public class BambooEnvironmentVariablesConfigLoaderTest extends ConfigLoaderCont
         new BambooEnvironmentVariablesConfigLoader(env).load(config);
         new EnvironmentVariablesConfigLoader(env).load(config);
 
-        assertEquals("X", config.get("bamboo_FOO"));
-        assertEquals("X", config.get("FOO"));
+        assertEquals("X", config.getString("bamboo_FOO"));
+        assertEquals("X", config.getString("FOO"));
     }
 
     @Test
@@ -39,6 +39,6 @@ public class BambooEnvironmentVariablesConfigLoaderTest extends ConfigLoaderCont
         new BambooEnvironmentVariablesConfigLoader(env).load(config);
         new EnvironmentVariablesConfigLoader(env).load(config);
 
-        assertEquals("Y", config.get("BAR"));
+        assertEquals("Y", config.getString("BAR"));
     }
 }

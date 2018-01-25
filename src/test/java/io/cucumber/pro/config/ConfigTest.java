@@ -5,29 +5,24 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ConfigTest {
     @Test
     public void gets_and_sets_value() {
         Config config = new Config();
-        config.setValue("name", "progress");
-        assertEquals("progress", config.get("name"));
+        config.set("name", "progress");
+        assertEquals("progress", config.getString("name"));
     }
 
     @Test
     public void gets_boolean() {
         Config config = new Config();
-        config.setValue("a", "true");
-        config.setValue("b", "false");
+        config.set("a", true);
+        config.set("b", false);
 
-        assertTrue(config.getBoolean("a", false));
-        assertFalse(config.getBoolean("b", false));
-
-        assertTrue(config.getBoolean("a", true));
-        assertFalse(config.getBoolean("b", true));
-
-        assertFalse(config.getBoolean("c", false));
-        assertTrue(config.getBoolean("c", true));
+        assertTrue(config.getBoolean("a"));
+        assertFalse(config.getBoolean("b"));
     }
 
     @Test
@@ -40,8 +35,19 @@ public class ConfigTest {
         Config two = new Config();
         one.setConfig("two", two);
 
-        two.setValue("hello", "world");
-        assertEquals("world", root.get("one.two.hello"));
+        two.set("hello", "world");
+        assertEquals("world", root.getString("one.two.hello"));
+    }
+
+    @Test
+    public void throws_exception_when_no_value_set() {
+        Config config = new Config();
+        try {
+            config.getString("not.set");
+            fail();
+        } catch (UndefinedKeyException expected) {
+            assertEquals("No such key: not.set", expected.getMessage());
+        }
     }
 
     @Test

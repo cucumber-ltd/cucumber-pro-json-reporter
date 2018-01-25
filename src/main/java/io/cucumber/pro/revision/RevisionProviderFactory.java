@@ -14,11 +14,11 @@ public class RevisionProviderFactory {
 
     public static RevisionProvider create(final Config config, Logger logger) {
         for (final String envVar : REVISION_ENV_VARS) {
-            if (config.get(envVar) != null) {
+            if (!config.isNull(envVar)) {
                 return new RevisionProvider() {
                     @Override
                     public String getRevision() {
-                        return config.get(envVar);
+                        return config.getString(envVar);
                     }
                 };
             }

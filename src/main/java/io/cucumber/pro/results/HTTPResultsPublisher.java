@@ -49,7 +49,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
     HTTPResultsPublisher(String url, Config config, Logger logger) {
         this.url = url;
         this.config = config;
-        authToken = config.get(Env.CUCUMBER_PRO_TOKEN, null);
+        authToken = config.getString(Env.CUCUMBER_PRO_TOKEN);
         this.logger = logger;
     }
 
@@ -93,7 +93,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
                 ));
             }
         } catch (ConnectTimeoutException | HttpHostConnectException e) {
-            if (config.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true)) {
+            if (config.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR)) {
                 logger.log(Logger.Level.WARN, "Failed to publish results to %s\n", url);
             } else {
                 throw new CucumberException(String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR), e);
@@ -106,7 +106,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
     private HttpClient buildHttpClient() {
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
-        int timeout = config.getInt(Env.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS, 5000);
+        int timeout = config.getInteger(Env.CUCUMBER_PRO_CONNECTION_TIMEOUT_MILLIS);
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout).build();
         httpClientBuilder.setDefaultRequestConfig(requestConfig);
 

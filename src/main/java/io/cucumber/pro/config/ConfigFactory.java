@@ -1,8 +1,10 @@
 package io.cucumber.pro.config;
 
+import static io.cucumber.pro.Env.createConfig;
+
 public class ConfigFactory {
     public static Config create() {
-        Config config = new Config();
+        Config config = createConfig();
 
         // TODO: is this the right order?
         YamlConfigLoader.create().load(config);

@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class GitDocumentationPublisher implements DocumentationPublisher {
-    private static final String DEFAULT_SOURCE_REMOTE_NAME = "origin";
     private final RemoteSpec pushSpec;
     private final Logger logger;
     private final boolean ignoreConnectionError;
@@ -50,12 +49,12 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
     GitDocumentationPublisher(RemoteSpec pushSpec, Config config, Logger logger) {
         this.pushSpec = pushSpec;
         this.logger = logger;
-        if (config.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG, false)) {
+        if (config.getBoolean(Env.CUCUMBER_PRO_GIT_DEBUG)) {
             JSch.setLogger(new JschLogger(logger));
         }
-        ignoreConnectionError = config.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR, true);
-        fetchRemoteName = config.get(Env.CUCUMBER_PRO_SOURCE_REMOTE_NAME, DEFAULT_SOURCE_REMOTE_NAME);
-        fetchFromSource = config.getBoolean(Env.CUCUMBER_PRO_FETCH_FROM_SOURCE, true);
+        ignoreConnectionError = config.getBoolean(Env.CUCUMBER_PRO_IGNORE_CONNECTION_ERROR);
+        fetchRemoteName = config.getString(Env.CUCUMBER_PRO_SOURCE_REMOTE_NAME);
+        fetchFromSource = config.getBoolean(Env.CUCUMBER_PRO_FETCH_FROM_SOURCE);
     }
 
     private static <C extends GitCommand, R> void configureSsh(RemoteSpec remoteSpec, TransportCommand<C, R> push) throws JSchException {

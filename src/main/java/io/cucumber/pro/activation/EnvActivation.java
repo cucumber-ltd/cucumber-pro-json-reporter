@@ -20,7 +20,9 @@ public class EnvActivation implements Activation {
     @Override
     public boolean isActive() {
         for (String envVar : ACTIVATION_ENV_VARS) {
-            if (config.getBoolean(envVar, false)) return true;
+            // false by default
+            Boolean aBoolean = config.getBoolean(envVar);
+            if (aBoolean) return true;
         }
         return false;
 
