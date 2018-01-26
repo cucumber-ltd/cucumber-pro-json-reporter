@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [2.0.0] - 2018-01-26
+
+### Added
+
+* Ability to specify all settings in YAML (`/usr/local/etc/cucumber/cucumber.yml` and `./cucumber.yml`)
+* Ability to specify all settings as Java System properties
+
+### Deprecated
+
+* Most existing environment variables are deprecated and replaced with a different name.
+  The old ones will work until version 3.0.0.
+
 ## [1.2.9] - 2018-01-09
 
 ### Changed
@@ -125,7 +137,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.9...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.9...v2.0.0
 [1.2.8]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.7...v1.2.9
 [1.2.7]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.6...v1.2.7
 [1.2.6]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.5...v1.2.6

@@ -22,7 +22,7 @@ Add the following dependency to your `pom.xml`:
 <dependency>
     <groupId>io.cucumber</groupId>
     <artifactId>pro-plugin</artifactId>
-    <version>1.2.9</version>
+    <version>2.0.0</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -147,8 +147,11 @@ cucumberpro:
 Depending on your environment you will have to override some of the defaults, or specify some of the
 settings that don't have a default value.
 
-The simplest way to override defaults is to create a file called `.cucumberpro.yml` at the root of your
+The simplest way to override defaults is to create a file called `./cucumber.yml` at the root of your
 repository, paste the above contents and make modifications. Then check it in to source control.
+(If you already have this file, just add the content to the bottom).
+
+You can also create a `/usr/local/etc/cucumber/cucumber.yml` file to define global settings.
 
 Every setting can also be overridden with environment variables or Java system properties.
 
