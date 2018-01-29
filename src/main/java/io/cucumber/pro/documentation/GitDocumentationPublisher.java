@@ -174,6 +174,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         PushCommand push = git.push();
         push.setProgressMonitor(new TextProgressMonitor());
         push.setRemote(pushSpec.remote);
+        push.setForce(true);
         configureSsh(pushSpec, push);
 
         Iterable<PushResult> result = push.call();
