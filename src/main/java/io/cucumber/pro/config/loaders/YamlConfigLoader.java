@@ -46,20 +46,21 @@ public class YamlConfigLoader implements ConfigLoader {
 
     private void populate(Config config, Map<String, Object> map) {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            String key = entry.getKey();
-            key = key.replaceAll("_", "");
+            String property = entry.getKey();
+            property = property.replaceAll("_", "");
             Object value = entry.getValue();
             if (value == null) {
-                config.setNull(key);
+                config.setNull(property);
             } else if (value instanceof String) {
-                config.setValue(key, RealValue.fromString((String) value));
+                config.setValue(property, RealValue.fromString((String) value));
             } else if (value instanceof Boolean) {
-                config.setValue(key, RealValue.fromBoolean((Boolean) value));
+                config.setValue(property, RealValue.fromBoolean((Boolean) value));
             } else if (value instanceof Integer) {
-                config.setValue(key, RealValue.fromInteger((Integer) value));
+                config.setValue(property, RealValue.fromInteger((Integer) value));
             } else if (value instanceof Map) {
-                Config childConfig = new Config();
-                config.setConfig(key, childConfig);
+//                Config childConfig = new Config();
+                Config childConfig = config.getChild(property);
+//                config.setConfig(property, childConfig);
                 populate(childConfig, (Map<String, Object>) value);
             } else {
                 throw new RuntimeException(String.format("Unsupported YAML type: %s (%s)", value, value.getClass()));

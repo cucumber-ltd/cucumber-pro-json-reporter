@@ -51,8 +51,11 @@ public class Config {
         this.valueByProperty.put(property.toLowerCase(), value);
     }
 
-    public void setConfig(String property, Config childConfig) {
-        this.configByProperty.put(property.toLowerCase(), childConfig);
+    public Config getChild(String property) {
+        if (!this.configByProperty.containsKey(property.toLowerCase())) {
+            this.configByProperty.put(property.toLowerCase(), new Config());
+        }
+        return this.configByProperty.get(property.toLowerCase());
     }
 
     private Value getValue(String property) {
@@ -84,23 +87,14 @@ public class Config {
         List<String> path = toPath(normalizedKey);
         Config config = this;
         for (int i = 0; i < path.size(); i++) {
-            String key = path.get(i);
+            String property = path.get(i);
             if (i == path.size() - 1) {
-                config.setValue(key, value);
+                config.setValue(property, value);
                 return;
             } else {
-                Config childConfig = config.getChild(key.toLowerCase());
-                if (childConfig == null) {
-                    childConfig = new Config();
-                    config.setConfig(key, childConfig);
-                }
-                config = childConfig;
+                config = config.getChild(property.toLowerCase());
             }
         }
-    }
-
-    private Config getChild(String key) {
-        return configByProperty.get(key);
     }
 
     public String toYaml(String rootKey) {

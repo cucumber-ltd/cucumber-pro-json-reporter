@@ -27,7 +27,26 @@ public class YamlConfigLoaderTest extends ConfigLoaderContract {
     }
 
     @Test
-    public void roundtips() {
+    public void merges() {
+        Config config = new Config();
+        new YamlConfigLoader(new StringReader("" +
+                "cucumberpro:\n" +
+                "  one: un\n")).load(config);
+
+        new YamlConfigLoader(new StringReader("" +
+                "cucumberpro:\n" +
+                "  two: deux\n")).load(config);
+
+        String yaml = "" +
+                "cucumberpro:\n" +
+                "  one: un\n" +
+                "  two: deux\n";
+        assertEquals(yaml, config.toYaml("cucumberpro"));
+
+    }
+
+    @Test
+    public void roundtrips() {
         String yaml = "" +
                 "cucumberpro:\n" +
                 "  cucumberprofile: cucumber-jvm-unspecified-profile\n" +

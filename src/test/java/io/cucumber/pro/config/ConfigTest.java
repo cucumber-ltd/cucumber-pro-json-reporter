@@ -29,11 +29,8 @@ public class ConfigTest {
     public void gets_deep_value() {
         Config root = new Config();
 
-        Config one = new Config();
-        root.setConfig("one", one);
-
-        Config two = new Config();
-        one.setConfig("two", two);
+        Config one = root.getChild("one");
+        Config two = one.getChild("two");
 
         two.set("hello", "world");
         assertEquals("world", root.getString("one.two.hello"));
