@@ -11,13 +11,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-* Use force push for git publishing
-
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+## [2.0.1] - 2018-01-31
+
+### Added
+
+* Make it easy to publish results from a local machine with a minimum `cucumber.yml`:
+  ```angularjs
+  cucumberpro:
+    projectname: your-cucumber-pro-project-name
+    results:
+      token: your-cucumber-pro-project-token
+      publish: true
+  ```
+  See docs for more details about configuration.
+
+### Changed
+
+* Use force push for git publishing
 
 ## [2.0.0] - 2018-01-26
 
@@ -139,7 +155,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.1...HEAD
+[2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.9...v2.0.0
 [1.2.8]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.7...v1.2.9
 [1.2.7]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.6...v1.2.7
