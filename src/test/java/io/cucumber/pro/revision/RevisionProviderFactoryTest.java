@@ -13,9 +13,11 @@ public class RevisionProviderFactoryTest {
     @Test
     public void finds_revision_from_environment_variable() {
         Config config = createConfig();
-        config.set(Keys.bamboo_planRepository_revision, "foo");
-        RevisionProvider revisionProvider = RevisionProviderFactory.create(config, null);
-        assertEquals("foo", revisionProvider.getRevision());
+        config.set(Keys.bamboo_planRepository_revision, "rev");
+        config.set(Keys.bamboo_repository_git_branch, "branch");
+        config.set(Keys.bamboo_buildNumber, "number");
+        RevisionProvider revisionProvider = RevisionProviderFactory.create(config, new TestLogger());
+        assertEquals("rev", revisionProvider.getRevision());
     }
 
     @Test

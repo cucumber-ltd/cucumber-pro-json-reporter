@@ -1,18 +1,19 @@
-package io.cucumber.pro;
+package io.cucumber.pro.environment;
 
 import io.cucumber.pro.config.Config;
 import io.cucumber.pro.config.loaders.EnvironmentVariablesConfigLoader;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 
-public class FilteredEnvTest {
+public class EnvFilterTest {
     @Test
     public void filters_and_sorts_keys() {
-        HashMap<String, String> env = new HashMap<String, String>() {{
+        Map<String, String> env = new HashMap<String, String>() {{
             put("my_secret__token", "abcd");
             put("MY_SECRET_TOKEN", "abcd");
             put("A_KEY_TO_A_DOOR", "clef");
@@ -21,17 +22,24 @@ public class FilteredEnvTest {
             put("DOO", "dar");
             put("PASSWORD_A", "drowssap");
         }};
+
         Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
-        FilteredEnv filteredEnv = new FilteredEnv(env, config);
-        String actual = filteredEnv.toString();
-        assertEquals("ALPHA=BETA\nDOO=dar\nFOO=BAR\n", actual);
+        EnvFilter envFilter = new EnvFilter(config);
+
+        Map<String, String> expectedEnv = new HashMap<String, String>() {{
+            put("FOO", "BAR");
+            put("ALPHA", "BETA");
+            put("DOO", "dar");
+        }};
+
+        assertEquals(expectedEnv, envFilter.filter(env));
     }
 
     @Test
     public void allows_overriding_mask() {
-        HashMap<String, String> env = new HashMap<String, String>() {{
-            put("CUCUMBERPRO_ENVMASK", "KEY|TOKEN");
+        Map<String, String> env = new HashMap<String, String>() {{
+            put("CUCUMBERPRO_ENVMASK", "KEY|TOKEN"); // But not SECRET|PASSWORD
             put("my_secret__token", "abcd");
             put("MY_SECRET_TOKEN", "abcd");
             put("A_KEY_TO_A_DOOR", "clef");
@@ -40,10 +48,18 @@ public class FilteredEnvTest {
             put("DOO", "dar");
             put("PASSWORD_A", "drowssap");
         }};
+
         Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
-        FilteredEnv filteredEnv = new FilteredEnv(env, config);
-        String actual = filteredEnv.toString();
-        assertEquals("ALPHA=BETA\nCUCUMBERPRO_ENVMASK=KEY|TOKEN\nDOO=dar\nFOO=BAR\nPASSWORD_A=drowssap\n", actual);
+        EnvFilter envFilter = new EnvFilter(config);
+
+        Map<String, String> expectedEnv = new HashMap<String, String>() {{
+            put("CUCUMBERPRO_ENVMASK", "KEY|TOKEN");
+            put("FOO", "BAR");
+            put("ALPHA", "BETA");
+            put("DOO", "dar");
+            put("PASSWORD_A", "drowssap");
+        }};
+        assertEquals(expectedEnv, envFilter.filter(env));
     }
 }

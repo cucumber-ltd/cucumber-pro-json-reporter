@@ -51,6 +51,22 @@ public class ConfigTest {
     }
 
     @Test
+    public void unset_value_is_null() {
+        Config config = new Config();
+        assertTrue(config.isNull("booya.kasha"));
+        assertTrue(config.isNull("booya"));
+    }
+
+    @Test
+    public void set_value_is_not_null() {
+        Config config = new Config();
+        config.set("booya.kasha", "wat");
+        config.set("ninky", "nonk");
+        assertFalse(config.isNull("booya.kasha"));
+        assertFalse(config.isNull("ninky"));
+    }
+
+    @Test
     public void has_yaml_representation() {
         Config config = new Config();
         config.set("a.b.c.d.e", "1");

@@ -1,28 +1,16 @@
 package io.cucumber.pro.revision;
 
-import io.cucumber.pro.Keys;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.config.Config;
+import io.cucumber.pro.environment.CIEnvironment;
 
 public class RevisionProviderFactory {
-    private static final String[] REVISION_ENV_VARS = new String[]{
-            Keys.bamboo_planRepository_revision, // Bamboo
-            Keys.CIRCLE_SHA1,                    // Circle
-            Keys.GIT_COMMIT,                     // Jenkins / Hudson
-            Keys.TRAVIS_COMMIT                   // Travis
-    };
-
     public static RevisionProvider create(final Config config, Logger logger) {
-        for (final String envVar : REVISION_ENV_VARS) {
-            if (!config.isNull(envVar)) {
-                return new RevisionProvider() {
-                    @Override
-                    public String getRevision() {
-                        return config.getString(envVar);
-                    }
-                };
-            }
+        CIEnvironment ciEnvironment = CIEnvironment.detect(config);
+        if (ciEnvironment != null) {
+            return ciEnvironment.getRevisionProvider(config);
+        } else {
+            return new GitRevisionProvider(logger);
         }
-        return new GitRevisionProvider(logger);
     }
 }

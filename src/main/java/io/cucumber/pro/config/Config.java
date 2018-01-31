@@ -15,19 +15,19 @@ public class Config {
     private final Map<String, Config> configByProperty = new TreeMap<>();
 
     public String getString(String key) {
-        return getIn(normalize(key)).getString();
+        return getIn(normalize(key), false).getString();
     }
 
     public Boolean getBoolean(String key) {
-        return getIn(normalize(key)).getBoolean();
+        return getIn(normalize(key), false).getBoolean();
     }
 
     public Integer getInteger(String key) {
-        return getIn(normalize(key)).getInt();
+        return getIn(normalize(key), false).getInt();
     }
 
     public boolean isNull(String key) {
-        return getIn(normalize(key)).isNull();
+        return getIn(normalize(key), true).isNull();
     }
 
     public void setNull(String key) {
@@ -59,7 +59,7 @@ public class Config {
         return this.valueByProperty.get(property.toLowerCase());
     }
 
-    private Value getIn(String normalizedKey) {
+    private Value getIn(String normalizedKey, boolean allowNull) {
         List<String> path = toPath(normalizedKey);
         Config config = this;
         for (int i = 0; i < path.size(); i++) {
@@ -67,10 +67,12 @@ public class Config {
             if (i == path.size() - 1) {
                 Value value = config.getValue(property);
                 if (value != null) return value;
+                if (allowNull) return new NullValue();
                 throw new UndefinedKeyException(normalizedKey);
             } else {
                 config = config.getChild(property.toLowerCase());
                 if (config == null) {
+                    if (allowNull) return new NullValue();
                     throw new UndefinedKeyException(normalizedKey);
                 }
             }

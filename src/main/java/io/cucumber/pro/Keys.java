@@ -23,6 +23,12 @@ public class Keys {
     public static final String GIT_COMMIT = "GIT_COMMIT";
     public static final String TRAVIS_COMMIT = "TRAVIS_COMMIT";
 
+    // Git branch
+    public static final String bamboo_repository_git_branch = "bamboo_repository_git_branch";
+    public static final String CIRCLE_BRANCH = "CIRCLE_BRANCH";
+    public static final String GIT_BRANCH = "GIT_BRANCH";
+    public static final String TRAVIS_BRANCH = "TRAVIS_BRANCH";
+
     // CI detection
     public static final String BUILD_NUMBER = "BUILD_NUMBER";
     public static final String CIRCLE_BUILD_NUM = "CIRCLE_BUILD_NUM";

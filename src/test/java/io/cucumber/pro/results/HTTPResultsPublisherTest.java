@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR;
 import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_TIMEOUT;
@@ -51,6 +52,9 @@ public class HTTPResultsPublisherTest {
                         assertEquals("env.txt", formData.get("env").getFirst().getFileName());
                         assertEquals("the-profile", formData.get("profileName").getFirst().getValue());
 
+                        // Verify that env has cucumber_pro_git_branch, which Pro uses as a fallback
+                        // if it can't find a CI-specific
+
                         exchange.getResponseSender().send("OK");
                     }
                 }).build();
@@ -58,7 +62,7 @@ public class HTTPResultsPublisherTest {
 
         Config config = createConfig();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
-        publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
+        publisher.publish(new File("README.md"), new HashMap<String, String>(), "the-profile");
     }
 
     @Test
@@ -76,7 +80,7 @@ public class HTTPResultsPublisherTest {
         Config config = createConfig();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
-            publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
+            publisher.publish(new File("README.md"), new HashMap<String, String>(), "the-profile");
             fail();
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
@@ -92,7 +96,7 @@ public class HTTPResultsPublisherTest {
         config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
-            publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
+            publisher.publish(new File("README.md"), new HashMap<String, String>(), "the-profile");
             fail();
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
@@ -107,7 +111,7 @@ public class HTTPResultsPublisherTest {
         config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
         TestLogger logger = new TestLogger();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);
-        publisher.publish(new File("README.md"), "FOO=BAR", "the-profile");
+        publisher.publish(new File("README.md"), new HashMap<String, String>(), "the-profile");
         assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.getMessages(Logger.Level.WARN).get(0));
     }
 }

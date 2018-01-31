@@ -37,4 +37,13 @@ public class GitRevisionProvider implements RevisionProvider {
             throw new CucumberException(e);
         }
     }
+
+    @Override
+    public String getBranch() {
+        try {
+            return repository.getBranch();
+        } catch (IOException e) {
+            throw new CucumberException(e);
+        }
+    }
 }

@@ -10,6 +10,7 @@ import io.cucumber.pro.config.Config;
 import io.cucumber.pro.config.loaders.EnvironmentVariablesConfigLoader;
 import io.cucumber.pro.documentation.NullDocumentationPublisher;
 import io.cucumber.pro.results.ResultsPublisher;
+import io.cucumber.pro.revision.GitRevisionProvider;
 import org.junit.Test;
 
 import java.io.File;
@@ -40,6 +41,7 @@ public class JsonReporterTest {
                 profileName,
                 config,
                 logger,
+                new GitRevisionProvider(logger),
                 env);
 
         TimeService timeService = TimeService.SYSTEM;
@@ -53,22 +55,26 @@ public class JsonReporterTest {
         eventBus.registerHandlerFor(TestRunFinished.class, testRunFinishedEventHandler);
         eventBus.send(new TestRunFinished(timeService.time()));
 
-        assertEquals("FOO=bar\n", resultsPublisher.getPublishedEnv());
+        Map<String, String> expectedEnv = new HashMap<String, String>() {{
+            put("FOO", "bar");
+            put("cucumber_pro_git_branch", "master");
+        }};
+        assertEquals(expectedEnv, resultsPublisher.getPublishedEnv());
         assertNotNull(resultsPublisher.getPublishedFile());
     }
 
     class CapturingResultsPublisher implements ResultsPublisher {
 
         private File file;
-        private String env;
+        private Map<String, String> env;
 
         @Override
-        public void publish(File resultsJsonFile, String env, String profileName) throws CucumberException {
+        public void publish(File resultsJsonFile, Map<String, String> env, String profileName) throws CucumberException {
             this.file = resultsJsonFile;
             this.env = env;
         }
 
-        public String getPublishedEnv() {
+        public Map<String, String> getPublishedEnv() {
             return env;
         }
 

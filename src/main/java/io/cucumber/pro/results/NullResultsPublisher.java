@@ -4,6 +4,7 @@ import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Logger;
 
 import java.io.File;
+import java.util.Map;
 
 class NullResultsPublisher implements ResultsPublisher {
     private final String warningMessage;
@@ -15,7 +16,7 @@ class NullResultsPublisher implements ResultsPublisher {
     }
 
     @Override
-    public void publish(File resultsJsonFile, String env, String profileName) throws CucumberException {
+    public void publish(File resultsJsonFile, Map<String, String> env, String profileName) throws CucumberException {
         if (warningMessage != null) {
             logger.log(Logger.Level.WARN, warningMessage);
         }

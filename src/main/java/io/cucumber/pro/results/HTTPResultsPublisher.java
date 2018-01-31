@@ -4,6 +4,7 @@ import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Keys;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.config.Config;
+import io.cucumber.pro.environment.MapHelper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.util.Map;
 
 class HTTPResultsPublisher implements ResultsPublisher {
 
@@ -49,12 +51,12 @@ class HTTPResultsPublisher implements ResultsPublisher {
     HTTPResultsPublisher(String url, Config config, Logger logger) {
         this.url = url;
         this.config = config;
-        authToken = config.getString(Keys.CUCUMBERPRO_RESULTS_TOKEN);
+        this.authToken = config.getString(Keys.CUCUMBERPRO_RESULTS_TOKEN);
         this.logger = logger;
     }
 
     @Override
-    public void publish(File resultsJsonFile, final String envString, String profileName) {
+    public void publish(File resultsJsonFile, final Map<String, String> env, String profileName) {
         HttpClient client = buildHttpClient();
 
         HttpPost post = new HttpPost(URI.create(url));
@@ -62,6 +64,8 @@ class HTTPResultsPublisher implements ResultsPublisher {
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
         try {
+            String envString = MapHelper.toEnvString(env);
+
             builder.addPart(PART_ENV, new MemoryFileBody("env.txt", envString, ContentType.TEXT_PLAIN));
             builder.addPart(PART_PAYLOAD, new FileBody(resultsJsonFile, ContentType.create(CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON, "UTF-8")));
             builder.addPart(PART_PROFILE_NAME, new StringBody(profileName, ContentType.TEXT_PLAIN));
