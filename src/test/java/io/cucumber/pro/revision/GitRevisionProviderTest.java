@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.regex.Pattern;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -21,7 +22,7 @@ public class GitRevisionProviderTest {
     public void findsBranch() {
         RevisionProvider revisionProvider = new GitRevisionProvider(new TestLogger());
         String branch = revisionProvider.getBranch();
-        // This will fail on a branch. In that case, update the test!
-        assertEquals("master", branch);
+        // Can't expect it to be master. During release it's a SHA!
+        assertNotNull(branch);
     }
 }

@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-## [2.0.1] - 2018-01-31
+## [2.0.2] - 2018-01-31
 
 ### Added
 
@@ -155,8 +155,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.1...HEAD
-[2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...v2.0.1
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.2...HEAD
+[2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...v2.0.2
 [2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.9...v2.0.0
 [1.2.8]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.7...v1.2.9
 [1.2.7]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.6...v1.2.7
