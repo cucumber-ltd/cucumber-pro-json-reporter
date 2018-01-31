@@ -22,7 +22,7 @@ Add the following dependency to your `pom.xml`:
 <dependency>
     <groupId>io.cucumber</groupId>
     <artifactId>pro-plugin</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.3</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -165,7 +165,7 @@ export CUCUMBERPRO_GIT_PUBLISH=true
 SET CUCUMBERPRO_GIT_PUBLISH=true
 ```
 
-Alternatively, you can specify a Java System property (in Maven, Gradle or other build tool):
+Alternatively, you can specify a Java system property (in Maven, Gradle or other build tool):
 
 ```
 -Dcucumberpro.git.publish=true

@@ -55,11 +55,13 @@ public class JsonReporterTest {
         eventBus.registerHandlerFor(TestRunFinished.class, testRunFinishedEventHandler);
         eventBus.send(new TestRunFinished(timeService.time()));
 
+        Map<String, String> publishedEnv = resultsPublisher.getPublishedEnv();
+        assertNotNull(publishedEnv.remove("cucumber_pro_git_branch"));
+
         Map<String, String> expectedEnv = new HashMap<String, String>() {{
             put("FOO", "bar");
-            put("cucumber_pro_git_branch", "master");
         }};
-        assertEquals(expectedEnv, resultsPublisher.getPublishedEnv());
+        assertEquals(expectedEnv, publishedEnv);
         assertNotNull(resultsPublisher.getPublishedFile());
     }
 
