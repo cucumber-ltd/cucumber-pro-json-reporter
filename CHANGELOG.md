@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-* Log errors before throwing an exception everywhere, as some tools (cucumber gradle plugin?) swallow exceptions.
-
 ### Changed
 
 ### Deprecated
@@ -18,6 +16,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 
 ### Fixed
+
+## [2.0.4] - 2018-02-01
+
+### Added
+
+* Log errors before throwing an exception everywhere, as some tools (cucumber gradle plugin?) swallow exceptions.
 
 ## [2.0.3] - 2018-01-31
 
@@ -157,10 +161,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.3...HEAD
-[2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...v2.0.3
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.4...HEAD
+[2.0.4]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.3...v2.0.4
+[2.0.3]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...v2.0.3
 [2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.9...v2.0.0
-[1.2.8]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.7...v1.2.9
+[1.2.9]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.7...v1.2.9
 [1.2.7]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.6...v1.2.7
 [1.2.6]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.5...v1.2.6
 [1.2.5]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.4...v1.2.5
