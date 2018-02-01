@@ -1,6 +1,6 @@
 package io.cucumber.pro.environment;
 
-import cucumber.runtime.CucumberException;
+import io.cucumber.pro.Logger;
 import io.cucumber.pro.config.Config;
 
 import static io.cucumber.pro.Keys.CIRCLE_PROJECT_REPONAME;
@@ -17,9 +17,11 @@ public class ProjectName {
             TRAVIS_REPO_SLUG,
     };
     private final Config config;
+    private final Logger logger;
 
-    public ProjectName(Config config) {
+    public ProjectName(Config config, Logger logger) {
         this.config = config;
+        this.logger = logger;
     }
 
     public String getProjectName() {
@@ -32,6 +34,7 @@ public class ProjectName {
                 return value;
             }
         }
-        throw new CucumberException("Couldn't detect project name. Please define " + CUCUMBERPRO_PROJECTNAME);
+        String message = "Couldn't detect project name. Please define " + CUCUMBERPRO_PROJECTNAME;
+        throw logger.log(null, message);
     }
 }

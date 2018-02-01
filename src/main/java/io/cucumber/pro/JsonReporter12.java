@@ -1,6 +1,5 @@
 package io.cucumber.pro;
 
-import cucumber.runtime.CucumberException;
 import gherkin.formatter.JSONFormatter;
 import io.cucumber.pro.config.Config;
 import io.cucumber.pro.documentation.DocumentationPublisher;
@@ -29,7 +28,7 @@ public class JsonReporter12 extends JSONFormatter {
             jsonFile = File.createTempFile("cucumber-json", ".json");
             jsonFile.deleteOnExit();
         } catch (IOException e) {
-            throw new CucumberException(e);
+            throw LOGGER.log(e, "Failed to create temp file for Cucumber JSON results");
         }
     }
 

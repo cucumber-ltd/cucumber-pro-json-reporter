@@ -5,7 +5,6 @@ import cucumber.api.event.EventHandler;
 import cucumber.api.event.EventPublisher;
 import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
-import cucumber.runtime.CucumberException;
 import cucumber.runtime.formatter.PluginFactory;
 import io.cucumber.pro.config.Config;
 import io.cucumber.pro.documentation.DocumentationPublisher;
@@ -54,7 +53,7 @@ public class JsonReporter implements Formatter {
         try {
             jsonFile = File.createTempFile("cucumber-json", ".json");
         } catch (IOException e) {
-            throw new CucumberException(e);
+            throw logger.log(e, "Failed to create temp file for Cucumber JSON results");
         }
         jsonFile.deleteOnExit();
         jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());

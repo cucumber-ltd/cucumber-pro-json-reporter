@@ -12,7 +12,7 @@ public class ResultsPublisherFactory {
         boolean explicitPublish = !config.isNull(Keys.CUCUMBERPRO_RESULTS_PUBLISH) && config.getBoolean(Keys.CUCUMBERPRO_RESULTS_PUBLISH);
         CIEnvironment ciEnvironment = CIEnvironment.detect(config);
         if (ciEnvironment != null || explicitPublish) {
-            String projectName = new ProjectName(config).getProjectName();
+            String projectName = new ProjectName(config, logger).getProjectName();
             String revision = revisionProvider.getRevision();
             String url = CucumberProResultsUrlBuilder.buildCucumberProUrl(config, projectName, revision);
             return new HTTPResultsPublisher(url, config, logger);

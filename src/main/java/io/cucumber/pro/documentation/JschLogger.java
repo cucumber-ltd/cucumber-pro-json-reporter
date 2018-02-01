@@ -34,6 +34,7 @@ class JschLogger implements com.jcraft.jsch.Logger {
                 logger.log(Logger.Level.FATAL, message);
                 break;
             default:
+                logger.log(Logger.Level.FATAL, message);
                 throw new CucumberException("Unexpected log level: " + level);
         }
     }

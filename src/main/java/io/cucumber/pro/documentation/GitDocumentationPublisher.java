@@ -9,7 +9,6 @@ import com.jcraft.jsch.agentproxy.AgentProxyException;
 import com.jcraft.jsch.agentproxy.Connector;
 import com.jcraft.jsch.agentproxy.ConnectorFactory;
 import com.jcraft.jsch.agentproxy.RemoteIdentityRepository;
-import cucumber.runtime.CucumberException;
 import io.cucumber.pro.Keys;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.config.Config;
@@ -55,8 +54,8 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         fetchFromSource = config.getBoolean(Keys.CUCUMBERPRO_GIT_SOURCE_FETCH);
     }
 
-    private static <C extends GitCommand, R> void configureSsh(RemoteSpec remoteSpec, TransportCommand<C, R> push) throws JSchException {
-        final SshSessionFactory sshSessionFactory = getSshSessionFactory(remoteSpec);
+    private static <C extends GitCommand, R> void configureSsh(RemoteSpec remoteSpec, TransportCommand<C, R> push, Logger logger) throws JSchException {
+        final SshSessionFactory sshSessionFactory = getSshSessionFactory(remoteSpec, logger);
         push.setTransportConfigCallback(new TransportConfigCallback() {
             @Override
             public void configure(Transport transport) {
@@ -76,7 +75,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         return new Git(repository);
     }
 
-    private static SshSessionFactory getSshSessionFactory(final RemoteSpec remoteSpec) throws JSchException {
+    private static SshSessionFactory getSshSessionFactory(final RemoteSpec remoteSpec, final Logger logger) throws JSchException {
         return new JschConfigSessionFactory() {
             @Override
             protected void configure(OpenSshConfig.Host host, Session session) {
@@ -90,19 +89,19 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
                     HostKey key = new HostKey(host.getHostName(), DatatypeConverter.parseBase64Binary(remoteSpec.hostKey));
                     jsch.getHostKeyRepository().add(key, null);
                 }
-                jsch.setIdentityRepository(getIdentityRepository());
+                jsch.setIdentityRepository(getIdentityRepository(logger));
                 return jsch;
             }
         };
     }
 
-    private static IdentityRepository getIdentityRepository() throws JSchException {
+    private static IdentityRepository getIdentityRepository(Logger logger) throws JSchException {
         try {
             ConnectorFactory connectorFactory = ConnectorFactory.getDefault();
             Connector connector = connectorFactory.createConnector();
             return new RemoteIdentityRepository(connector);
         } catch (AgentProxyException e) {
-            throw new JSchException("Failed to configure SSH Agent", e);
+            throw logger.log(e, "Failed to configure SSH Agent");
         }
     }
 
@@ -115,7 +114,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             }
             push(git);
         } catch (IOException e) {
-            throw new CucumberException("IO error", e);
+            throw logger.log(e, "IO error");
         }
     }
 
@@ -134,10 +133,10 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             if (ignoreConnectionError) {
                 logger.log(Logger.Level.INFO, "Failed to fetch commits from %s\n", fetchSpec.remote);
             } else {
-                throw new CucumberException(String.format("Failed to fetch commits from %s\nYou can set %s to true to treat this as a warning instead of an error", fetchSpec.remote, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR), e);
+                throw logger.log(e, String.format("Failed to fetch commits from %s\nYou can set %s to true to treat this as a warning instead of an error", fetchSpec.remote, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR));
             }
         } catch (JSchException e) {
-            throw new CucumberException("SSH error", e);
+            throw logger.log(e, "SSH error");
         }
     }
 
@@ -149,10 +148,10 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
             if (ignoreConnectionError) {
                 logger.log(Logger.Level.WARN, "Failed to publish documentation to %s\n", pushSpec.remote);
             } else {
-                throw new CucumberException(String.format("Failed to publish documentation to %s\nYou can set %s to true to treat this as a warning instead of an error", pushSpec.remote, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR), e);
+                throw logger.log(e, String.format("Failed to publish documentation to %s\nYou can set %s to true to treat this as a warning instead of an error", pushSpec.remote, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR));
             }
         } catch (JSchException e) {
-            throw new CucumberException("SSH error", e);
+            throw logger.log(e, "SSH error");
         }
     }
 
@@ -164,7 +163,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         StoredConfig config = git.getRepository().getConfig();
         List<RefSpec> refSpecs = config.getRefSpecs("remote", fetchRemoteName, "fetch");
         fetch.setRefSpecs(refSpecs);
-        configureSsh(fetchSpec, fetch);
+        configureSsh(fetchSpec, fetch, logger);
 
         FetchResult result = fetch.call();
         logResult(result);
@@ -175,7 +174,7 @@ public class GitDocumentationPublisher implements DocumentationPublisher {
         push.setProgressMonitor(new TextProgressMonitor());
         push.setRemote(pushSpec.remote);
         push.setForce(true);
-        configureSsh(pushSpec, push);
+        configureSsh(pushSpec, push, logger);
 
         Iterable<PushResult> result = push.call();
         for (PushResult pushResult : result) {

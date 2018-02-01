@@ -10,7 +10,7 @@ public class DocumentationPublisherFactory {
     public static DocumentationPublisher create(Config config, Logger logger) {
         if (!config.getBoolean(Keys.CUCUMBERPRO_GIT_PUBLISH)) return new NullDocumentationPublisher();
 
-        String projectName = new ProjectName(config).getProjectName();
+        String projectName = new ProjectName(config, logger).getProjectName();
         GitDocumentationPublisher.RemoteSpec pushSpec = new GitDocumentationPublisher.RemoteSpec(
                 CucumberProGitRemoteBuilder.buildCucumberProUrl(config, projectName),
                 config.getInteger(Keys.CUCUMBERPRO_GIT_SSHPORT),

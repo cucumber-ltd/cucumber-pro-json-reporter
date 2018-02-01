@@ -88,22 +88,24 @@ class HTTPResultsPublisher implements ResultsPublisher {
                 if (statusCode == 403)
                     suggestion = String.format("You need to change the value of %s", Keys.CUCUMBERPRO_RESULTS_TOKEN);
 
-                throw new CucumberException(String.format(
+                String message = String.format(
                         "Failed to publish results to Cucumber Pro URL: %s, Status: %s\n%s\n%s",
                         url,
                         statusLine,
                         responseBody,
                         suggestion
-                ));
+                );
+                logger.log(Logger.Level.ERROR, message);
+                throw new CucumberException(message);
             }
         } catch (ConnectTimeoutException | HttpHostConnectException e) {
             if (config.getBoolean(Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR)) {
                 logger.log(Logger.Level.WARN, "Failed to publish results to %s\n", url);
             } else {
-                throw new CucumberException(String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR), e);
+                throw logger.log(e, String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR));
             }
         } catch (IOException e) {
-            throw new CucumberException(e);
+            throw logger.log(e, "Unexpected IO Error");
         }
     }
 

@@ -1,5 +1,7 @@
 package io.cucumber.pro;
 
+import cucumber.runtime.CucumberException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,12 @@ public class TestLogger implements Logger {
     @Override
     public void log(Level level, String message, Object... args) {
         messages.get(level).add(String.format(message, args));
+    }
+
+    @Override
+    public RuntimeException log(Exception e, String message) {
+        log(Level.ERROR, message);
+        return new CucumberException(message, e);
     }
 
     public List<String> getMessages(Level level) {

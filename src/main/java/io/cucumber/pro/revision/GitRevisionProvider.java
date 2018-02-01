@@ -10,8 +10,10 @@ import java.io.IOException;
 
 public class GitRevisionProvider implements RevisionProvider {
     private final Repository repository;
+    private final Logger logger;
 
     public GitRevisionProvider(Logger logger) {
+        this.logger = logger;
         File currentDirectory = new File(System.getProperty("user.dir"));
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         try {
@@ -19,13 +21,16 @@ public class GitRevisionProvider implements RevisionProvider {
                     .findGitDir(currentDirectory)
                     .setMustExist(true);
             if (builder.getGitDir() == null) {
-                throw new CucumberException(String.format("The current directory '%s' and none of its parent directories appear to have a '.git' directory", currentDirectory));
+                String message = String.format("The current directory '%s' and none of its parent directories appear to have a '.git' directory", currentDirectory);
+                logger.log(Logger.Level.ERROR, message);
+                throw new CucumberException(message);
             } else {
                 logger.log(Logger.Level.INFO, "Current directory: '%s', Git directory: '%s'", currentDirectory, builder.getGitDir().getAbsolutePath());
             }
             repository = builder.build();
         } catch (IOException e) {
-            throw new CucumberException(e);
+            logger.log(Logger.Level.ERROR, e.getMessage());
+            throw new CucumberException(e.getMessage());
         }
     }
 
@@ -34,7 +39,7 @@ public class GitRevisionProvider implements RevisionProvider {
         try {
             return repository.exactRef("HEAD").getObjectId().getName();
         } catch (IOException e) {
-            throw new CucumberException(e);
+            throw logger.log(e, "Couldn't detect git revision");
         }
     }
 
@@ -43,7 +48,7 @@ public class GitRevisionProvider implements RevisionProvider {
         try {
             return repository.getBranch();
         } catch (IOException e) {
-            throw new CucumberException(e);
+            throw logger.log(e, "Couldn't detect git branch");
         }
     }
 }

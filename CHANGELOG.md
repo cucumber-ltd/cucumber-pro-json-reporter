@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* Log errors before throwing an exception everywhere, as some tools (cucumber gradle plugin?) swallow exceptions.
+
 ### Changed
 
 ### Deprecated
