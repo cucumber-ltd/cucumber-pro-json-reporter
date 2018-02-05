@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* WARN/ERROR/FATAL logging now goes to STDERR, while INFO/DEBUG goes to STDOUT.
+
 ### Deprecated
 
 ### Removed

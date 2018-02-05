@@ -3,6 +3,8 @@ package io.cucumber.pro;
 import cucumber.runtime.CucumberException;
 import io.cucumber.pro.config.Config;
 
+import java.io.PrintStream;
+
 public interface Logger {
     void log(Level level, String message, Object... args);
 
@@ -34,10 +36,11 @@ public interface Logger {
         @Override
         public void log(Level level, String message, Object... args) {
             if (level.value >= this.level.value) {
-                java.lang.System.out.print(level);
-                java.lang.System.out.print(": ");
-                java.lang.System.out.format(message, args);
-                java.lang.System.out.print("\n");
+                PrintStream out = level.value >= Level.WARN.value ? System.err : System.out;
+                out.print(level);
+                out.print(": ");
+                out.format(message, args);
+                out.print("\n");
             }
         }
 
