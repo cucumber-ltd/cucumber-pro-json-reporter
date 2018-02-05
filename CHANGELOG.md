@@ -11,11 +11,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* `CUCUMBERPRO_RESULTS_TOKEN` has been renamed to `CUCUMBERPRO_TOKEN`.
+* The only way to activate the plugin is by defining the environment variables `GIT_COMMIT` and `GIT_BRANCH`
+  (or similar environment variables for Bamboo/Circle/Jenkins/Travis).
 * WARN/ERROR/FATAL logging now goes to STDERR, while INFO/DEBUG goes to STDOUT.
 
 ### Deprecated
 
 ### Removed
+
+* The plugin no longer publishes documentation via git. (Cucumber Pro automatically syncs with your repo).
 
 ### Fixed
 

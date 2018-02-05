@@ -1,6 +1,5 @@
 package io.cucumber.pro.environment;
 
-import io.cucumber.pro.Keys;
 import io.cucumber.pro.config.Config;
 import org.junit.Test;
 
@@ -18,9 +17,8 @@ public class CiEnvironmentTest {
     @Test
     public void recognises_travis() {
         Config config = createConfig();
-        config.set(Keys.TRAVIS_JOB_NUMBER, "whatever");
-        config.set(Keys.TRAVIS_COMMIT, "whatever");
-        config.set(Keys.TRAVIS_BRANCH, "whatever");
+        config.set(CIEnvironment.TRAVIS.branchVar, "whatever");
+        config.set(CIEnvironment.TRAVIS.revisionVar, "whatever");
         assertEquals(CIEnvironment.TRAVIS, CIEnvironment.detect(config));
     }
 }

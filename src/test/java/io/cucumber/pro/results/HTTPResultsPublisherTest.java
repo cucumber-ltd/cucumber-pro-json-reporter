@@ -85,7 +85,7 @@ public class HTTPResultsPublisherTest {
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
             String suggestion = lines[lines.length - 1];
-            assertEquals("You need to define cucumberpro.results.token", suggestion);
+            assertEquals("You need to define cucumberpro.token", suggestion);
         }
     }
 

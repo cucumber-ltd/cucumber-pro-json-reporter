@@ -60,42 +60,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.eclipse.jgit</groupId>
-            <artifactId>org.eclipse.jgit</artifactId>
-            <version>4.9.0.201710071750-r</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch.agentproxy.core</artifactId>
-            <version>0.0.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch.agentproxy.usocket-jna</artifactId>
-            <version>0.0.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch.agentproxy.sshagent</artifactId>
-            <version>0.0.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch.agentproxy.connector-factory</artifactId>
-            <version>0.0.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch.agentproxy.jsch</artifactId>
-            <version>0.0.9</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <version>1.19</version>
@@ -247,19 +211,6 @@
                                         <exclude>META-INF/*.RSA</exclude>
                                     </excludes>
                                 </filter>
-                                <filter>
-                                    <!-- These also exist in com.jcraft:jsch.agentproxy.core -->
-                                    <artifact>com.jcraft:jsch.agentproxy.connector-factory</artifact>
-                                    <excludes>
-                                        <exclude>com/jcraft/jsch/agentproxy/USocketFactory$Socket.class</exclude>
-                                        <exclude>com/jcraft/jsch/agentproxy/Buffer.class</exclude>
-                                        <exclude>com/jcraft/jsch/agentproxy/Identity.class</exclude>
-                                        <exclude>com/jcraft/jsch/agentproxy/USocketFactory.class</exclude>
-                                        <exclude>com/jcraft/jsch/agentproxy/AgentProxy.class</exclude>
-                                        <exclude>com/jcraft/jsch/agentproxy/AgentProxyException.class</exclude>
-                                        <exclude>com/jcraft/jsch/agentproxy/Connector.class</exclude>
-                                    </excludes>
-                                </filter>
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
@@ -284,10 +235,6 @@
                                 <relocation>
                                     <pattern>com.googlecode</pattern>
                                     <shadedPattern>io.cucumber.pro.shaded.com.googlecode</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.jcraft</pattern>
-                                    <shadedPattern>io.cucumber.pro.shaded.com.jcraft</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.slf4j</pattern>

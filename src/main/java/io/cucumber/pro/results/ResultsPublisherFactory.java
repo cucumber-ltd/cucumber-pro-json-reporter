@@ -1,19 +1,15 @@
 package io.cucumber.pro.results;
 
-import io.cucumber.pro.Keys;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.config.Config;
 import io.cucumber.pro.environment.CIEnvironment;
 import io.cucumber.pro.environment.ProjectName;
-import io.cucumber.pro.revision.RevisionProvider;
 
 public class ResultsPublisherFactory {
-    public static ResultsPublisher create(Config config, Logger logger, RevisionProvider revisionProvider) {
-        boolean explicitPublish = !config.isNull(Keys.CUCUMBERPRO_RESULTS_PUBLISH) && config.getBoolean(Keys.CUCUMBERPRO_RESULTS_PUBLISH);
-        CIEnvironment ciEnvironment = CIEnvironment.detect(config);
-        if (ciEnvironment != null || explicitPublish) {
+    public static ResultsPublisher create(Config config, Logger logger, CIEnvironment ciEnvironment) {
+        if (ciEnvironment != null) {
             String projectName = new ProjectName(config, logger).getProjectName();
-            String revision = revisionProvider.getRevision();
+            String revision = ciEnvironment.getRevision(config);
             String url = CucumberProResultsUrlBuilder.buildCucumberProUrl(config, projectName, revision);
             return new HTTPResultsPublisher(url, config, logger);
         } else {

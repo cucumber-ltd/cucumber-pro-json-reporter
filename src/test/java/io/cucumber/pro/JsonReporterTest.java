@@ -8,9 +8,8 @@ import cucumber.runner.TimeService;
 import cucumber.runtime.CucumberException;
 import io.cucumber.pro.config.Config;
 import io.cucumber.pro.config.loaders.EnvironmentVariablesConfigLoader;
-import io.cucumber.pro.documentation.NullDocumentationPublisher;
+import io.cucumber.pro.environment.CIEnvironment;
 import io.cucumber.pro.results.ResultsPublisher;
-import io.cucumber.pro.revision.GitRevisionProvider;
 import org.junit.Test;
 
 import java.io.File;
@@ -28,7 +27,8 @@ public class JsonReporterTest {
         Map<String, String> env = new HashMap<String, String>() {{
             put("FOO", "bar");
             put("PASSWORD", "secret");
-
+            put("TRAVIS_BRANCH", "the-branch");
+            put("TRAVIS_COMMIT", "the-commit");
         }};
         Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
@@ -36,12 +36,11 @@ public class JsonReporterTest {
         String profileName = "testing-testing";
         Logger logger = new TestLogger();
         Formatter reporter = new JsonReporter(
-                new NullDocumentationPublisher(),
                 resultsPublisher,
                 profileName,
                 config,
                 logger,
-                new GitRevisionProvider(logger),
+                CIEnvironment.TRAVIS,
                 env);
 
         TimeService timeService = TimeService.SYSTEM;
@@ -60,6 +59,8 @@ public class JsonReporterTest {
 
         Map<String, String> expectedEnv = new HashMap<String, String>() {{
             put("FOO", "bar");
+            put("TRAVIS_BRANCH", "the-branch");
+            put("TRAVIS_COMMIT", "the-commit");
         }};
         assertEquals(expectedEnv, publishedEnv);
         assertNotNull(resultsPublisher.getPublishedFile());
