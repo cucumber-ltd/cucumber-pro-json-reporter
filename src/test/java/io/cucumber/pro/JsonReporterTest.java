@@ -55,7 +55,6 @@ public class JsonReporterTest {
         eventBus.send(new TestRunFinished(timeService.time()));
 
         Map<String, String> publishedEnv = resultsPublisher.getPublishedEnv();
-        assertNotNull(publishedEnv.remove("cucumber_pro_git_branch"));
 
         Map<String, String> expectedEnv = new HashMap<String, String>() {{
             put("FOO", "bar");
@@ -72,7 +71,7 @@ public class JsonReporterTest {
         private Map<String, String> env;
 
         @Override
-        public void publish(File resultsJsonFile, Map<String, String> env, String profileName) throws CucumberException {
+        public void publish(File resultsJsonFile, Map<String, String> env, String profileName, String revision, String branch) throws CucumberException {
             this.file = resultsJsonFile;
             this.env = env;
         }

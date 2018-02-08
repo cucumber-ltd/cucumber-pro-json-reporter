@@ -31,6 +31,7 @@ public class JsonReporter12 extends JSONFormatter {
 
     private final Config config;
     private final Logger logger;
+    private final CIEnvironment ciEnvironment;
     private final ResultsPublisher resultsPublisher;
     private final String profileName;
     private final Map<String, String> env;
@@ -48,11 +49,8 @@ public class JsonReporter12 extends JSONFormatter {
         this.profileName = profileName;
         this.config = config;
         this.logger = logger;
-
+        this.ciEnvironment = ciEnvironment;
         this.env = new EnvFilter(config).filter(env);
-        if (ciEnvironment != null) {
-            this.env.put("cucumber_pro_git_branch", ciEnvironment.getBranch(config));
-        }
     }
 
     JsonReporter12(String profileName) throws IOException {
@@ -78,8 +76,12 @@ public class JsonReporter12 extends JSONFormatter {
     @Override
     public void close() {
         super.close();
-        logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", config.toYaml("cucumberpro"));
-        this.resultsPublisher.publish(jsonFile, env, profileName);
+        if (this.ciEnvironment != null) {
+            logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", config.toYaml("cucumberpro"));
+            String revision = ciEnvironment.getRevision(config);
+            String branch = ciEnvironment.getBranch(config);
+            this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch);
+        }
     }
 }
 

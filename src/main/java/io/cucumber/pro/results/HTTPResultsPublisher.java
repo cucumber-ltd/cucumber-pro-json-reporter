@@ -1,11 +1,10 @@
 package io.cucumber.pro.results;
 
 import cucumber.runtime.CucumberException;
+import gherkin.deps.com.google.gson.Gson;
 import io.cucumber.pro.Keys;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.config.Config;
-import io.cucumber.pro.environment.MapHelper;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
@@ -17,27 +16,21 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.AbstractContentBody;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStreamReader;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 class HTTPResultsPublisher implements ResultsPublisher {
-
-    private static final String PART_ENV = "env";
-    private static final String PART_PAYLOAD = "payload";
-    private static final String PART_PROFILE_NAME = "profileName";
+    private static final Gson GSON = new Gson();
     private static final String CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON = "application/x.cucumber.java.results+json";
     private final String url;
     private final String authToken;
@@ -56,21 +49,26 @@ class HTTPResultsPublisher implements ResultsPublisher {
     }
 
     @Override
-    public void publish(File resultsJsonFile, final Map<String, String> env, String profileName) {
+    public void publish(File resultsJsonFile, final Map<String, String> env, String profileName, String revision, String branch) {
         HttpClient client = buildHttpClient();
 
         HttpPost post = new HttpPost(URI.create(url));
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
         try {
-            String envString = MapHelper.toEnvString(env);
+            Map<String, String> git = new HashMap<>();
+            git.put("revision", revision);
+            git.put("branch", branch);
 
-            builder.addPart(PART_ENV, new MemoryFileBody("env.txt", envString, ContentType.TEXT_PLAIN));
-            builder.addPart(PART_PAYLOAD, new FileBody(resultsJsonFile, ContentType.create(CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON, "UTF-8")));
-            builder.addPart(PART_PROFILE_NAME, new StringBody(profileName, ContentType.TEXT_PLAIN));
-            HttpEntity entity = builder.build();
-            post.setEntity(entity);
+            Map<String, Object> body = new HashMap<>();
+            body.put("environment", env);
+            body.put("cucumberJson", GSON.fromJson(new InputStreamReader(new FileInputStream(resultsJsonFile), "UTF-8"), Map.class));
+            body.put("profileName", profileName);
+            body.put("git", git);
+
+
+            String json = GSON.toJson(body);
+            System.out.println("JSON = " + json);
+            post.setEntity(new StringEntity(json, ContentType.create(CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON, "UTF-8")));
 
             HttpResponse response = client.execute(post);
             StatusLine statusLine = response.getStatusLine();
@@ -78,6 +76,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
             if (statusCode >= 200 && statusCode < 400) {
                 logger.log(Logger.Level.INFO, "Published results to Cucumber Pro: " + url);
             } else {
+                // Read the HTTP response and throw an error
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 response.getEntity().writeTo(baos);
                 String responseBody = new String(baos.toByteArray(), "UTF-8");
@@ -123,36 +122,5 @@ class HTTPResultsPublisher implements ResultsPublisher {
             httpClientBuilder.setDefaultCredentialsProvider(provider);
         }
         return httpClientBuilder.build();
-    }
-
-    private class MemoryFileBody extends AbstractContentBody {
-        private final String filename;
-        private final byte[] data;
-
-        MemoryFileBody(String filename, String data, ContentType contentType) throws UnsupportedEncodingException {
-            super(contentType);
-            this.filename = filename;
-            this.data = data.getBytes("UTF-8");
-        }
-
-        @Override
-        public String getFilename() {
-            return filename;
-        }
-
-        @Override
-        public void writeTo(OutputStream outputStream) throws IOException {
-            outputStream.write(data);
-        }
-
-        @Override
-        public String getTransferEncoding() {
-            return "UTF-8";
-        }
-
-        @Override
-        public long getContentLength() {
-            return data.length;
-        }
     }
 }

@@ -1,21 +1,21 @@
 package io.cucumber.pro.results;
 
 import cucumber.runtime.CucumberException;
+import gherkin.deps.com.google.gson.Gson;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.TestLogger;
 import io.cucumber.pro.config.Config;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
-import io.undertow.server.handlers.form.FormData;
-import io.undertow.server.handlers.form.FormDataParser;
-import io.undertow.server.handlers.form.FormParserFactory;
 import org.junit.After;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Map;
 
 import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR;
 import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_TIMEOUT;
@@ -25,6 +25,15 @@ import static org.junit.Assert.fail;
 
 public class HTTPResultsPublisherTest {
 
+    public static final File RESULTS_JSON_FILE = new File("src/test/resources/sample.json");
+
+    public static class ResultSet {
+        public Map<String, String> environment;
+        // It's a more complex structure, but this simple structure is easier to use in a test
+        public Map<String, String> cucumberJson;
+        public Map<String, String> git;
+    }
+
     private Undertow server;
 
     @After
@@ -33,7 +42,7 @@ public class HTTPResultsPublisherTest {
     }
 
     @Test
-    public void posts_results_as_multipart_formadata() throws InterruptedException {
+    public void posts_results_as_json() {
         server = Undertow.builder()
                 .addHttpListener(8082, "localhost")
                 .setHandler(new HttpHandler() {
@@ -44,17 +53,12 @@ public class HTTPResultsPublisherTest {
                             return;
                         }
                         exchange.startBlocking();
-                        FormParserFactory.Builder builder = FormParserFactory.builder();
-                        FormDataParser formDataParser = builder.build().createParser(exchange);
-                        FormData formData = formDataParser.parseBlocking();
-
-                        assertEquals("README.md", formData.get("payload").getFirst().getFileName());
-                        assertEquals("env.txt", formData.get("env").getFirst().getFileName());
-                        assertEquals("the-profile", formData.get("profileName").getFirst().getValue());
-
-                        // Verify that env has cucumber_pro_git_branch, which Pro uses as a fallback
-                        // if it can't find a CI-specific
-
+                        InputStream inputStream = exchange.getInputStream();
+                        ResultSet resultSet = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), ResultSet.class);
+                        assertEquals("some-value", resultSet.environment.get("some-env"));
+                        assertEquals("on the rocks", resultSet.cucumberJson.get("cucumber"));
+                        assertEquals("the-rev", resultSet.git.get("revision"));
+                        assertEquals("the-branch", resultSet.git.get("branch"));
                         exchange.getResponseSender().send("OK");
                     }
                 }).build();
@@ -62,11 +66,13 @@ public class HTTPResultsPublisherTest {
 
         Config config = createConfig();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
-        publisher.publish(new File("README.md"), new HashMap<String, String>(), "the-profile");
+        Map<String, String> env = new HashMap<>();
+        env.put("some-env", "some-value");
+        publisher.publish(RESULTS_JSON_FILE, env, "the-profile", "the-rev", "the-branch");
     }
 
     @Test
-    public void explains_what_to_do_on_auth_error() throws InterruptedException {
+    public void explains_what_to_do_on_auth_error() {
         server = Undertow.builder()
                 .addHttpListener(8082, "localhost")
                 .setHandler(new HttpHandler() {
@@ -80,7 +86,7 @@ public class HTTPResultsPublisherTest {
         Config config = createConfig();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
-            publisher.publish(new File("README.md"), new HashMap<String, String>(), "the-profile");
+            publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch");
             fail();
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
@@ -90,13 +96,13 @@ public class HTTPResultsPublisherTest {
     }
 
     @Test
-    public void throws_error_with_explanation_on_connection_timeout() throws InterruptedException, IOException {
+    public void throws_error_with_explanation_on_connection_timeout() {
         Config config = createConfig();
         config.set(CUCUMBERPRO_CONNECTION_IGNOREERROR, "false");
         config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
-            publisher.publish(new File("README.md"), new HashMap<String, String>(), "the-profile");
+            publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch");
             fail();
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
@@ -106,12 +112,12 @@ public class HTTPResultsPublisherTest {
     }
 
     @Test
-    public void prints_error_on_connection_timeout() throws InterruptedException, IOException {
+    public void prints_error_on_connection_timeout() {
         Config config = createConfig();
         config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
         TestLogger logger = new TestLogger();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);
-        publisher.publish(new File("README.md"), new HashMap<String, String>(), "the-profile");
+        publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch");
         assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.getMessages(Logger.Level.WARN).get(0));
     }
 }

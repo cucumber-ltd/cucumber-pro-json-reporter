@@ -26,6 +26,7 @@ public class JsonReporter implements Formatter {
     private final ResultsPublisher resultsPublisher;
     private final String profileName;
     private final Logger logger;
+    private final CIEnvironment ciEnvironment;
     private final Map<String, String> env;
     private final Config config;
 
@@ -41,11 +42,8 @@ public class JsonReporter implements Formatter {
         this.profileName = profileName;
         this.config = config;
         this.logger = logger;
+        this.ciEnvironment = ciEnvironment;
         this.env = new EnvFilter(config).filter(env);
-
-        if (ciEnvironment != null) {
-            this.env.put("cucumber_pro_git_branch", ciEnvironment.getBranch(config));
-        }
 
         try {
             jsonFile = File.createTempFile("cucumber-json", ".json");
@@ -77,15 +75,22 @@ public class JsonReporter implements Formatter {
 
     @Override
     public void setEventPublisher(EventPublisher publisher) {
-        if (jsonFormatter == null) return;
-        jsonFormatter.setEventPublisher(new PublisherAdapter(publisher));
+        if(this.ciEnvironment != null) {
+            String revision = ciEnvironment.getRevision(this.config);
+            String branch = ciEnvironment.getBranch(this.config);
+            jsonFormatter.setEventPublisher(new PublisherAdapter(publisher, revision, branch));
+        }
     }
 
     private class PublisherAdapter implements EventPublisher {
         private final EventPublisher publisher;
+        private final String revision;
+        private final String branch;
 
-        PublisherAdapter(EventPublisher publisher) {
+        PublisherAdapter(EventPublisher publisher, String revision, String branch) {
             this.publisher = publisher;
+            this.revision = revision;
+            this.branch = branch;
         }
 
         @Override
@@ -97,7 +102,7 @@ public class JsonReporter implements Formatter {
                     @Override
                     public void receive(TestRunFinished event) {
                         JsonReporter.this.logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", JsonReporter.this.config.toYaml("cucumberpro"));
-                        JsonReporter.this.resultsPublisher.publish(jsonFile, env, profileName);
+                        JsonReporter.this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch);
                     }
                 });
             }

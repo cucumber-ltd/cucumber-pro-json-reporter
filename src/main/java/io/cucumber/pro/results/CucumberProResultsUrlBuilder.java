@@ -8,13 +8,12 @@ import java.util.HashMap;
 
 class CucumberProResultsUrlBuilder {
 
-    static String buildCucumberProUrl(final Config config, final String projectName, final String revision) {
-        String template = "{cucumberProUrl}tests/results/{projectName}/{revision}";
+    static String buildCucumberProUrl(final Config config, final String projectName) {
+        String template = "{cucumberProUrl}tests/results/{projectName}";
         URITemplate uriTemplate = new URITemplate(template);
         return uriTemplate.expand(new HashMap<String, String>() {{
             put("cucumberProUrl", getCucumberProUrl(config));
             put("projectName", projectName);
-            put("revision", revision);
         }});
     }
 
