@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR;
@@ -25,12 +26,12 @@ import static org.junit.Assert.fail;
 
 public class HTTPResultsPublisherTest {
 
-    public static final File RESULTS_JSON_FILE = new File("src/test/resources/sample.json");
+    private static final File RESULTS_JSON_FILE = new File("src/test/resources/sample.json");
 
     public static class ResultSet {
         public Map<String, String> environment;
         // It's a more complex structure, but this simple structure is easier to use in a test
-        public Map<String, String> cucumberJson;
+        public List<Object> cucumberJson;
         public Map<String, String> git;
     }
 
@@ -56,7 +57,7 @@ public class HTTPResultsPublisherTest {
                         InputStream inputStream = exchange.getInputStream();
                         ResultSet resultSet = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), ResultSet.class);
                         assertEquals("some-value", resultSet.environment.get("some-env"));
-                        assertEquals("on the rocks", resultSet.cucumberJson.get("cucumber"));
+                        assertEquals(1, resultSet.cucumberJson.size());
                         assertEquals("the-rev", resultSet.git.get("revision"));
                         assertEquals("the-branch", resultSet.git.get("branch"));
                         exchange.getResponseSender().send("OK");

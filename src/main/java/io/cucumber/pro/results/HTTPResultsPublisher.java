@@ -2,6 +2,7 @@ package io.cucumber.pro.results;
 
 import cucumber.runtime.CucumberException;
 import gherkin.deps.com.google.gson.Gson;
+import gherkin.deps.com.google.gson.JsonSyntaxException;
 import io.cucumber.pro.Keys;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.config.Config;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 class HTTPResultsPublisher implements ResultsPublisher {
@@ -61,13 +63,12 @@ class HTTPResultsPublisher implements ResultsPublisher {
 
             Map<String, Object> body = new HashMap<>();
             body.put("environment", env);
-            body.put("cucumberJson", GSON.fromJson(new InputStreamReader(new FileInputStream(resultsJsonFile), "UTF-8"), Map.class));
+            body.put("cucumberJson", GSON.fromJson(new InputStreamReader(new FileInputStream(resultsJsonFile), "UTF-8"), List.class));
             body.put("profileName", profileName);
             body.put("git", git);
 
 
             String json = GSON.toJson(body);
-            System.out.println("JSON = " + json);
             post.setEntity(new StringEntity(json, ContentType.create(CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON, "UTF-8")));
 
             HttpResponse response = client.execute(post);
@@ -103,6 +104,9 @@ class HTTPResultsPublisher implements ResultsPublisher {
             } else {
                 throw logger.log(e, String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR));
             }
+        } catch(JsonSyntaxException e) {
+            System.err.println("Failed to parse JSON from " + resultsJsonFile.getAbsolutePath());
+            throw e;
         } catch (IOException e) {
             throw logger.log(e, "Unexpected IO Error");
         }

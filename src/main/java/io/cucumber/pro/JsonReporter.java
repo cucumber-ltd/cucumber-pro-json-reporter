@@ -50,7 +50,6 @@ public class JsonReporter implements Formatter {
         } catch (IOException e) {
             throw logger.log(e, "Failed to create temp file for Cucumber JSON results");
         }
-        jsonFile.deleteOnExit();
         jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
     }
 
@@ -103,6 +102,7 @@ public class JsonReporter implements Formatter {
                     public void receive(TestRunFinished event) {
                         JsonReporter.this.logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", JsonReporter.this.config.toYaml("cucumberpro"));
                         JsonReporter.this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch);
+                        jsonFile.deleteOnExit(); // If the publisher fails, leave the file for inspection.
                     }
                 });
             }

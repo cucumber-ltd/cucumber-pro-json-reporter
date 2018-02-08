@@ -23,7 +23,6 @@ public class JsonReporter12 extends JSONFormatter {
     static {
         try {
             jsonFile = File.createTempFile("cucumber-json", ".json");
-            jsonFile.deleteOnExit();
         } catch (IOException e) {
             throw LOGGER.log(e, "Failed to create temp file for Cucumber JSON results");
         }
@@ -81,6 +80,7 @@ public class JsonReporter12 extends JSONFormatter {
             String revision = ciEnvironment.getRevision(config);
             String branch = ciEnvironment.getBranch(config);
             this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch);
+            jsonFile.deleteOnExit(); // If the publisher fails, leave the file for inspection.
         }
     }
 }
