@@ -69,7 +69,7 @@ public class HTTPResultsPublisherTest {
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         Map<String, String> env = new HashMap<>();
         env.put("some-env", "some-value");
-        publisher.publish(RESULTS_JSON_FILE, env, "the-profile", "the-rev", "the-branch");
+        publisher.publish(RESULTS_JSON_FILE, env, "the-profile", "the-rev", "the-branch", "the-tag");
     }
 
     @Test
@@ -87,7 +87,7 @@ public class HTTPResultsPublisherTest {
         Config config = createConfig();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
-            publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch");
+            publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch", "the-tag");
             fail();
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
@@ -103,7 +103,7 @@ public class HTTPResultsPublisherTest {
         config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
         try {
-            publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch");
+            publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch", "the-tag");
             fail();
         } catch (CucumberException expected) {
             String[] lines = expected.getMessage().split("\\n");
@@ -118,7 +118,7 @@ public class HTTPResultsPublisherTest {
         config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
         TestLogger logger = new TestLogger();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);
-        publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch");
+        publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch", "the-tag");
         assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.getMessages(Logger.Level.WARN).get(0));
     }
 }

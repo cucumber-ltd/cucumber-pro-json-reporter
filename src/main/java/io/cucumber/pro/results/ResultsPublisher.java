@@ -6,5 +6,5 @@ import java.io.File;
 import java.util.Map;
 
 public interface ResultsPublisher {
-    void publish(File resultsJsonFile, Map<String, String> env, String profileName, String revision, String branch) throws CucumberException;
+    void publish(File resultsJsonFile, Map<String, String> env, String profileName, String revision, String branch, String tag) throws CucumberException;
 }

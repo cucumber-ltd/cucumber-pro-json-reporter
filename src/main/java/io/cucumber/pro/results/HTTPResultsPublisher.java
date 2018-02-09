@@ -51,7 +51,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
     }
 
     @Override
-    public void publish(File resultsJsonFile, final Map<String, String> env, String profileName, String revision, String branch) {
+    public void publish(File resultsJsonFile, final Map<String, String> env, String profileName, String revision, String branch, String tag) {
         HttpClient client = buildHttpClient();
 
         HttpPost post = new HttpPost(URI.create(url));
@@ -60,6 +60,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
             Map<String, String> git = new HashMap<>();
             git.put("revision", revision);
             git.put("branch", branch);
+            git.put("tag", tag);
 
             Map<String, Object> body = new HashMap<>();
             body.put("environment", env);

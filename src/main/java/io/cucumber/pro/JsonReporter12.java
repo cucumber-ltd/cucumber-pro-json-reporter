@@ -79,7 +79,8 @@ public class JsonReporter12 extends JSONFormatter {
             logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", config.toYaml("cucumberpro"));
             String revision = ciEnvironment.getRevision(config);
             String branch = ciEnvironment.getBranch(config);
-            this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch);
+            String tag = ciEnvironment.getTag(config);
+            this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch, tag);
             jsonFile.deleteOnExit(); // If the publisher fails, leave the file for inspection.
         }
     }

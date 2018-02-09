@@ -77,7 +77,8 @@ public class JsonReporter implements Formatter {
         if(this.ciEnvironment != null) {
             String revision = ciEnvironment.getRevision(this.config);
             String branch = ciEnvironment.getBranch(this.config);
-            jsonFormatter.setEventPublisher(new PublisherAdapter(publisher, revision, branch));
+            String tag = ciEnvironment.getTag(this.config);
+            jsonFormatter.setEventPublisher(new PublisherAdapter(publisher, revision, branch, tag));
         }
     }
 
@@ -85,11 +86,13 @@ public class JsonReporter implements Formatter {
         private final EventPublisher publisher;
         private final String revision;
         private final String branch;
+        private final String tag;
 
-        PublisherAdapter(EventPublisher publisher, String revision, String branch) {
+        PublisherAdapter(EventPublisher publisher, String revision, String branch, String tag) {
             this.publisher = publisher;
             this.revision = revision;
             this.branch = branch;
+            this.tag = tag;
         }
 
         @Override
@@ -101,7 +104,7 @@ public class JsonReporter implements Formatter {
                     @Override
                     public void receive(TestRunFinished event) {
                         JsonReporter.this.logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", JsonReporter.this.config.toYaml("cucumberpro"));
-                        JsonReporter.this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch);
+                        JsonReporter.this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch, tag);
                         jsonFile.deleteOnExit(); // If the publisher fails, leave the file for inspection.
                     }
                 });
