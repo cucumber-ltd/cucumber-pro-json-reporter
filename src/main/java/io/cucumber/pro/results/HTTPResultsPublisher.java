@@ -70,6 +70,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
 
 
             String json = GSON.toJson(body);
+            System.out.println("json = " + json);
             post.setEntity(new StringEntity(json, ContentType.create(CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON, "UTF-8")));
 
             HttpResponse response = client.execute(post);

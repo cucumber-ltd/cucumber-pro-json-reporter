@@ -92,7 +92,7 @@ cucumberpro:
   # The plugin sends your local environment variables to Cucumber Pro so it can detect the CI build number, 
   # git branch/tag and other information about the build. This mask is a regular expression for filtering
   # out sensitive values that should not be sent to Cucumber Pro.
-  envmask: SECRET|KEY|TOKEN|PASSWORD
+  envmask: SECRET|KEY|TOKEN|PASSWORD|PWD
 
   # Sets the log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
   # Setting it to `DEBUG` will also print the current configuration when the plugin runs.

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* Support for Wercker CI
+* Support for TFS
+
 ### Changed
 
 * `CUCUMBERPRO_RESULTS_TOKEN` has been renamed to `CUCUMBERPRO_TOKEN`.
