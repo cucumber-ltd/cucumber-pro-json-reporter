@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * The default value of `CUCUMBERPRO_LOGGING` has changed from `WARN` to `INFO`.
 * `CUCUMBERPRO_RESULTS_TOKEN` has been renamed to `CUCUMBERPRO_TOKEN`.
 * The only way to activate the plugin is by defining the environment variables `GIT_COMMIT` and `GIT_BRANCH`
-  (or similar environment variables for Bamboo/Circle/Jenkins/Travis).
+  (or similar environment variables for Bamboo/Circle/Jenkins/Travis/TFS/Wercker).
 * WARN/ERROR/FATAL logging now goes to STDERR, while INFO/DEBUG goes to STDOUT.
 
 ### Deprecated
