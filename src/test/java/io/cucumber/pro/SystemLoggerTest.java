@@ -8,10 +8,10 @@ import static org.junit.Assert.assertEquals;
 
 public class SystemLoggerTest {
     @Test
-    public void is_warn_level_by_default() {
+    public void is_info_level_by_default() {
         Config config = createConfig();
         Logger.SystemLogger logger = new Logger.SystemLogger(config);
-        assertEquals(Logger.Level.WARN, logger.level);
+        assertEquals(Logger.Level.INFO, logger.level);
     }
 
     @Test

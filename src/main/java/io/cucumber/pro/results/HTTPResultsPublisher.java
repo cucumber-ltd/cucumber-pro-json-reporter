@@ -68,9 +68,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
             body.put("profileName", profileName);
             body.put("git", git);
 
-
             String json = GSON.toJson(body);
-            System.out.println("json = " + json);
             post.setEntity(new StringEntity(json, ContentType.create(CONTENT_TYPE_CUCUMBER_JAVA_RESULTS_JSON, "UTF-8")));
 
             HttpResponse response = client.execute(post);
@@ -106,7 +104,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
             } else {
                 throw logger.log(e, String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR));
             }
-        } catch(JsonSyntaxException e) {
+        } catch (JsonSyntaxException e) {
             System.err.println("Failed to parse JSON from " + resultsJsonFile.getAbsolutePath());
             throw e;
         } catch (IOException e) {

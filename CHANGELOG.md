@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
+* The plugin no longer tries to guess project name from the CI environment. It *has* to be defined explicitly
+  in `cucumberpro.projectname` (YAML) or `CUCUMBERPRO_PROJECTNAME` (Environment variable)
 * The plugin no longer publishes documentation via git. (Cucumber Pro automatically syncs with your repo).
 
 ### Fixed
