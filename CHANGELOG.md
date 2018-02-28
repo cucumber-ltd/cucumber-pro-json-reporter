@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* The default value of `CUCUMBERPRO_LOGGING` has changed from `WARN` to `INFO`.
 * `CUCUMBERPRO_RESULTS_TOKEN` has been renamed to `CUCUMBERPRO_TOKEN`.
 * The only way to activate the plugin is by defining the environment variables `GIT_COMMIT` and `GIT_BRANCH`
   (or similar environment variables for Bamboo/Circle/Jenkins/Travis).

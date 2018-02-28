@@ -26,7 +26,7 @@ public class Keys {
         config.set(CUCUMBERPRO_CONNECTION_IGNOREERROR, true);
         config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, 5000);
         config.set(CUCUMBERPRO_ENVMASK, "SECRET|KEY|TOKEN|PASSWORD");
-        config.set(CUCUMBERPRO_LOGGING, "WARN");
+        config.set(CUCUMBERPRO_LOGGING, "INFO");
 
         config.setNull(CUCUMBERPRO_PROJECTNAME);
         config.setNull(bamboo_planRepository_name);
