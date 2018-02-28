@@ -29,11 +29,11 @@ public class ConfigFactory {
         // to define global values, but equally easy to override them on a per-project
         // basis.
         YamlConfigLoader.load(GLOBAL_YAML_FILE_NAMES, config);
-        new EnvironmentVariablesConfigLoader().load(config);
-        new BambooEnvironmentVariablesConfigLoader().load(config);
+        YamlConfigLoader.load(LOCAL_YAML_FILE_NAMES, config);
         new DeprecatedEnvironmentVariablesConfigLoader().load(config);
         new SystemPropertiesConfigLoader().load(config);
-        YamlConfigLoader.load(LOCAL_YAML_FILE_NAMES, config);
+        new BambooEnvironmentVariablesConfigLoader().load(config);
+        new EnvironmentVariablesConfigLoader().load(config);
 
         return config;
     }
