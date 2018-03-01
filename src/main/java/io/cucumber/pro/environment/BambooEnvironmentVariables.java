@@ -1,8 +1,7 @@
-package io.cucumber.pro.config.loaders;
-
-import io.cucumber.pro.config.Config;
+package io.cucumber.pro.environment;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -13,21 +12,13 @@ import java.util.regex.Pattern;
  * Bamboo prefixes all environment variables with `bamboo_`. This class
  * strips them off.
  */
-public class BambooEnvironmentVariablesConfigLoader implements ConfigLoader {
+public class BambooEnvironmentVariables {
     private static Pattern BAMBOO_PATTERN = Pattern.compile("^bamboo_(.+)");
-    private final Map<String, String> env;
 
-    public BambooEnvironmentVariablesConfigLoader() {
-        this(System.getenv());
-    }
+    public Map<String, String> convert(Map<String, String> env) {
+        Map<String, String> result = new HashMap<>();
 
-    public BambooEnvironmentVariablesConfigLoader(Map<String, String> env) {
-        this.env = env;
-    }
-
-    @Override
-    public void load(Config config) {
-        SortedSet<String> variables = new TreeSet<>(new Comparator<String>() {
+        SortedSet<String> vars = new TreeSet<>(new Comparator<String>() {
             @Override
             public int compare(String v1, String v2) {
                 if (BAMBOO_PATTERN.matcher(v1).lookingAt()) return -1;
@@ -35,15 +26,17 @@ public class BambooEnvironmentVariablesConfigLoader implements ConfigLoader {
                 return 0;
             }
         });
-        variables.addAll(env.keySet());
+        vars.addAll(env.keySet());
 
-        for (String key : variables) {
+        for (String key : vars) {
             Matcher matcher = BAMBOO_PATTERN.matcher(key);
             if (matcher.lookingAt()) {
                 String value = env.get(key);
-                String strippedKey = matcher.group(1);
-                config.set(strippedKey, value);
+                String strippedVar = matcher.group(1);
+                result.put(strippedVar, value);
             }
         }
+        result.putAll(env);
+        return result;
     }
 }

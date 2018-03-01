@@ -18,26 +18,6 @@ public class CIEnvironment {
         this.projectName = projectName;
     }
 
-    public String getCiName() {
-        return ciName;
-    }
-
-    public String getRevision() {
-        return revision;
-    }
-
-    public String getBranch() {
-        return branch;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
     public static CIEnvironment detect(Map<String, String> env) {
         CIEnvironment ci;
         if ((ci = detectBamboo(env)) != null) return ci;
@@ -145,6 +125,26 @@ public class CIEnvironment {
                 tag,
                 projectName
         );
+    }
+
+    public String getCiName() {
+        return ciName;
+    }
+
+    public String getRevision() {
+        return revision;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public String getProjectName() {
+        return projectName;
     }
 
 }

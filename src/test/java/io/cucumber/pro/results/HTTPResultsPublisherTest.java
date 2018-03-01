@@ -27,14 +27,6 @@ import static org.junit.Assert.fail;
 public class HTTPResultsPublisherTest {
 
     private static final File RESULTS_JSON_FILE = new File("src/test/resources/sample.json");
-
-    public static class ResultSet {
-        public Map<String, String> environment;
-        // It's a more complex structure, but this simple structure is easier to use in a test
-        public List<Object> cucumberJson;
-        public Map<String, String> git;
-    }
-
     private Undertow server;
 
     @After
@@ -120,5 +112,12 @@ public class HTTPResultsPublisherTest {
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);
         publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch", "the-tag");
         assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.getMessages(Logger.Level.WARN).get(0));
+    }
+
+    public static class ResultSet {
+        public Map<String, String> environment;
+        // It's a more complex structure, but this simple structure is easier to use in a test
+        public List<Object> cucumberJson;
+        public Map<String, String> git;
     }
 }

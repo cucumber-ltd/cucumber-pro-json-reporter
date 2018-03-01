@@ -1,10 +1,12 @@
 package io.cucumber.pro;
 
 import io.cucumber.pro.config.Config;
-import io.cucumber.pro.config.loaders.BambooEnvironmentVariablesConfigLoader;
 import io.cucumber.pro.config.loaders.EnvironmentVariablesConfigLoader;
 import io.cucumber.pro.config.loaders.SystemPropertiesConfigLoader;
 import io.cucumber.pro.config.loaders.YamlConfigLoader;
+import io.cucumber.pro.environment.BambooEnvironmentVariables;
+
+import java.util.Map;
 
 import static io.cucumber.pro.Keys.createConfig;
 
@@ -32,8 +34,8 @@ public class ConfigFactory {
         YamlConfigLoader.load(LOCAL_YAML_FILE_NAMES, config);
         new DeprecatedEnvironmentVariablesConfigLoader().load(config);
         new SystemPropertiesConfigLoader().load(config);
-        new BambooEnvironmentVariablesConfigLoader().load(config);
-        new EnvironmentVariablesConfigLoader().load(config);
+        Map<String, String> env = new BambooEnvironmentVariables().convert(System.getenv());
+        new EnvironmentVariablesConfigLoader(env).load(config);
 
         return config;
     }

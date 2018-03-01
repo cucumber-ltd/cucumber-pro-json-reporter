@@ -74,7 +74,7 @@ public class JsonReporter implements Formatter {
 
     @Override
     public void setEventPublisher(EventPublisher publisher) {
-        if(this.ciEnvironment != null) {
+        if (this.ciEnvironment != null) {
             String revision = ciEnvironment.getRevision();
             String branch = ciEnvironment.getBranch();
             String tag = ciEnvironment.getTag();
