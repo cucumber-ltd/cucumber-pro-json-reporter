@@ -21,4 +21,14 @@ public class CiEnvironmentTest {
         config.set(CIEnvironment.TRAVIS.revisionVar, "whatever");
         assertEquals(CIEnvironment.TRAVIS, CIEnvironment.detect(config));
     }
+
+    @Test
+    public void recognises_bamboo() {
+        Config config = createConfig();
+        config.set(CIEnvironment.BAMBOO.branchVar, "master");
+        config.set(CIEnvironment.BAMBOO.revisionVar, "1234");
+        config.set(CIEnvironment.BAMBOO.projectNameVar, "the-project");
+        assertEquals(CIEnvironment.BAMBOO, CIEnvironment.detect(config));
+        assertEquals("the-project", CIEnvironment.detect(config).getProjectName(config));
+    }
 }

@@ -10,10 +10,13 @@ public class ResultsPublisherFactory {
     public static ResultsPublisher create(Config config, Logger logger, CIEnvironment ciEnvironment) {
         if (ciEnvironment != null) {
             String projectName = config.getString(Keys.CUCUMBERPRO_PROJECTNAME);
+            if (projectName == null) {
+                projectName = ciEnvironment.getProjectName(config);
+            }
             if (projectName == null) throw new CucumberException(String.format(
-                    "CucumberPro detected a CI environment (%s), but no %s was defined",
-                    ciEnvironment.toString(),
-                    Keys.CUCUMBERPRO_PROJECTNAME
+                    "You have to define %s when running on %s",
+                    Keys.CUCUMBERPRO_PROJECTNAME,
+                    ciEnvironment.toString()
             ));
             String url = CucumberProResultsUrlBuilder.buildCucumberProUrl(config, projectName);
             return new HTTPResultsPublisher(url, config, logger);
