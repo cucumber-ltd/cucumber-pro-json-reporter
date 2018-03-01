@@ -1,10 +1,7 @@
 package io.cucumber.pro.environment;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,18 +14,7 @@ public class BambooEnvironmentVariables {
 
     public Map<String, String> convert(Map<String, String> env) {
         Map<String, String> result = new HashMap<>();
-
-        SortedSet<String> vars = new TreeSet<>(new Comparator<String>() {
-            @Override
-            public int compare(String v1, String v2) {
-                if (BAMBOO_PATTERN.matcher(v1).lookingAt()) return -1;
-                if (BAMBOO_PATTERN.matcher(v2).lookingAt()) return 1;
-                return 0;
-            }
-        });
-        vars.addAll(env.keySet());
-
-        for (String key : vars) {
+        for (String key : env.keySet()) {
             Matcher matcher = BAMBOO_PATTERN.matcher(key);
             if (matcher.lookingAt()) {
                 String value = env.get(key);
