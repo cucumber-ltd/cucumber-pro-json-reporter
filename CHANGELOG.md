@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## [2.1.0] - 2018-03-01
+
+### Added
+
 * Support for Wercker CI
 * Support for TFS
 * Added `CUCUMBERPRO_LOGFILE` / `cucumberpro.logfile` option, allowing logging to be written to a file.
@@ -21,8 +33,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * The only way to activate the plugin is by defining the environment variables `GIT_COMMIT` and `GIT_BRANCH`
   (or similar environment variables for Bamboo/Circle/Jenkins/TFS/Travis/Wercker).
 * WARN/ERROR/FATAL logging now goes to STDERR, while INFO/DEBUG goes to STDOUT.
-
-### Deprecated
 
 ### Removed
 
@@ -174,7 +184,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.4...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...v2.0.3
 [2.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v1.2.9...v2.0.0
