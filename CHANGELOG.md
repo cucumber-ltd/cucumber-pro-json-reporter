@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Support for Wercker CI
 * Support for TFS
+* Added `CUCUMBERPRO_LOGFILE` / `cucumberpro.logfile` option, allowing logging to be written to a file.
 
 ### Changed
 
@@ -18,14 +19,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * The default value of `CUCUMBERPRO_LOGGING` has changed from `WARN` to `INFO`.
 * `CUCUMBERPRO_RESULTS_TOKEN` has been renamed to `CUCUMBERPRO_TOKEN`.
 * The only way to activate the plugin is by defining the environment variables `GIT_COMMIT` and `GIT_BRANCH`
-  (or similar environment variables for Bamboo/Circle/Jenkins/Travis/TFS/Wercker).
+  (or similar environment variables for Bamboo/Circle/Jenkins/TFS/Travis/Wercker).
 * WARN/ERROR/FATAL logging now goes to STDERR, while INFO/DEBUG goes to STDOUT.
 
 ### Deprecated
 
 ### Removed
 
-* The plugin no longer publishes documentation via git. (Cucumber Pro automatically syncs with your repo).
+* The plugin no longer publishes documentation via git. (Cucumber Pro automatically syncs with your repo using WebHooks).
 
 ### Fixed
 

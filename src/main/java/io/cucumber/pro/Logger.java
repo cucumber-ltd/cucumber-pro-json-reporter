@@ -3,7 +3,11 @@ package io.cucumber.pro;
 import cucumber.runtime.CucumberException;
 import io.cucumber.pro.config.Config;
 
-import java.io.PrintStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 public interface Logger {
     void log(Level level, String message, Object... args);
@@ -22,7 +26,11 @@ public interface Logger {
     class SystemLogger implements Logger {
         public final Level level;
 
-        public SystemLogger(Config config) {
+        private final PrintWriter stdout;
+        private final PrintWriter stderr;
+        private final PrintWriter fileWriter;
+
+        SystemLogger(Config config) {
             String name = config.getString(Keys.CUCUMBERPRO_LOGGING).toUpperCase();
             Level level;
             try {
@@ -30,18 +38,41 @@ public interface Logger {
             } catch (IllegalArgumentException e) {
                 level = Level.WARN;
             }
+            try {
+                stdout = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"));
+                stderr = new PrintWriter(new OutputStreamWriter(System.err, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new CucumberException(e);
+            }
+            if (config.getString(Keys.CUCUMBERPRO_LOGFILE) != null) {
+                try {
+                    fileWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(config.getString(Keys.CUCUMBERPRO_LOGFILE)), "UTF-8"));
+                } catch (IOException e) {
+                    throw new CucumberException("Failed to create Cucumber Pro log file " + config.getString(Keys.CUCUMBERPRO_LOGFILE), e);
+                }
+            } else {
+                fileWriter = null;
+            }
             this.level = level;
         }
 
         @Override
         public void log(Level level, String message, Object... args) {
             if (level.value >= this.level.value) {
-                PrintStream out = level.value >= Level.WARN.value ? System.err : System.out;
-                out.print(level);
-                out.print(": ");
-                out.format(message, args);
-                out.print("\n");
+                PrintWriter console = level.value >= Level.WARN.value ? stderr : stdout;
+                log(console, level, message, args);
+                if (fileWriter != null) {
+                    log(fileWriter, level, message, args);
+                }
             }
+        }
+
+        private void log(PrintWriter console, Level level, String message, Object[] args) {
+            console.print(level);
+            console.print(": ");
+            console.format(message, args);
+            console.print("\n");
+            console.flush();
         }
 
         @Override
@@ -49,6 +80,5 @@ public interface Logger {
             log(Level.ERROR, message);
             return new CucumberException(message, e);
         }
-
     }
 }

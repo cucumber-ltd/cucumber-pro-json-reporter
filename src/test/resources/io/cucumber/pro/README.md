@@ -96,7 +96,10 @@ cucumberpro:
 
   # Sets the log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
   # Setting it to `DEBUG` will also print the current configuration when the plugin runs.
-  logging: warn
+  logging: INFO
+
+  # Writes out the log messages to the specified file. 
+  logfile:
 
   # Override this if you are using a privately hosted Cucumber Pro appliance.
   # We recommend setting this with a CUCUMBERPRO_URL environment variable defined globally on your build server.
