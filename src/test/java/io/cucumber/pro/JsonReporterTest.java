@@ -29,6 +29,7 @@ public class JsonReporterTest {
             put("PASSWORD", "secret");
             put("TRAVIS_BRANCH", "the-branch");
             put("TRAVIS_COMMIT", "the-commit");
+            put("TRAVIS_REPO_SLUG", "owner/repo");
         }};
         Config config = createConfig();
         new EnvironmentVariablesConfigLoader(env).load(config);
@@ -40,7 +41,7 @@ public class JsonReporterTest {
                 profileName,
                 config,
                 logger,
-                CIEnvironment.TRAVIS,
+                CIEnvironment.detect(env),
                 env);
 
         TimeService timeService = TimeService.SYSTEM;
@@ -60,6 +61,7 @@ public class JsonReporterTest {
             put("FOO", "bar");
             put("TRAVIS_BRANCH", "the-branch");
             put("TRAVIS_COMMIT", "the-commit");
+            put("TRAVIS_REPO_SLUG", "owner/repo");
         }};
         assertEquals(expectedEnv, publishedEnv);
         assertNotNull(resultsPublisher.getPublishedFile());

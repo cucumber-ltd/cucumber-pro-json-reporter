@@ -16,7 +16,7 @@ public class JsonReporter12 extends JSONFormatter {
 
     private static final Config CONFIG = ConfigFactory.create();
     private static final Logger LOGGER = new Logger.SystemLogger(CONFIG);
-    private static final CIEnvironment CI_ENVIRONMENT = CIEnvironment.detect(CONFIG);
+    private static final CIEnvironment CI_ENVIRONMENT = CIEnvironment.detect(System.getenv());
 
     private static final File jsonFile;
 
@@ -77,9 +77,9 @@ public class JsonReporter12 extends JSONFormatter {
         super.close();
         if (this.ciEnvironment != null) {
             logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", config.toYaml("cucumberpro"));
-            String revision = ciEnvironment.getRevision(config);
-            String branch = ciEnvironment.getBranch(config);
-            String tag = ciEnvironment.getTag(config);
+            String revision = ciEnvironment.getRevision();
+            String branch = ciEnvironment.getBranch();
+            String tag = ciEnvironment.getTag();
             this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch, tag);
             jsonFile.deleteOnExit(); // If the publisher fails, leave the file for inspection.
         }

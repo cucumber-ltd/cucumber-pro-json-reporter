@@ -20,7 +20,7 @@ public class JsonReporter implements Formatter {
 
     private static final Config CONFIG = ConfigFactory.create();
     private static final Logger LOGGER = new Logger.SystemLogger(CONFIG);
-    private static final CIEnvironment CI_ENVIRONMENT = CIEnvironment.detect(CONFIG);
+    private static final CIEnvironment CI_ENVIRONMENT = CIEnvironment.detect(System.getenv());
     private final Formatter jsonFormatter;
     private final File jsonFile;
     private final ResultsPublisher resultsPublisher;
@@ -75,9 +75,9 @@ public class JsonReporter implements Formatter {
     @Override
     public void setEventPublisher(EventPublisher publisher) {
         if(this.ciEnvironment != null) {
-            String revision = ciEnvironment.getRevision(this.config);
-            String branch = ciEnvironment.getBranch(this.config);
-            String tag = ciEnvironment.getTag(this.config);
+            String revision = ciEnvironment.getRevision();
+            String branch = ciEnvironment.getBranch();
+            String tag = ciEnvironment.getTag();
             jsonFormatter.setEventPublisher(new PublisherAdapter(publisher, revision, branch, tag));
         }
     }

@@ -11,7 +11,7 @@ public class ResultsPublisherFactory {
         if (ciEnvironment != null) {
             String projectName = config.getString(Keys.CUCUMBERPRO_PROJECTNAME);
             if (projectName == null) {
-                projectName = ciEnvironment.getProjectName(config);
+                projectName = ciEnvironment.getProjectName();
             }
             if (projectName == null) throw new CucumberException(String.format(
                     "You have to define %s when running on %s",
