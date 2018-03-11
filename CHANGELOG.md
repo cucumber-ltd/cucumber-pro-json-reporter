@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* Added `CUCUMBERPRO_PROFILE` / `cucumberpro.profile` option, allowing the profile to be specified
+  in an environment variable or `cucumber.yml` as well as in the `@CucumberOptions` annotation.
+
 ### Changed
+
+* The various `cucumber.yml` file locations have changed: https://cucumber.netlify.com/cucumber/reporting/#advanced-configuration
 
 ### Deprecated
 

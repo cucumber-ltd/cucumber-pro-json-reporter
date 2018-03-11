@@ -39,7 +39,7 @@ public class JsonReporter implements Formatter {
             Map<String, String> env
     ) {
         this.resultsPublisher = resultsPublisher;
-        this.profileName = profileName;
+        this.profileName = ProfileName.getProfileName(config, profileName);
         this.config = config;
         this.logger = logger;
         this.ciEnvironment = ciEnvironment;
@@ -69,7 +69,7 @@ public class JsonReporter implements Formatter {
     }
 
     public JsonReporter() {
-        this("cucumber-jvm-unspecified-profile");
+        this(null);
     }
 
     @Override

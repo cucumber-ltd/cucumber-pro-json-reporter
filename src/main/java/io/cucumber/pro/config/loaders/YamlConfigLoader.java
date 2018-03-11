@@ -4,12 +4,7 @@ import io.cucumber.pro.config.Config;
 import io.cucumber.pro.config.RealValue;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.util.Map;
 
 public class YamlConfigLoader implements ConfigLoader {
@@ -19,24 +14,6 @@ public class YamlConfigLoader implements ConfigLoader {
 
     public YamlConfigLoader(Reader reader) {
         this.map = YAML.load(reader);
-    }
-
-    public static void load(String[] yamlFileNames, Config config) {
-        for (String yamlFileName : yamlFileNames) {
-            getConfigLoader(yamlFileName).load(config);
-        }
-    }
-
-    private static ConfigLoader getConfigLoader(String yamlFileName) {
-        File file = new File(yamlFileName);
-        if (!file.isFile()) return new NullConfigLoader();
-
-        try {
-            Reader reader = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
-            return new YamlConfigLoader(reader);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

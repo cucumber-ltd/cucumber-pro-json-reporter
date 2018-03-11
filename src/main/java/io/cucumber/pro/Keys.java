@@ -8,6 +8,7 @@ public class Keys {
     public static final String CUCUMBERPRO_ENVMASK = "cucumberpro.envmask";
     public static final String CUCUMBERPRO_LOGFILE = "cucumberpro.logfile";
     public static final String CUCUMBERPRO_LOGGING = "cucumberpro.logging";
+    public static final String CUCUMBERPRO_PROFILE = "cucumberpro.profile";
     public static final String CUCUMBERPRO_PROJECTNAME = "cucumberpro.projectname";
     public static final String CUCUMBERPRO_TOKEN = "cucumberpro.token";
     public static final String CUCUMBERPRO_URL = "cucumberpro.url";
@@ -19,6 +20,7 @@ public class Keys {
         config.set(CUCUMBERPRO_ENVMASK, "SECRET|KEY|TOKEN|PASSWORD");
         config.setNull(CUCUMBERPRO_LOGFILE);
         config.set(CUCUMBERPRO_LOGGING, "INFO");
+        config.setNull(CUCUMBERPRO_PROFILE);
         config.setNull(CUCUMBERPRO_PROJECTNAME);
         config.setNull(CUCUMBERPRO_TOKEN);
         config.set(CUCUMBERPRO_URL, "https://app.cucumber.pro/");

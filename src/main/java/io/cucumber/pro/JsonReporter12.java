@@ -45,7 +45,7 @@ public class JsonReporter12 extends JSONFormatter {
     ) throws IOException {
         super(new FileWriter(jsonFile));
         this.resultsPublisher = resultsPublisher;
-        this.profileName = profileName;
+        this.profileName = ProfileName.getProfileName(config, profileName);
         this.config = config;
         this.logger = logger;
         this.ciEnvironment = ciEnvironment;
