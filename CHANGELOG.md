@@ -79,7 +79,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Deprecated
 
 * Most existing environment variables are deprecated and replaced with a different name.
-  The old ones will work until version 3.0.0.
 
 ## [1.2.9] - 2018-01-09
 
