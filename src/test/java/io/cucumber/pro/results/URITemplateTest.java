@@ -19,6 +19,16 @@ public class URITemplateTest {
         assertEquals("http://example.com/foo/bar/zap", uriTemplate.expand(values));
     }
 
+    @Test
+    public void uri_encodes_arguments() {
+        Map<String, String> values = new HashMap<String, String>() {{
+                put("projectName", "bar baz");
+                put("revision", "zap");
+            }};
+        URITemplate uriTemplate = new URITemplate("http://example.com/foo/{projectName}/{revision}");
+        assertEquals("http://example.com/foo/bar%20baz/zap", uriTemplate.expand(values));
+    }
+
     @Test(expected = RuntimeException.class)
     public void throws_exception_for_missing_argument() {
         Map<String, String> values = new HashMap<String, String>() {{
