@@ -2,6 +2,8 @@ package io.cucumber.pro;
 
 import cucumber.runtime.CucumberException;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +32,24 @@ public class URITemplate {
             if (argument == null) {
                 throw new CucumberException(String.format("Missing argument \"%s\". Template: %s Arguments: %s", variableName, template, values));
             }
-            arguments.add(argument);
+            arguments.add(encodeURIComponent(argument));
         }
         matcher.appendTail(format);
         Object[] args = arguments.toArray(new String[arguments.size()]);
         return String.format(format.toString(), args);
+    }
+
+    private static String encodeURIComponent(String s) {
+        try {
+            return URLEncoder.encode(s, "UTF-8")
+                    .replaceAll("\\+", "%20")
+                    .replaceAll("%21", "!")
+                    .replaceAll("%27", "'")
+                    .replaceAll("%28", "(")
+                    .replaceAll("%29", ")")
+                    .replaceAll("%7E", "~");
+        } catch (UnsupportedEncodingException e) {
+            throw new CucumberException(e);
+        }
     }
 }
