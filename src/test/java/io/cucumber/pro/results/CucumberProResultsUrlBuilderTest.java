@@ -7,7 +7,7 @@ import org.junit.Test;
 import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
 
-public class CucumberProUrlBuilderTest {
+public class CucumberProResultsUrlBuilderTest {
 
     @Test
     public void builds_url_for_saas_by_default() {
