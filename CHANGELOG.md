@@ -9,16 +9,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## [2.1.1] - 2018-05-22
+
+### Added
+
 * Added `CUCUMBERPRO_PROFILE` / `cucumberpro.profile` option, allowing the profile to be specified
   in an environment variable or `cucumber.yml` as well as in the `@CucumberOptions` annotation.
 
 ### Changed
 
-* The various `cucumber.yml` file locations have changed: https://cucumber.netlify.com/cucumber/reporting/#advanced-configuration
-
-### Deprecated
+* Server errors are logged and ignored rather than throwing an error.
+* The various `cucumber.yml` file locations have changed: https://docs.cucumber.io/cucumber/reporting/#advanced-configuration
 
 ### Removed
+
+* The `CUCUMBERPRO_CONNECTION_IGNOREERROR` option is removed - all connection errors are logged and ignored.
 
 ### Fixed
 
@@ -191,7 +204,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First proper release!
 
-[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.0...v2.0.3

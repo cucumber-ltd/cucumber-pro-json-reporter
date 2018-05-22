@@ -1,10 +1,9 @@
 package io.cucumber.pro.results;
 
-import cucumber.runtime.CucumberException;
 import gherkin.deps.com.google.gson.Gson;
-import gherkin.deps.com.google.gson.JsonSyntaxException;
 import io.cucumber.pro.Keys;
 import io.cucumber.pro.Logger;
+import io.cucumber.pro.StackTrace;
 import io.cucumber.pro.config.Config;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -14,8 +13,6 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -24,7 +21,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.HashMap;
@@ -88,27 +84,14 @@ class HTTPResultsPublisher implements ResultsPublisher {
                 if (statusCode == 403)
                     suggestion = String.format("You need to change the value of %s", Keys.CUCUMBERPRO_TOKEN);
 
-                String message = String.format(
-                        "Failed to publish results to Cucumber Pro URL: %s, Status: %s\n%s\n%s",
+                logger.log(Logger.Level.ERROR, "Failed to publish results to : %s\nHTTP Status: %s\n%s\n%s",
                         url,
                         statusLine,
                         responseBody,
-                        suggestion
-                );
-                logger.log(Logger.Level.ERROR, message);
-                throw new CucumberException(message);
+                        suggestion);
             }
-        } catch (ConnectTimeoutException | HttpHostConnectException e) {
-            if (config.getBoolean(Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR)) {
-                logger.log(Logger.Level.WARN, "Failed to publish results to %s\n", url);
-            } else {
-                throw logger.log(e, String.format("Failed to publish results to %s\nYou can set %s to true to treat this as a warning instead of an error", url, Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR));
-            }
-        } catch (JsonSyntaxException e) {
-            System.err.println("Failed to parse JSON from " + resultsJsonFile.getAbsolutePath());
-            throw e;
-        } catch (IOException e) {
-            throw logger.log(e, "Unexpected IO Error");
+        } catch (Throwable e) {
+            logger.log(Logger.Level.ERROR, "Failed to publish results to %s\n%s", url, StackTrace.get(e));
         }
     }
 

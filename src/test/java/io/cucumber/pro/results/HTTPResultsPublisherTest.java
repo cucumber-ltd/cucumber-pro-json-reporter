@@ -1,6 +1,5 @@
 package io.cucumber.pro.results;
 
-import cucumber.runtime.CucumberException;
 import gherkin.deps.com.google.gson.Gson;
 import io.cucumber.pro.Logger;
 import io.cucumber.pro.TestLogger;
@@ -18,11 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_IGNOREERROR;
 import static io.cucumber.pro.Keys.CUCUMBERPRO_CONNECTION_TIMEOUT;
 import static io.cucumber.pro.Keys.createConfig;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class HTTPResultsPublisherTest {
 
@@ -77,31 +74,15 @@ public class HTTPResultsPublisherTest {
         server.start();
 
         Config config = createConfig();
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
-        try {
-            publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch", "the-tag");
-            fail();
-        } catch (CucumberException expected) {
-            String[] lines = expected.getMessage().split("\\n");
-            String suggestion = lines[lines.length - 1];
-            assertEquals("You need to define cucumberpro.token", suggestion);
-        }
-    }
+        TestLogger logger = new TestLogger();
+        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);
+        publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch", "the-tag");
 
-    @Test
-    public void throws_error_with_explanation_on_connection_timeout() {
-        Config config = createConfig();
-        config.set(CUCUMBERPRO_CONNECTION_IGNOREERROR, "false");
-        config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, "100");
-        HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, new TestLogger());
-        try {
-            publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch", "the-tag");
-            fail();
-        } catch (CucumberException expected) {
-            String[] lines = expected.getMessage().split("\\n");
-            String suggestion = lines[lines.length - 1];
-            assertEquals("You can set cucumberpro.connection.ignoreerror to true to treat this as a warning instead of an error", suggestion);
-        }
+        String firstLogMessage = logger.getMessages(Logger.Level.ERROR).get(0);
+        assertEquals("Failed to publish results to : http://localhost:8082/results\n" +
+                "HTTP Status: HTTP/1.1 401 Unauthorized\n" +
+                "\n" +
+                "You need to define cucumberpro.token", firstLogMessage);
     }
 
     @Test
@@ -111,7 +92,9 @@ public class HTTPResultsPublisherTest {
         TestLogger logger = new TestLogger();
         HTTPResultsPublisher publisher = new HTTPResultsPublisher("http://localhost:8082/results", config, logger);
         publisher.publish(RESULTS_JSON_FILE, new HashMap<String, String>(), "the-profile", "the-rev", "the-branch", "the-tag");
-        assertEquals("Failed to publish results to http://localhost:8082/results\n", logger.getMessages(Logger.Level.WARN).get(0));
+        String firstLogMessage = logger.getMessages(Logger.Level.ERROR).get(0);
+        String firstLine = firstLogMessage.split("\\n")[0];
+        assertEquals("Failed to publish results to http://localhost:8082/results", firstLine);
     }
 
     public static class ResultSet {

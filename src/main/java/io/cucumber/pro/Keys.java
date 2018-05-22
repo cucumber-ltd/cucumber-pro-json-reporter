@@ -3,7 +3,6 @@ package io.cucumber.pro;
 import io.cucumber.pro.config.Config;
 
 public class Keys {
-    public static final String CUCUMBERPRO_CONNECTION_IGNOREERROR = "cucumberpro.connection.ignoreerror";
     public static final String CUCUMBERPRO_CONNECTION_TIMEOUT = "cucumberpro.connection.timeout";
     public static final String CUCUMBERPRO_ENVMASK = "cucumberpro.envmask";
     public static final String CUCUMBERPRO_LOGFILE = "cucumberpro.logfile";
@@ -15,7 +14,6 @@ public class Keys {
 
     public static Config createConfig() {
         Config config = new Config();
-        config.set(CUCUMBERPRO_CONNECTION_IGNOREERROR, true);
         config.set(CUCUMBERPRO_CONNECTION_TIMEOUT, 5000);
         config.set(CUCUMBERPRO_ENVMASK, "SECRET|KEY|TOKEN|PASSWORD");
         config.setNull(CUCUMBERPRO_LOGFILE);

@@ -67,12 +67,12 @@ public interface Logger {
             }
         }
 
-        private void log(PrintWriter console, Level level, String message, Object[] args) {
-            console.print(level);
-            console.print(": ");
-            console.format(message, args);
-            console.print("\n");
-            console.flush();
+        private void log(PrintWriter printWriter, Level level, String message, Object[] args) {
+            printWriter.print(level);
+            printWriter.print(": ");
+            printWriter.format(message, args);
+            printWriter.print("\n");
+            printWriter.flush();
         }
 
         @Override
