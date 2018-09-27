@@ -81,12 +81,8 @@ cucumberpro:
 
   # The project-specific authentication token. You can find it in the project settings (press `?` to display it).
   #
-  # Rather than defining the value in this file we recommend defining the `CUCUMBERPRO_TOKEN` environment varibale
-  # in your CI server.
-  #
-  # Consult your CI server's documentation for details about defining per-project environment variables.
-  # Some CI servers such as Travis and Circle CI allow you to define environment variables in a file checked into git.
-  # *DO NOT DO THIS* - as it would allow anyone with read acceess to your repository to publish results.
+  # Do not share this token outside of your team or organisation. If you need to keep it out of source control, use
+  # a CUCUMBERPRO_TOKEN environment variable instead.
   token:
 
   # The plugin sends your local environment variables to Cucumber Pro so it can detect the CI build number, 
