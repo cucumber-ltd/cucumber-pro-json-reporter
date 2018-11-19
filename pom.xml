@@ -2,28 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.cucumber</groupId>
+    <parent>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-parent</artifactId>
+        <version>1.0.1</version>
+    </parent>
     <artifactId>pro-plugin</artifactId>
     <version>3.0.1-SNAPSHOT</version>
-
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     <name>cucumber-pro-plugin</name>
     <description>Cucumber Pro Plugin</description>
     <url>https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm</url>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
-
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
+        <project.Automatic-Module-Name>io.cucumber.pro</project.Automatic-Module-Name>
+    </properties>
 
     <scm>
         <connection>scm:git:git://github.com/cucumber-ltd/cucumber-pro-plugin-jvm.git</connection>
@@ -48,21 +43,45 @@
         </dependency>
 
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
+            <version>4.5.6</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
-            <version>4.5.3</version>
+            <version>4.5.6</version>
         </dependency>
 
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.19</version>
+            <version>1.23</version>
         </dependency>
 
         <dependency>
@@ -89,227 +108,15 @@
         <dependency>
             <groupId>io.undertow</groupId>
             <artifactId>undertow-core</artifactId>
-            <version>1.4.12.Final</version>
+            <version>2.0.15.Final</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.undertow</groupId>
             <artifactId>undertow-servlet</artifactId>
-            <version>1.4.12.Final</version>
+            <version>2.0.15.Final</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <showWarnings>true</showWarnings>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20.1</version>
-                <configuration>
-                    <argLine>${surefireArgLine}</argLine>
-                    <useFile>false</useFile>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <version>3.3.0</version>
-                <configuration>
-                    <instructions>
-                        <Bundle-Description />
-                        <Export-Package>io.cucumber.cucumberexpressions.*</Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin.version}</version>
-                <executions>
-                    <!--
-                        Prepares the property pointing to the JaCoCo runtime agent which
-                        is passed as VM argument when Maven the Surefire plugin is executed.
-                    -->
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-                            <!--
-                                Sets the name of the property containing the settings
-                                for JaCoCo runtime agent.
-                            -->
-                            <propertyName>surefireArgLine</propertyName>
-                        </configuration>
-                    </execution>
-                    <!--
-                        Ensures that the code coverage report for unit tests is created after
-                        unit tests have been run.
-                    -->
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
-                            <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <tagNameFormat>v@{project.version}</tagNameFormat>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
-                                </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
-                                    <addHeader>false</addHeader>
-                                </transformer>
-                            </transformers>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org.apache</pattern>
-                                    <shadedPattern>io.cucumber.pro.shaded.org.apache</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>mozilla</pattern>
-                                    <shadedPattern>io.cucumber.pro.shaded.mozilla</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.eclipse</pattern>
-                                    <shadedPattern>io.cucumber.pro.shaded.org.eclipse</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.googlecode</pattern>
-                                    <shadedPattern>io.cucumber.pro.shaded.com.googlecode</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.slf4j</pattern>
-                                    <shadedPattern>io.cucumber.pro.shaded.org.slf4j</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.yaml</pattern>
-                                    <shadedPattern>io.cucumber.pro.shaded.org.yaml</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.sun</pattern>
-                                    <shadedPattern>io.cucumber.pro.shaded.com.sun</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>test</id>
-            <properties>
-                <env>test</env>
-                <gebEnv>test</gebEnv>
-                <jacoco.skip>false</jacoco.skip>
-                <maven.test.skip>false</maven.test.skip>
-                <skip.unit.tests>false</skip.unit.tests>
-            </properties>
-        </profile>
-        <profile>
-            <id>release-sign-artifacts</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <configuration>
-                            <useAgent>true</useAgent>
-                            <gpgArguments>
-                                <arg>--local-user</arg>
-                                <arg>devs@cucumber.io</arg>
-                            </gpgArguments>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin.version}</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
-    </properties>
 </project>
