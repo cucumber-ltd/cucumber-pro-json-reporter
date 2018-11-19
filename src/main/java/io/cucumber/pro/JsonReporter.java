@@ -1,8 +1,10 @@
 package io.cucumber.pro;
 
-import cucumber.api.Plugin;
-import cucumber.api.event.*;
-import cucumber.api.formatter.Formatter;
+import cucumber.api.event.Event;
+import cucumber.api.event.EventHandler;
+import cucumber.api.event.EventListener;
+import cucumber.api.event.EventPublisher;
+import cucumber.api.event.TestRunFinished;
 import cucumber.runtime.formatter.PluginFactory;
 import io.cucumber.pro.config.Config;
 import io.cucumber.pro.environment.CIEnvironment;
@@ -14,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-public class JsonReporter implements Formatter {
+public class JsonReporter implements EventListener {
 
     private static final Config CONFIG = ConfigFactory.create();
     private static final Logger LOGGER = new Logger.SystemLogger(CONFIG);
@@ -82,15 +84,18 @@ public class JsonReporter implements Formatter {
 
     private class PublisherAdapter implements EventPublisher {
         private final EventPublisher publisher;
-        private final String revision;
-        private final String branch;
-        private final String tag;
+        private final EventHandler<TestRunFinished> publisherHandler;
 
-        PublisherAdapter(EventPublisher publisher, String revision, String branch, String tag) {
+        PublisherAdapter(EventPublisher publisher, final String revision, final String branch, final String tag) {
             this.publisher = publisher;
-            this.revision = revision;
-            this.branch = branch;
-            this.tag = tag;
+            this.publisherHandler = new EventHandler<TestRunFinished>() {
+                @Override
+                public void receive(TestRunFinished event) {
+                    JsonReporter.this.logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", JsonReporter.this.config.toYaml("cucumberpro"));
+                    JsonReporter.this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch, tag);
+                    jsonFile.deleteOnExit(); // Defer deleting file until successful publication
+                }
+            };
         }
 
         @Override
@@ -98,19 +103,16 @@ public class JsonReporter implements Formatter {
             publisher.registerHandlerFor(eventType, handler);
 
             if (eventType == TestRunFinished.class) {
-                publisher.registerHandlerFor(TestRunFinished.class, new EventHandler<TestRunFinished>() {
-                    @Override
-                    public void receive(TestRunFinished event) {
-                        JsonReporter.this.logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", JsonReporter.this.config.toYaml("cucumberpro"));
-                        JsonReporter.this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch, tag);
-                        jsonFile.deleteOnExit(); // If the publisher fails, leave the file for inspection.
-                    }
-                });
+                publisher.registerHandlerFor(TestRunFinished.class, publisherHandler);
             }
         }
 
         @Override
         public <T extends Event> void removeHandlerFor(Class<T> eventType, EventHandler<T> handler) {
+            if (eventType == TestRunFinished.class) {
+                publisher.removeHandlerFor(TestRunFinished.class, publisherHandler);
+            }
+
             publisher.removeHandlerFor(eventType, handler);
         }
     }

@@ -1,8 +1,8 @@
 package io.cucumber.pro;
 
 import cucumber.api.event.EventHandler;
+import cucumber.api.event.EventListener;
 import cucumber.api.event.TestRunFinished;
-import cucumber.api.formatter.Formatter;
 import cucumber.runner.EventBus;
 import cucumber.runner.TimeService;
 import cucumber.runner.TimeServiceEventBus;
@@ -37,7 +37,7 @@ public class JsonReporterTest {
         CapturingResultsPublisher resultsPublisher = new CapturingResultsPublisher();
         String profileName = "testing-testing";
         Logger logger = new TestLogger();
-        Formatter reporter = new JsonReporter(
+        EventListener reporter = new JsonReporter(
                 resultsPublisher,
                 profileName,
                 config,
@@ -79,11 +79,11 @@ public class JsonReporterTest {
             this.env = env;
         }
 
-        public Map<String, String> getPublishedEnv() {
+        Map<String, String> getPublishedEnv() {
             return env;
         }
 
-        public File getPublishedFile() {
+        File getPublishedFile() {
             return file;
         }
     }
