@@ -25,5 +25,5 @@ jobs:
             - ~/.m2
           key: dependencies-{{ checksum "pom.xml" }}
 
-      - run: mvn test
+      - run: mvn test -Dsurefire.useSystemClassLoader=false -Djacoco.skip=true
 
