@@ -122,6 +122,7 @@
                 <configuration>
                     <argLine>${surefireArgLine}</argLine>
                     <useFile>false</useFile>
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
 
