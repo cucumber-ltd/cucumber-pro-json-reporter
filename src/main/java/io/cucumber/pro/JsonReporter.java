@@ -1,9 +1,7 @@
 package io.cucumber.pro;
 
-import cucumber.api.event.Event;
-import cucumber.api.event.EventHandler;
-import cucumber.api.event.EventPublisher;
-import cucumber.api.event.TestRunFinished;
+import cucumber.api.Plugin;
+import cucumber.api.event.*;
 import cucumber.api.formatter.Formatter;
 import cucumber.runtime.formatter.PluginFactory;
 import io.cucumber.pro.config.Config;
@@ -21,7 +19,7 @@ public class JsonReporter implements Formatter {
     private static final Config CONFIG = ConfigFactory.create();
     private static final Logger LOGGER = new Logger.SystemLogger(CONFIG);
     private static final CIEnvironment CI_ENVIRONMENT = CIEnvironment.detect(System.getenv());
-    private final Formatter jsonFormatter;
+    private final EventListener jsonFormatter;
     private final File jsonFile;
     private final ResultsPublisher resultsPublisher;
     private final String profileName;
@@ -50,7 +48,7 @@ public class JsonReporter implements Formatter {
         } catch (IOException e) {
             throw logger.log(e, "Failed to create temp file for Cucumber JSON results");
         }
-        jsonFormatter = (Formatter) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
+        jsonFormatter = (EventListener) new PluginFactory().create("json:" + jsonFile.getAbsolutePath());
     }
 
     public JsonReporter(String profileName) {
@@ -109,6 +107,11 @@ public class JsonReporter implements Formatter {
                     }
                 });
             }
+        }
+
+        @Override
+        public <T extends Event> void removeHandlerFor(Class<T> eventType, EventHandler<T> handler) {
+            publisher.removeHandlerFor(eventType, handler);
         }
     }
 }

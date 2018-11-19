@@ -5,6 +5,7 @@ import cucumber.api.event.TestRunFinished;
 import cucumber.api.formatter.Formatter;
 import cucumber.runner.EventBus;
 import cucumber.runner.TimeService;
+import cucumber.runner.TimeServiceEventBus;
 import cucumber.runtime.CucumberException;
 import io.cucumber.pro.config.Config;
 import io.cucumber.pro.config.loaders.EnvironmentVariablesConfigLoader;
@@ -45,7 +46,7 @@ public class JsonReporterTest {
                 env);
 
         TimeService timeService = TimeService.SYSTEM;
-        EventBus eventBus = new EventBus(timeService);
+        EventBus eventBus = new TimeServiceEventBus(timeService);
         reporter.setEventPublisher(eventBus);
         EventHandler<TestRunFinished> testRunFinishedEventHandler = new EventHandler<TestRunFinished>() {
             @Override
