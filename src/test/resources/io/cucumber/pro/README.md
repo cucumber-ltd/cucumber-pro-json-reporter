@@ -23,14 +23,14 @@ Add the following dependency to your `pom.xml`:
 <dependency>
     <groupId>io.cucumber</groupId>
     <artifactId>pro-plugin</artifactId>
-    <version>2.1.1</version>
+    <version>3.0.0</version>
     <scope>test</scope>
 </dependency>
 ```
 
 If you're not using Maven, declare a similar dependency. Next, tell Cucumber to use the plugin. 
 
-If you're on Cucumber-JVM 2.0.0 or newer:
+If you're on Cucumber-JVM 4.0.0 or newer:
 
 ```java
 @RunWith(Cucumber.class)
@@ -48,6 +48,8 @@ The `all` part is the profile name (see the "Cucumber Profiles" section below). 
 public class RunCucumberTest {
 }
 ```
+
+If you're using Cucumber 2.0.0 - 3.0.2, please use [v2.1.1](https://app.cucumber.pro/projects/cucumber-pro-plugin-jvm/documents/tag/v2.1.1) of this plugin.
 
 ### Profiles
 

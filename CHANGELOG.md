@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [3.0.0] - 2018-05-22
+
+### Changed
+
+* Added support for Cucumber-JVM 4 - for earlier versions please use v2.1.1 of this plugin
+
 ## [2.1.1] - 2018-05-22
 
 ### Added
@@ -205,6 +211,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 First proper release!
 
 [Unreleased]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.1.1...HEAD
+[3.0.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.1.1...v3.0.0
 [2.1.1]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/cucumber-ltd/cucumber-pro-plugin-jvm/compare/v2.0.3...v2.0.4
