@@ -27,7 +27,7 @@ jobs:
 
       - run: mvn test -Dsurefire.useSystemClassLoader=false -Djacoco.skip=true
 
-  build:
+  release:
     docker:
       - image: circleci/openjdk:10-jdk
 
