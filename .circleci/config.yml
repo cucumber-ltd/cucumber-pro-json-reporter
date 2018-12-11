@@ -48,7 +48,7 @@ jobs:
             - ~/.m2
           key: dependencies-{{ checksum "pom.xml" }}
 
-      - run: openssl aes-256-cbc -d -out scripts/codesigning.asc -in scripts/codesigning.asc.enc -k "${KEY}"
+      - run: openssl aes-256-cbc -d -md sha256 -out scripts/codesigning.asc -in scripts/codesigning.asc.enc -k "${KEY}"
       - run: ./scripts/mvn_deploy.sh
 
 workflows:
