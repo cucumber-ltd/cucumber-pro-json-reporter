@@ -26,5 +26,5 @@ jobs:
           key: dependencies-{{ checksum "pom.xml" }}
 
       - run: mvn test -Dsurefire.useSystemClassLoader=false -Djacoco.skip=true
-      - run: openssl aes-256-cbc -d -md sha256 -out scripts/codesigning.asc -in scripts/codesigning.asc.enc -k "${CODESIGNING_KEY}"
+      - run: openssl aes-256-cbc -pbkdf2 -d -md sha256 -out scripts/codesigning.asc -in scripts/codesigning.asc.enc -k "${CODESIGNING_KEY}"
       - run: ./scripts/mvn_deploy.sh
