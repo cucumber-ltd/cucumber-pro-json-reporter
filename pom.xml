@@ -20,6 +20,35 @@
         <project.Automatic-Module-Name>io.cucumber.pro</project.Automatic-Module-Name>
     </properties>
 
+    <profiles>
+      <profile>
+        <id>sign-source-javadoc</id>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <executions>
+                <execution>
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>sign</goal>
+                  </goals>
+                  <configuration>
+                    <gpgArguments>
+                      <arg>--pinentry-mode</arg>
+                      <arg>loopback</arg>
+                    </gpgArguments>
+                    <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+    </profiles>
+
     <scm>
         <connection>scm:git:git://github.com/cucumber-ltd/cucumber-pro-plugin-jvm.git</connection>
         <developerConnection>scm:git:git@github.com:cucumber-ltd/cucumber-pro-plugin-jvm.git</developerConnection>
