@@ -48,7 +48,7 @@ public interface Logger {
                 try {
                     fileWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(config.getString(Keys.CUCUMBERPRO_LOGFILE)), "UTF-8"));
                 } catch (IOException e) {
-                    throw new CucumberException("Failed to create Cucumber Pro log file " + config.getString(Keys.CUCUMBERPRO_LOGFILE), e);
+                    throw new CucumberException("Failed to create Jam log file " + config.getString(Keys.CUCUMBERPRO_LOGFILE), e);
                 }
             } else {
                 fileWriter = null;

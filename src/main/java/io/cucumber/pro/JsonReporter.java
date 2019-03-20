@@ -91,7 +91,7 @@ public class JsonReporter implements EventListener {
             this.publisherHandler = new EventHandler<TestRunFinished>() {
                 @Override
                 public void receive(TestRunFinished event) {
-                    JsonReporter.this.logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", JsonReporter.this.config.toYaml("cucumberpro"));
+                    JsonReporter.this.logger.log(Logger.Level.DEBUG, "Jam config:\n\n%s", JsonReporter.this.config.toYaml("cucumberpro"));
                     JsonReporter.this.resultsPublisher.publish(jsonFile, env, profileName, revision, branch, tag);
                     jsonFile.deleteOnExit(); // Defer deleting file until successful publication
                 }

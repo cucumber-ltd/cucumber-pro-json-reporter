@@ -71,7 +71,7 @@ class HTTPResultsPublisher implements ResultsPublisher {
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
             if (statusCode >= 200 && statusCode < 400) {
-                logger.log(Logger.Level.INFO, "Published results to Cucumber Pro: " + url);
+                logger.log(Logger.Level.INFO, "Published results to Jam: " + url);
             } else {
                 // Read the HTTP response and throw an error
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();

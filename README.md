@@ -1,4 +1,4 @@
-# Cucumber Pro Plugin for Cucumber-JVM
+# Jam Plugin for Cucumber-JVM
 
 [![CircleCI](https://circleci.com/gh/cucumber-ltd/cucumber-pro-plugin-jvm.svg?style=svg)](https://circleci.com/gh/cucumber-ltd/cucumber-pro-plugin-jvm)
 
@@ -22,7 +22,7 @@ If that works, remove the generated `README.md.asc`. You're ready to release:
   * Remove any empty sections for the released version. 
   * Update diff links at the bottom of the file.
 * Commit everything.
-* Update [Cucumber Pro docs](https://github.com/cucumber-ltd/cucumber-pro/blob/master/lib/cucumber-pro/web/test_results/installation_instructions_for_java.jsx)
+* Update [Jam docs](https://github.com/cucumber-ltd/cucumber-pro/blob/master/lib/cucumber-pro/web/test_results/installation_instructions_for_java.jsx)
 
 ```
 mvn release:clean

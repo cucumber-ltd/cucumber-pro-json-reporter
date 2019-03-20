@@ -76,7 +76,7 @@ public class JsonReporter12 extends JSONFormatter {
     public void close() {
         super.close();
         if (this.ciEnvironment != null) {
-            logger.log(Logger.Level.DEBUG, "Cucumber Pro config:\n\n%s", config.toYaml("cucumberpro"));
+            logger.log(Logger.Level.DEBUG, "Jam config:\n\n%s", config.toYaml("cucumberpro"));
             String revision = ciEnvironment.getRevision();
             String branch = ciEnvironment.getBranch();
             String tag = ciEnvironment.getTag();

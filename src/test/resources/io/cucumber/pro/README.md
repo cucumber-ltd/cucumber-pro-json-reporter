@@ -1,6 +1,6 @@
-# Cucumber-JVM plugin for Cucumber Pro
+# Cucumber-JVM plugin for Jam
 
-This Cucumber plugin publishes documentation and results to Cucumber Pro.
+This Cucumber plugin publishes documentation and results to Jam.
 
 ## Requirements
 
@@ -54,7 +54,7 @@ If you're using Cucumber 2.0.0 - 3.0.2, please use [v2.1.1](https://jam.cucumber
 ### Profiles
 
 If you run Cucumber several times as part of your build (with different options, perhaps different tags), you can
-specify a different *profile name* for each run. This allows Cucumber Pro to show separate results for each profile.
+specify a different *profile name* for each run. This allows Jam to show separate results for each profile.
 
 The profile name is specified by appending a colon and a profile name to the class name:
 
@@ -78,7 +78,7 @@ The default configuration of the plugin is as follows:
 
 ```yaml
 cucumberpro:
-  # The name of the Cucumber Pro project.
+  # The name of the Jam project.
   projectname:
 
   # The project-specific authentication token. You can find it in the project settings (press `?` to display it).
@@ -87,9 +87,9 @@ cucumberpro:
   # a CUCUMBERPRO_TOKEN environment variable instead.
   token:
 
-  # The plugin sends your local environment variables to Cucumber Pro so it can detect the CI build number, 
+  # The plugin sends your local environment variables to Jam so it can detect the CI build number, 
   # git branch/tag and other information about the build. This mask is a regular expression for filtering
-  # out sensitive values that should not be sent to Cucumber Pro.
+  # out sensitive values that should not be sent to Jam.
   envmask: SECRET|KEY|TOKEN|PASSWORD|PWD
 
   # Sets the log level to one of `DEBUG`, `INFO`, `WARN`, `ERROR` or `FATAL`. Defaults to `WARN`.
@@ -99,12 +99,12 @@ cucumberpro:
   # Writes out the log messages to the specified file. 
   logfile:
 
-  # Override this if you are using a privately hosted Cucumber Pro appliance.
+  # Override this if you are using a privately hosted Jam appliance.
   # We recommend setting this with a CUCUMBERPRO_URL environment variable defined globally on your build server.
   url: https://jam.cucumber.io/
 
   connection:
-    # Set this to false if you want the build to break in case Cucumber Pro is unavailable.
+    # Set this to false if you want the build to break in case Jam is unavailable.
     ignoreerror: true
 
     # If a http or ssh connection takes longer than this (milliseconds), time out the connection.

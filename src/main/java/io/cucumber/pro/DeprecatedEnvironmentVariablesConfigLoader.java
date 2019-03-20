@@ -37,7 +37,7 @@ public class DeprecatedEnvironmentVariablesConfigLoader implements ConfigLoader 
     private void map(Config config, String deprecatedEnvVar, String newKey) {
         if (env.containsKey(deprecatedEnvVar)) {
             if (newKey != null) {
-                System.err.format("*** WARNING: The %s environment variable is deprecated and will not be supported from version 2.0.0 of the Cucumber Pro plugin. Please use %s instead\n", deprecatedEnvVar, newKey);
+                System.err.format("*** WARNING: The %s environment variable is deprecated and will not be supported from version 2.0.0 of the Jam plugin. Please use %s instead\n", deprecatedEnvVar, newKey);
                 config.set(newKey, env.get(deprecatedEnvVar));
             } else {
                 System.err.format("*** WARNING: The %s environment variable is no longer supported\n", deprecatedEnvVar);
