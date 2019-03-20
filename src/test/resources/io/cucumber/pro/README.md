@@ -49,7 +49,7 @@ public class RunCucumberTest {
 }
 ```
 
-If you're using Cucumber 2.0.0 - 3.0.2, please use [v2.1.1](https://app.cucumber.pro/projects/cucumber-pro-plugin-jvm/documents/tag/v2.1.1) of this plugin.
+If you're using Cucumber 2.0.0 - 3.0.2, please use [v2.1.1](https://jam.cucumber.io/projects/cucumber-pro-plugin-jvm/documents/tag/v2.1.1) of this plugin.
 
 ### Profiles
 
@@ -101,7 +101,7 @@ cucumberpro:
 
   # Override this if you are using a privately hosted Cucumber Pro appliance.
   # We recommend setting this with a CUCUMBERPRO_URL environment variable defined globally on your build server.
-  url: https://app.cucumber.pro/
+  url: https://jam.cucumber.io/
 
   connection:
     # Set this to false if you want the build to break in case Cucumber Pro is unavailable.

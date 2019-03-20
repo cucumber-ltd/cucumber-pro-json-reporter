@@ -21,7 +21,7 @@ public class Keys {
         config.setNull(CUCUMBERPRO_PROFILE);
         config.setNull(CUCUMBERPRO_PROJECTNAME);
         config.setNull(CUCUMBERPRO_TOKEN);
-        config.set(CUCUMBERPRO_URL, "https://app.cucumber.pro/");
+        config.set(CUCUMBERPRO_URL, "https://jam.cucumber.io/");
 
         return config;
     }

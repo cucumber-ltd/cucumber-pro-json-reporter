@@ -13,7 +13,7 @@ public class CucumberProResultsUrlBuilderTest {
     public void builds_url_for_saas_by_default() {
         Config config = createConfig();
         String url = CucumberProResultsUrlBuilder.buildCucumberProUrl(config, "my-project");
-        assertEquals("https://app.cucumber.pro/tests/results/my-project", url);
+        assertEquals("https://jam.cucumber.io/tests/results/my-project", url);
     }
 
     @Test

@@ -52,7 +52,7 @@ public class YamlConfigLoaderTest extends ConfigLoaderContract {
                 "  cucumberprofile: cucumber-jvm-unspecified-profile\n" +
                 "  envmask: SECRET|KEY|TOKEN|PASSWORD\n" +
                 "  logging: debug\n" +
-                "  url: https://app.cucumber.pro/\n" +
+                "  url: https://jam.cucumber.io/\n" +
                 "  connection:\n" +
                 "    ignoreerror: true\n" +
                 "    timeout: 5000\n" +

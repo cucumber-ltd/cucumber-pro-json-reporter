@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/cucumber-ltd/cucumber-pro-plugin-jvm.svg?style=svg)](https://circleci.com/gh/cucumber-ltd/cucumber-pro-plugin-jvm)
 
-[The documentation is here](https://app.cucumber.pro/projects/cucumber-pro-plugin-jvm)
+[The documentation is here](https://jam.cucumber.io/projects/cucumber-pro-plugin-jvm)
 
 ## Release process
 
